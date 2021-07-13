@@ -1,0 +1,16 @@
+{
+    "name":"abdyek/whoo",
+    "description": "database agnostic authentication JWT library",
+    "autoload": {
+        "psr-4": {
+            "Whoo\\": "src"
+        }
+    },
+    "require": {
+        "firebase/php-jwt": "^5.4",
+        "propel/propel": "~2.0@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
+}
