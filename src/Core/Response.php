@@ -8,11 +8,4 @@ class Response {
             'data'=>$data
         ];
     }
-    public static function error($code, $data=[]) {
-        return [
-            'status'=>'error',
-            'code'=>$code,
-            'data'=>$data
-        ];
-    }
 }

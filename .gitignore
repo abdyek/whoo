@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/composer,vim
-# Edit at https://www.toptal.com/developers/gitignore?templates=composer,vim
+# Created by https://www.toptal.com/developers/gitignore/api/composer,vim,phpunit
+# Edit at https://www.toptal.com/developers/gitignore?templates=composer,vim,phpunit
 
 ### Composer ###
 composer.phar
@@ -8,6 +8,20 @@ composer.phar
 # Commit your application's lock file https://getcomposer.org/doc/01-basic-usage.md#commit-your-composer-lock-file-to-version-control
 # You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
 # composer.lock
+
+### PHPUnit ###
+# Covers PHPUnit
+# Reference: https://phpunit.de/
+
+# Generated files
+.phpunit.result.cache
+.phpunit.cache
+
+# PHPUnit
+# /phpunit.xml
+
+# Build data
+/build/
 
 ### Vim ###
 # Swap
@@ -30,4 +44,4 @@ tags
 # Persistent undo
 [._]*.un~
 
-# End of https://www.toptal.com/developers/gitignore/api/composer,vim
+# End of https://www.toptal.com/developers/gitignore/api/composer,vim,phpunit
