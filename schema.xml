@@ -11,7 +11,7 @@
         <column name="provider" type="varchar" size="255" required="false" />
         <column name="provider_id" type="varchar" size="255" required="false" />
     </table>
-    <table name="whoo_authentication_code" phpName="authentication_code">
+    <table name="whoo_authentication_code" phpName="AuthenticationCode">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
         <column name="type" type="varchar" size="32" required="true" />
         <column name="code" type="varchar" size="64" required="true" />

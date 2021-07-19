@@ -1,6 +1,6 @@
 <?php
 
-use Base\authentication_codeQuery as Baseauthentication_codeQuery;
+use Base\AuthenticationCodeQuery as BaseAuthenticationCodeQuery;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'whoo_authentication_code' table.
@@ -11,7 +11,7 @@ use Base\authentication_codeQuery as Baseauthentication_codeQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class authentication_codeQuery extends Baseauthentication_codeQuery
+class AuthenticationCodeQuery extends BaseAuthenticationCodeQuery
 {
 
 }

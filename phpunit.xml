@@ -18,6 +18,9 @@
         <testsuite name="core">
             <directory>tests/unit/Core</directory>
         </testsuite>
+        <testsuite name="model">
+            <directory>tests/unit/Model</directory>
+        </testsuite>
 
     </testsuites>
 

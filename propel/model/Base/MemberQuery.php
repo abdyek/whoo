@@ -48,17 +48,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMemberQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildMemberQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildMemberQuery leftJoinauthentication_code($relationAlias = null) Adds a LEFT JOIN clause to the query using the authentication_code relation
- * @method     ChildMemberQuery rightJoinauthentication_code($relationAlias = null) Adds a RIGHT JOIN clause to the query using the authentication_code relation
- * @method     ChildMemberQuery innerJoinauthentication_code($relationAlias = null) Adds a INNER JOIN clause to the query using the authentication_code relation
+ * @method     ChildMemberQuery leftJoinAuthenticationCode($relationAlias = null) Adds a LEFT JOIN clause to the query using the AuthenticationCode relation
+ * @method     ChildMemberQuery rightJoinAuthenticationCode($relationAlias = null) Adds a RIGHT JOIN clause to the query using the AuthenticationCode relation
+ * @method     ChildMemberQuery innerJoinAuthenticationCode($relationAlias = null) Adds a INNER JOIN clause to the query using the AuthenticationCode relation
  *
- * @method     ChildMemberQuery joinWithauthentication_code($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the authentication_code relation
+ * @method     ChildMemberQuery joinWithAuthenticationCode($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the AuthenticationCode relation
  *
- * @method     ChildMemberQuery leftJoinWithauthentication_code() Adds a LEFT JOIN clause and with to the query using the authentication_code relation
- * @method     ChildMemberQuery rightJoinWithauthentication_code() Adds a RIGHT JOIN clause and with to the query using the authentication_code relation
- * @method     ChildMemberQuery innerJoinWithauthentication_code() Adds a INNER JOIN clause and with to the query using the authentication_code relation
+ * @method     ChildMemberQuery leftJoinWithAuthenticationCode() Adds a LEFT JOIN clause and with to the query using the AuthenticationCode relation
+ * @method     ChildMemberQuery rightJoinWithAuthenticationCode() Adds a RIGHT JOIN clause and with to the query using the AuthenticationCode relation
+ * @method     ChildMemberQuery innerJoinWithAuthenticationCode() Adds a INNER JOIN clause and with to the query using the AuthenticationCode relation
  *
- * @method     \authentication_codeQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \AuthenticationCodeQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildMember|null findOne(ConnectionInterface $con = null) Return the first ChildMember matching the query
  * @method     ChildMember findOneOrCreate(ConnectionInterface $con = null) Return the first ChildMember matching the query, or a new ChildMember object populated from the query conditions when no match is found
@@ -573,40 +573,40 @@ abstract class MemberQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \authentication_code object
+     * Filter the query by a related \AuthenticationCode object
      *
-     * @param \authentication_code|ObjectCollection $authentication_code the related object to use as filter
+     * @param \AuthenticationCode|ObjectCollection $authenticationCode the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildMemberQuery The current query, for fluid interface
      */
-    public function filterByauthentication_code($authentication_code, $comparison = null)
+    public function filterByAuthenticationCode($authenticationCode, $comparison = null)
     {
-        if ($authentication_code instanceof \authentication_code) {
+        if ($authenticationCode instanceof \AuthenticationCode) {
             return $this
-                ->addUsingAlias(MemberTableMap::COL_ID, $authentication_code->getMemberId(), $comparison);
-        } elseif ($authentication_code instanceof ObjectCollection) {
+                ->addUsingAlias(MemberTableMap::COL_ID, $authenticationCode->getMemberId(), $comparison);
+        } elseif ($authenticationCode instanceof ObjectCollection) {
             return $this
-                ->useauthentication_codeQuery()
-                ->filterByPrimaryKeys($authentication_code->getPrimaryKeys())
+                ->useAuthenticationCodeQuery()
+                ->filterByPrimaryKeys($authenticationCode->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByauthentication_code() only accepts arguments of type \authentication_code or Collection');
+            throw new PropelException('filterByAuthenticationCode() only accepts arguments of type \AuthenticationCode or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the authentication_code relation
+     * Adds a JOIN clause to the query using the AuthenticationCode relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildMemberQuery The current query, for fluid interface
      */
-    public function joinauthentication_code($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinAuthenticationCode($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('authentication_code');
+        $relationMap = $tableMap->getRelation('AuthenticationCode');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -621,14 +621,14 @@ abstract class MemberQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'authentication_code');
+            $this->addJoinObject($join, 'AuthenticationCode');
         }
 
         return $this;
     }
 
     /**
-     * Use the authentication_code relation authentication_code object
+     * Use the AuthenticationCode relation AuthenticationCode object
      *
      * @see useQuery()
      *
@@ -636,19 +636,19 @@ abstract class MemberQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \authentication_codeQuery A secondary query class using the current class as primary query
+     * @return \AuthenticationCodeQuery A secondary query class using the current class as primary query
      */
-    public function useauthentication_codeQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useAuthenticationCodeQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinauthentication_code($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'authentication_code', '\authentication_codeQuery');
+            ->joinAuthenticationCode($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'AuthenticationCode', '\AuthenticationCodeQuery');
     }
 
     /**
-     * Use the authentication_code relation authentication_code object
+     * Use the AuthenticationCode relation AuthenticationCode object
      *
-     * @param callable(\authentication_codeQuery):\authentication_codeQuery $callable A function working on the related query
+     * @param callable(\AuthenticationCodeQuery):\AuthenticationCodeQuery $callable A function working on the related query
      *
      * @param string|null $relationAlias optional alias for the relation
      *
@@ -656,12 +656,12 @@ abstract class MemberQuery extends ModelCriteria
      *
      * @return $this
      */
-    public function withauthentication_codeQuery(
+    public function withAuthenticationCodeQuery(
         callable $callable,
         string $relationAlias = null,
         ?string $joinType = Criteria::INNER_JOIN
     ) {
-        $relatedQuery = $this->useauthentication_codeQuery(
+        $relatedQuery = $this->useAuthenticationCodeQuery(
             $relationAlias,
             $joinType
         );
@@ -671,7 +671,7 @@ abstract class MemberQuery extends ModelCriteria
         return $this;
     }
     /**
-     * Use the relation to authentication_code table for an EXISTS query.
+     * Use the relation to AuthenticationCode table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
@@ -679,26 +679,26 @@ abstract class MemberQuery extends ModelCriteria
      * @param string|null $modelAlias sets an alias for the nested query
      * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
      *
-     * @return \authentication_codeQuery The inner query object of the EXISTS statement
+     * @return \AuthenticationCodeQuery The inner query object of the EXISTS statement
      */
-    public function useauthentication_codeExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    public function useAuthenticationCodeExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('authentication_code', $modelAlias, $queryClass, $typeOfExists);
+        return $this->useExistsQuery('AuthenticationCode', $modelAlias, $queryClass, $typeOfExists);
     }
 
     /**
-     * Use the relation to authentication_code table for a NOT EXISTS query.
+     * Use the relation to AuthenticationCode table for a NOT EXISTS query.
      *
-     * @see useauthentication_codeExistsQuery()
+     * @see useAuthenticationCodeExistsQuery()
      *
      * @param string|null $modelAlias sets an alias for the nested query
      * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      *
-     * @return \authentication_codeQuery The inner query object of the NOT EXISTS statement
+     * @return \AuthenticationCodeQuery The inner query object of the NOT EXISTS statement
      */
-    public function useauthentication_codeNotExistsQuery($modelAlias = null, $queryClass = null)
+    public function useAuthenticationCodeNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('authentication_code', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $this->useExistsQuery('AuthenticationCode', $modelAlias, $queryClass, 'NOT EXISTS');
     }
     /**
      * Exclude object from result

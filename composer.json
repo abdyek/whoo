@@ -13,7 +13,8 @@
             "Whoo\\": "src"
         },
         "classmap": [
-            "propel/model"
+            "propel/model",
+            "tests/unit/traits"
         ]
     }
 }

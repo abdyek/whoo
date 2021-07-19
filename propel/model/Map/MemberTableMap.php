@@ -257,13 +257,13 @@ class MemberTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('authentication_code', '\\authentication_code', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('AuthenticationCode', '\\AuthenticationCode', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':member_id',
     1 => ':id',
   ),
-), null, null, 'authentication_codes', false);
+), null, null, 'AuthenticationCodes', false);
     } // buildRelations()
 
     /**

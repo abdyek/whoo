@@ -2,11 +2,11 @@
 
 namespace Base;
 
-use \authentication_code as Childauthentication_code;
-use \authentication_codeQuery as Childauthentication_codeQuery;
+use \AuthenticationCode as ChildAuthenticationCode;
+use \AuthenticationCodeQuery as ChildAuthenticationCodeQuery;
 use \Exception;
 use \PDO;
-use Map\authentication_codeTableMap;
+use Map\AuthenticationCodeTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -20,108 +20,108 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  *
- * @method     Childauthentication_codeQuery orderById($order = Criteria::ASC) Order by the id column
- * @method     Childauthentication_codeQuery orderByType($order = Criteria::ASC) Order by the type column
- * @method     Childauthentication_codeQuery orderByCode($order = Criteria::ASC) Order by the code column
- * @method     Childauthentication_codeQuery orderByTrialCount($order = Criteria::ASC) Order by the trial_count column
- * @method     Childauthentication_codeQuery orderByDateTime($order = Criteria::ASC) Order by the date_time column
- * @method     Childauthentication_codeQuery orderByMemberId($order = Criteria::ASC) Order by the member_id column
+ * @method     ChildAuthenticationCodeQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method     ChildAuthenticationCodeQuery orderByType($order = Criteria::ASC) Order by the type column
+ * @method     ChildAuthenticationCodeQuery orderByCode($order = Criteria::ASC) Order by the code column
+ * @method     ChildAuthenticationCodeQuery orderByTrialCount($order = Criteria::ASC) Order by the trial_count column
+ * @method     ChildAuthenticationCodeQuery orderByDateTime($order = Criteria::ASC) Order by the date_time column
+ * @method     ChildAuthenticationCodeQuery orderByMemberId($order = Criteria::ASC) Order by the member_id column
  *
- * @method     Childauthentication_codeQuery groupById() Group by the id column
- * @method     Childauthentication_codeQuery groupByType() Group by the type column
- * @method     Childauthentication_codeQuery groupByCode() Group by the code column
- * @method     Childauthentication_codeQuery groupByTrialCount() Group by the trial_count column
- * @method     Childauthentication_codeQuery groupByDateTime() Group by the date_time column
- * @method     Childauthentication_codeQuery groupByMemberId() Group by the member_id column
+ * @method     ChildAuthenticationCodeQuery groupById() Group by the id column
+ * @method     ChildAuthenticationCodeQuery groupByType() Group by the type column
+ * @method     ChildAuthenticationCodeQuery groupByCode() Group by the code column
+ * @method     ChildAuthenticationCodeQuery groupByTrialCount() Group by the trial_count column
+ * @method     ChildAuthenticationCodeQuery groupByDateTime() Group by the date_time column
+ * @method     ChildAuthenticationCodeQuery groupByMemberId() Group by the member_id column
  *
- * @method     Childauthentication_codeQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     Childauthentication_codeQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     Childauthentication_codeQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildAuthenticationCodeQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildAuthenticationCodeQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildAuthenticationCodeQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     Childauthentication_codeQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     Childauthentication_codeQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     Childauthentication_codeQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method     ChildAuthenticationCodeQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method     ChildAuthenticationCodeQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method     ChildAuthenticationCodeQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     Childauthentication_codeQuery leftJoinMember($relationAlias = null) Adds a LEFT JOIN clause to the query using the Member relation
- * @method     Childauthentication_codeQuery rightJoinMember($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Member relation
- * @method     Childauthentication_codeQuery innerJoinMember($relationAlias = null) Adds a INNER JOIN clause to the query using the Member relation
+ * @method     ChildAuthenticationCodeQuery leftJoinMember($relationAlias = null) Adds a LEFT JOIN clause to the query using the Member relation
+ * @method     ChildAuthenticationCodeQuery rightJoinMember($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Member relation
+ * @method     ChildAuthenticationCodeQuery innerJoinMember($relationAlias = null) Adds a INNER JOIN clause to the query using the Member relation
  *
- * @method     Childauthentication_codeQuery joinWithMember($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Member relation
+ * @method     ChildAuthenticationCodeQuery joinWithMember($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Member relation
  *
- * @method     Childauthentication_codeQuery leftJoinWithMember() Adds a LEFT JOIN clause and with to the query using the Member relation
- * @method     Childauthentication_codeQuery rightJoinWithMember() Adds a RIGHT JOIN clause and with to the query using the Member relation
- * @method     Childauthentication_codeQuery innerJoinWithMember() Adds a INNER JOIN clause and with to the query using the Member relation
+ * @method     ChildAuthenticationCodeQuery leftJoinWithMember() Adds a LEFT JOIN clause and with to the query using the Member relation
+ * @method     ChildAuthenticationCodeQuery rightJoinWithMember() Adds a RIGHT JOIN clause and with to the query using the Member relation
+ * @method     ChildAuthenticationCodeQuery innerJoinWithMember() Adds a INNER JOIN clause and with to the query using the Member relation
  *
  * @method     \MemberQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     Childauthentication_code|null findOne(ConnectionInterface $con = null) Return the first Childauthentication_code matching the query
- * @method     Childauthentication_code findOneOrCreate(ConnectionInterface $con = null) Return the first Childauthentication_code matching the query, or a new Childauthentication_code object populated from the query conditions when no match is found
+ * @method     ChildAuthenticationCode|null findOne(ConnectionInterface $con = null) Return the first ChildAuthenticationCode matching the query
+ * @method     ChildAuthenticationCode findOneOrCreate(ConnectionInterface $con = null) Return the first ChildAuthenticationCode matching the query, or a new ChildAuthenticationCode object populated from the query conditions when no match is found
  *
- * @method     Childauthentication_code|null findOneById(int $id) Return the first Childauthentication_code filtered by the id column
- * @method     Childauthentication_code|null findOneByType(string $type) Return the first Childauthentication_code filtered by the type column
- * @method     Childauthentication_code|null findOneByCode(string $code) Return the first Childauthentication_code filtered by the code column
- * @method     Childauthentication_code|null findOneByTrialCount(int $trial_count) Return the first Childauthentication_code filtered by the trial_count column
- * @method     Childauthentication_code|null findOneByDateTime(string $date_time) Return the first Childauthentication_code filtered by the date_time column
- * @method     Childauthentication_code|null findOneByMemberId(int $member_id) Return the first Childauthentication_code filtered by the member_id column *
+ * @method     ChildAuthenticationCode|null findOneById(int $id) Return the first ChildAuthenticationCode filtered by the id column
+ * @method     ChildAuthenticationCode|null findOneByType(string $type) Return the first ChildAuthenticationCode filtered by the type column
+ * @method     ChildAuthenticationCode|null findOneByCode(string $code) Return the first ChildAuthenticationCode filtered by the code column
+ * @method     ChildAuthenticationCode|null findOneByTrialCount(int $trial_count) Return the first ChildAuthenticationCode filtered by the trial_count column
+ * @method     ChildAuthenticationCode|null findOneByDateTime(string $date_time) Return the first ChildAuthenticationCode filtered by the date_time column
+ * @method     ChildAuthenticationCode|null findOneByMemberId(int $member_id) Return the first ChildAuthenticationCode filtered by the member_id column *
 
- * @method     Childauthentication_code requirePk($key, ConnectionInterface $con = null) Return the Childauthentication_code by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     Childauthentication_code requireOne(ConnectionInterface $con = null) Return the first Childauthentication_code matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAuthenticationCode requirePk($key, ConnectionInterface $con = null) Return the ChildAuthenticationCode by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAuthenticationCode requireOne(ConnectionInterface $con = null) Return the first ChildAuthenticationCode matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     Childauthentication_code requireOneById(int $id) Return the first Childauthentication_code filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     Childauthentication_code requireOneByType(string $type) Return the first Childauthentication_code filtered by the type column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     Childauthentication_code requireOneByCode(string $code) Return the first Childauthentication_code filtered by the code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     Childauthentication_code requireOneByTrialCount(int $trial_count) Return the first Childauthentication_code filtered by the trial_count column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     Childauthentication_code requireOneByDateTime(string $date_time) Return the first Childauthentication_code filtered by the date_time column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     Childauthentication_code requireOneByMemberId(int $member_id) Return the first Childauthentication_code filtered by the member_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAuthenticationCode requireOneById(int $id) Return the first ChildAuthenticationCode filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAuthenticationCode requireOneByType(string $type) Return the first ChildAuthenticationCode filtered by the type column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAuthenticationCode requireOneByCode(string $code) Return the first ChildAuthenticationCode filtered by the code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAuthenticationCode requireOneByTrialCount(int $trial_count) Return the first ChildAuthenticationCode filtered by the trial_count column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAuthenticationCode requireOneByDateTime(string $date_time) Return the first ChildAuthenticationCode filtered by the date_time column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAuthenticationCode requireOneByMemberId(int $member_id) Return the first ChildAuthenticationCode filtered by the member_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     Childauthentication_code[]|ObjectCollection find(ConnectionInterface $con = null) Return Childauthentication_code objects based on current ModelCriteria
- * @psalm-method ObjectCollection&\Traversable<Childauthentication_code> find(ConnectionInterface $con = null) Return Childauthentication_code objects based on current ModelCriteria
- * @method     Childauthentication_code[]|ObjectCollection findById(int $id) Return Childauthentication_code objects filtered by the id column
- * @psalm-method ObjectCollection&\Traversable<Childauthentication_code> findById(int $id) Return Childauthentication_code objects filtered by the id column
- * @method     Childauthentication_code[]|ObjectCollection findByType(string $type) Return Childauthentication_code objects filtered by the type column
- * @psalm-method ObjectCollection&\Traversable<Childauthentication_code> findByType(string $type) Return Childauthentication_code objects filtered by the type column
- * @method     Childauthentication_code[]|ObjectCollection findByCode(string $code) Return Childauthentication_code objects filtered by the code column
- * @psalm-method ObjectCollection&\Traversable<Childauthentication_code> findByCode(string $code) Return Childauthentication_code objects filtered by the code column
- * @method     Childauthentication_code[]|ObjectCollection findByTrialCount(int $trial_count) Return Childauthentication_code objects filtered by the trial_count column
- * @psalm-method ObjectCollection&\Traversable<Childauthentication_code> findByTrialCount(int $trial_count) Return Childauthentication_code objects filtered by the trial_count column
- * @method     Childauthentication_code[]|ObjectCollection findByDateTime(string $date_time) Return Childauthentication_code objects filtered by the date_time column
- * @psalm-method ObjectCollection&\Traversable<Childauthentication_code> findByDateTime(string $date_time) Return Childauthentication_code objects filtered by the date_time column
- * @method     Childauthentication_code[]|ObjectCollection findByMemberId(int $member_id) Return Childauthentication_code objects filtered by the member_id column
- * @psalm-method ObjectCollection&\Traversable<Childauthentication_code> findByMemberId(int $member_id) Return Childauthentication_code objects filtered by the member_id column
- * @method     Childauthentication_code[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<Childauthentication_code> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildAuthenticationCode[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildAuthenticationCode objects based on current ModelCriteria
+ * @psalm-method ObjectCollection&\Traversable<ChildAuthenticationCode> find(ConnectionInterface $con = null) Return ChildAuthenticationCode objects based on current ModelCriteria
+ * @method     ChildAuthenticationCode[]|ObjectCollection findById(int $id) Return ChildAuthenticationCode objects filtered by the id column
+ * @psalm-method ObjectCollection&\Traversable<ChildAuthenticationCode> findById(int $id) Return ChildAuthenticationCode objects filtered by the id column
+ * @method     ChildAuthenticationCode[]|ObjectCollection findByType(string $type) Return ChildAuthenticationCode objects filtered by the type column
+ * @psalm-method ObjectCollection&\Traversable<ChildAuthenticationCode> findByType(string $type) Return ChildAuthenticationCode objects filtered by the type column
+ * @method     ChildAuthenticationCode[]|ObjectCollection findByCode(string $code) Return ChildAuthenticationCode objects filtered by the code column
+ * @psalm-method ObjectCollection&\Traversable<ChildAuthenticationCode> findByCode(string $code) Return ChildAuthenticationCode objects filtered by the code column
+ * @method     ChildAuthenticationCode[]|ObjectCollection findByTrialCount(int $trial_count) Return ChildAuthenticationCode objects filtered by the trial_count column
+ * @psalm-method ObjectCollection&\Traversable<ChildAuthenticationCode> findByTrialCount(int $trial_count) Return ChildAuthenticationCode objects filtered by the trial_count column
+ * @method     ChildAuthenticationCode[]|ObjectCollection findByDateTime(string $date_time) Return ChildAuthenticationCode objects filtered by the date_time column
+ * @psalm-method ObjectCollection&\Traversable<ChildAuthenticationCode> findByDateTime(string $date_time) Return ChildAuthenticationCode objects filtered by the date_time column
+ * @method     ChildAuthenticationCode[]|ObjectCollection findByMemberId(int $member_id) Return ChildAuthenticationCode objects filtered by the member_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildAuthenticationCode> findByMemberId(int $member_id) Return ChildAuthenticationCode objects filtered by the member_id column
+ * @method     ChildAuthenticationCode[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildAuthenticationCode> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
-abstract class authentication_codeQuery extends ModelCriteria
+abstract class AuthenticationCodeQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \Base\authentication_codeQuery object.
+     * Initializes internal state of \Base\AuthenticationCodeQuery object.
      *
      * @param     string $dbName The database name
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'whoo', $modelName = '\\authentication_code', $modelAlias = null)
+    public function __construct($dbName = 'whoo', $modelName = '\\AuthenticationCode', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new Childauthentication_codeQuery object.
+     * Returns a new ChildAuthenticationCodeQuery object.
      *
      * @param     string $modelAlias The alias of a model in the query
      * @param     Criteria $criteria Optional Criteria to build the query from
      *
-     * @return Childauthentication_codeQuery
+     * @return ChildAuthenticationCodeQuery
      */
     public static function create($modelAlias = null, Criteria $criteria = null)
     {
-        if ($criteria instanceof Childauthentication_codeQuery) {
+        if ($criteria instanceof ChildAuthenticationCodeQuery) {
             return $criteria;
         }
-        $query = new Childauthentication_codeQuery();
+        $query = new ChildAuthenticationCodeQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -144,7 +144,7 @@ abstract class authentication_codeQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return Childauthentication_code|array|mixed the result, formatted by the current formatter
+     * @return ChildAuthenticationCode|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ConnectionInterface $con = null)
     {
@@ -153,7 +153,7 @@ abstract class authentication_codeQuery extends ModelCriteria
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(authentication_codeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(AuthenticationCodeTableMap::DATABASE_NAME);
         }
 
         $this->basePreSelect($con);
@@ -166,7 +166,7 @@ abstract class authentication_codeQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = authentication_codeTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
+        if ((null !== ($obj = AuthenticationCodeTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -183,7 +183,7 @@ abstract class authentication_codeQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return Childauthentication_code A model object, or null if the key is not found
+     * @return ChildAuthenticationCode A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
@@ -198,10 +198,10 @@ abstract class authentication_codeQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var Childauthentication_code $obj */
-            $obj = new Childauthentication_code();
+            /** @var ChildAuthenticationCode $obj */
+            $obj = new ChildAuthenticationCode();
             $obj->hydrate($row);
-            authentication_codeTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
+            AuthenticationCodeTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -214,7 +214,7 @@ abstract class authentication_codeQuery extends ModelCriteria
      * @param     mixed $key Primary key to use for the query
      * @param     ConnectionInterface $con A connection object
      *
-     * @return Childauthentication_code|array|mixed the result, formatted by the current formatter
+     * @return ChildAuthenticationCode|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -256,12 +256,12 @@ abstract class authentication_codeQuery extends ModelCriteria
      *
      * @param     mixed $key Primary key to use for the query
      *
-     * @return $this|Childauthentication_codeQuery The current query, for fluid interface
+     * @return $this|ChildAuthenticationCodeQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(authentication_codeTableMap::COL_ID, $key, Criteria::EQUAL);
+        return $this->addUsingAlias(AuthenticationCodeTableMap::COL_ID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -269,12 +269,12 @@ abstract class authentication_codeQuery extends ModelCriteria
      *
      * @param     array $keys The list of primary key to use for the query
      *
-     * @return $this|Childauthentication_codeQuery The current query, for fluid interface
+     * @return $this|ChildAuthenticationCodeQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(authentication_codeTableMap::COL_ID, $keys, Criteria::IN);
+        return $this->addUsingAlias(AuthenticationCodeTableMap::COL_ID, $keys, Criteria::IN);
     }
 
     /**
@@ -293,18 +293,18 @@ abstract class authentication_codeQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|Childauthentication_codeQuery The current query, for fluid interface
+     * @return $this|ChildAuthenticationCodeQuery The current query, for fluid interface
      */
     public function filterById($id = null, $comparison = null)
     {
         if (is_array($id)) {
             $useMinMax = false;
             if (isset($id['min'])) {
-                $this->addUsingAlias(authentication_codeTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AuthenticationCodeTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($id['max'])) {
-                $this->addUsingAlias(authentication_codeTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AuthenticationCodeTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -315,7 +315,7 @@ abstract class authentication_codeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(authentication_codeTableMap::COL_ID, $id, $comparison);
+        return $this->addUsingAlias(AuthenticationCodeTableMap::COL_ID, $id, $comparison);
     }
 
     /**
@@ -330,7 +330,7 @@ abstract class authentication_codeQuery extends ModelCriteria
      * @param     string $type The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|Childauthentication_codeQuery The current query, for fluid interface
+     * @return $this|ChildAuthenticationCodeQuery The current query, for fluid interface
      */
     public function filterByType($type = null, $comparison = null)
     {
@@ -340,7 +340,7 @@ abstract class authentication_codeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(authentication_codeTableMap::COL_TYPE, $type, $comparison);
+        return $this->addUsingAlias(AuthenticationCodeTableMap::COL_TYPE, $type, $comparison);
     }
 
     /**
@@ -355,7 +355,7 @@ abstract class authentication_codeQuery extends ModelCriteria
      * @param     string $code The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|Childauthentication_codeQuery The current query, for fluid interface
+     * @return $this|ChildAuthenticationCodeQuery The current query, for fluid interface
      */
     public function filterByCode($code = null, $comparison = null)
     {
@@ -365,7 +365,7 @@ abstract class authentication_codeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(authentication_codeTableMap::COL_CODE, $code, $comparison);
+        return $this->addUsingAlias(AuthenticationCodeTableMap::COL_CODE, $code, $comparison);
     }
 
     /**
@@ -384,18 +384,18 @@ abstract class authentication_codeQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|Childauthentication_codeQuery The current query, for fluid interface
+     * @return $this|ChildAuthenticationCodeQuery The current query, for fluid interface
      */
     public function filterByTrialCount($trialCount = null, $comparison = null)
     {
         if (is_array($trialCount)) {
             $useMinMax = false;
             if (isset($trialCount['min'])) {
-                $this->addUsingAlias(authentication_codeTableMap::COL_TRIAL_COUNT, $trialCount['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AuthenticationCodeTableMap::COL_TRIAL_COUNT, $trialCount['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($trialCount['max'])) {
-                $this->addUsingAlias(authentication_codeTableMap::COL_TRIAL_COUNT, $trialCount['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AuthenticationCodeTableMap::COL_TRIAL_COUNT, $trialCount['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -406,7 +406,7 @@ abstract class authentication_codeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(authentication_codeTableMap::COL_TRIAL_COUNT, $trialCount, $comparison);
+        return $this->addUsingAlias(AuthenticationCodeTableMap::COL_TRIAL_COUNT, $trialCount, $comparison);
     }
 
     /**
@@ -427,18 +427,18 @@ abstract class authentication_codeQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|Childauthentication_codeQuery The current query, for fluid interface
+     * @return $this|ChildAuthenticationCodeQuery The current query, for fluid interface
      */
     public function filterByDateTime($dateTime = null, $comparison = null)
     {
         if (is_array($dateTime)) {
             $useMinMax = false;
             if (isset($dateTime['min'])) {
-                $this->addUsingAlias(authentication_codeTableMap::COL_DATE_TIME, $dateTime['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AuthenticationCodeTableMap::COL_DATE_TIME, $dateTime['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($dateTime['max'])) {
-                $this->addUsingAlias(authentication_codeTableMap::COL_DATE_TIME, $dateTime['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AuthenticationCodeTableMap::COL_DATE_TIME, $dateTime['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -449,7 +449,7 @@ abstract class authentication_codeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(authentication_codeTableMap::COL_DATE_TIME, $dateTime, $comparison);
+        return $this->addUsingAlias(AuthenticationCodeTableMap::COL_DATE_TIME, $dateTime, $comparison);
     }
 
     /**
@@ -470,18 +470,18 @@ abstract class authentication_codeQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|Childauthentication_codeQuery The current query, for fluid interface
+     * @return $this|ChildAuthenticationCodeQuery The current query, for fluid interface
      */
     public function filterByMemberId($memberId = null, $comparison = null)
     {
         if (is_array($memberId)) {
             $useMinMax = false;
             if (isset($memberId['min'])) {
-                $this->addUsingAlias(authentication_codeTableMap::COL_MEMBER_ID, $memberId['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(AuthenticationCodeTableMap::COL_MEMBER_ID, $memberId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($memberId['max'])) {
-                $this->addUsingAlias(authentication_codeTableMap::COL_MEMBER_ID, $memberId['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(AuthenticationCodeTableMap::COL_MEMBER_ID, $memberId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -492,7 +492,7 @@ abstract class authentication_codeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(authentication_codeTableMap::COL_MEMBER_ID, $memberId, $comparison);
+        return $this->addUsingAlias(AuthenticationCodeTableMap::COL_MEMBER_ID, $memberId, $comparison);
     }
 
     /**
@@ -503,20 +503,20 @@ abstract class authentication_codeQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return Childauthentication_codeQuery The current query, for fluid interface
+     * @return ChildAuthenticationCodeQuery The current query, for fluid interface
      */
     public function filterByMember($member, $comparison = null)
     {
         if ($member instanceof \Member) {
             return $this
-                ->addUsingAlias(authentication_codeTableMap::COL_MEMBER_ID, $member->getId(), $comparison);
+                ->addUsingAlias(AuthenticationCodeTableMap::COL_MEMBER_ID, $member->getId(), $comparison);
         } elseif ($member instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(authentication_codeTableMap::COL_MEMBER_ID, $member->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(AuthenticationCodeTableMap::COL_MEMBER_ID, $member->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
             throw new PropelException('filterByMember() only accepts arguments of type \Member or Collection');
         }
@@ -528,7 +528,7 @@ abstract class authentication_codeQuery extends ModelCriteria
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|Childauthentication_codeQuery The current query, for fluid interface
+     * @return $this|ChildAuthenticationCodeQuery The current query, for fluid interface
      */
     public function joinMember($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
@@ -630,14 +630,14 @@ abstract class authentication_codeQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   Childauthentication_code $authentication_code Object to remove from the list of results
+     * @param   ChildAuthenticationCode $authenticationCode Object to remove from the list of results
      *
-     * @return $this|Childauthentication_codeQuery The current query, for fluid interface
+     * @return $this|ChildAuthenticationCodeQuery The current query, for fluid interface
      */
-    public function prune($authentication_code = null)
+    public function prune($authenticationCode = null)
     {
-        if ($authentication_code) {
-            $this->addUsingAlias(authentication_codeTableMap::COL_ID, $authentication_code->getId(), Criteria::NOT_EQUAL);
+        if ($authenticationCode) {
+            $this->addUsingAlias(AuthenticationCodeTableMap::COL_ID, $authenticationCode->getId(), Criteria::NOT_EQUAL);
         }
 
         return $this;
@@ -652,7 +652,7 @@ abstract class authentication_codeQuery extends ModelCriteria
     public function doDeleteAll(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(authentication_codeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AuthenticationCodeTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -663,8 +663,8 @@ abstract class authentication_codeQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            authentication_codeTableMap::clearInstancePool();
-            authentication_codeTableMap::clearRelatedInstancePool();
+            AuthenticationCodeTableMap::clearInstancePool();
+            AuthenticationCodeTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -682,26 +682,26 @@ abstract class authentication_codeQuery extends ModelCriteria
     public function delete(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(authentication_codeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(AuthenticationCodeTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(authentication_codeTableMap::DATABASE_NAME);
+        $criteria->setDbName(AuthenticationCodeTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
 
-            authentication_codeTableMap::removeInstanceFromPool($criteria);
+            AuthenticationCodeTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
-            authentication_codeTableMap::clearRelatedInstancePool();
+            AuthenticationCodeTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
     }
 
-} // authentication_codeQuery
+} // AuthenticationCodeQuery

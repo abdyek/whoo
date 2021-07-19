@@ -2,15 +2,15 @@
 
 namespace Base;
 
+use \AuthenticationCode as ChildAuthenticationCode;
+use \AuthenticationCodeQuery as ChildAuthenticationCodeQuery;
 use \Member as ChildMember;
 use \MemberQuery as ChildMemberQuery;
-use \authentication_code as Childauthentication_code;
-use \authentication_codeQuery as Childauthentication_codeQuery;
 use \DateTime;
 use \Exception;
 use \PDO;
+use Map\AuthenticationCodeTableMap;
 use Map\MemberTableMap;
-use Map\authentication_codeTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -133,11 +133,11 @@ abstract class Member implements ActiveRecordInterface
     protected $provider_id;
 
     /**
-     * @var        ObjectCollection|Childauthentication_code[] Collection to store aggregation of Childauthentication_code objects.
-     * @phpstan-var ObjectCollection&\Traversable<Childauthentication_code> Collection to store aggregation of Childauthentication_code objects.
+     * @var        ObjectCollection|ChildAuthenticationCode[] Collection to store aggregation of ChildAuthenticationCode objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildAuthenticationCode> Collection to store aggregation of ChildAuthenticationCode objects.
      */
-    protected $collauthentication_codes;
-    protected $collauthentication_codesPartial;
+    protected $collAuthenticationCodes;
+    protected $collAuthenticationCodesPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -149,10 +149,10 @@ abstract class Member implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|Childauthentication_code[]
-     * @phpstan-var ObjectCollection&\Traversable<Childauthentication_code>
+     * @var ObjectCollection|ChildAuthenticationCode[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildAuthenticationCode>
      */
-    protected $authentication_codesScheduledForDeletion = null;
+    protected $authenticationCodesScheduledForDeletion = null;
 
     /**
      * Applies default values to this object.
@@ -834,7 +834,7 @@ abstract class Member implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->collauthentication_codes = null;
+            $this->collAuthenticationCodes = null;
 
         } // if (deep)
     }
@@ -950,17 +950,17 @@ abstract class Member implements ActiveRecordInterface
                 $this->resetModified();
             }
 
-            if ($this->authentication_codesScheduledForDeletion !== null) {
-                if (!$this->authentication_codesScheduledForDeletion->isEmpty()) {
-                    \authentication_codeQuery::create()
-                        ->filterByPrimaryKeys($this->authentication_codesScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->authenticationCodesScheduledForDeletion !== null) {
+                if (!$this->authenticationCodesScheduledForDeletion->isEmpty()) {
+                    \AuthenticationCodeQuery::create()
+                        ->filterByPrimaryKeys($this->authenticationCodesScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->authentication_codesScheduledForDeletion = null;
+                    $this->authenticationCodesScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collauthentication_codes !== null) {
-                foreach ($this->collauthentication_codes as $referrerFK) {
+            if ($this->collAuthenticationCodes !== null) {
+                foreach ($this->collAuthenticationCodes as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1197,20 +1197,20 @@ abstract class Member implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->collauthentication_codes) {
+            if (null !== $this->collAuthenticationCodes) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'authentication_codes';
+                        $key = 'authenticationCodes';
                         break;
                     case TableMap::TYPE_FIELDNAME:
                         $key = 'whoo_authentication_codes';
                         break;
                     default:
-                        $key = 'authentication_codes';
+                        $key = 'AuthenticationCodes';
                 }
 
-                $result[$key] = $this->collauthentication_codes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collAuthenticationCodes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1496,9 +1496,9 @@ abstract class Member implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
-            foreach ($this->getauthentication_codes() as $relObj) {
+            foreach ($this->getAuthenticationCodes() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addauthentication_code($relObj->copy($deepCopy));
+                    $copyObj->addAuthenticationCode($relObj->copy($deepCopy));
                 }
             }
 
@@ -1543,38 +1543,38 @@ abstract class Member implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
-        if ('authentication_code' === $relationName) {
-            $this->initauthentication_codes();
+        if ('AuthenticationCode' === $relationName) {
+            $this->initAuthenticationCodes();
             return;
         }
     }
 
     /**
-     * Clears out the collauthentication_codes collection
+     * Clears out the collAuthenticationCodes collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addauthentication_codes()
+     * @see        addAuthenticationCodes()
      */
-    public function clearauthentication_codes()
+    public function clearAuthenticationCodes()
     {
-        $this->collauthentication_codes = null; // important to set this to NULL since that means it is uninitialized
+        $this->collAuthenticationCodes = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collauthentication_codes collection loaded partially.
+     * Reset is the collAuthenticationCodes collection loaded partially.
      */
-    public function resetPartialauthentication_codes($v = true)
+    public function resetPartialAuthenticationCodes($v = true)
     {
-        $this->collauthentication_codesPartial = $v;
+        $this->collAuthenticationCodesPartial = $v;
     }
 
     /**
-     * Initializes the collauthentication_codes collection.
+     * Initializes the collAuthenticationCodes collection.
      *
-     * By default this just sets the collauthentication_codes collection to an empty array (like clearcollauthentication_codes());
+     * By default this just sets the collAuthenticationCodes collection to an empty array (like clearcollAuthenticationCodes());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1583,20 +1583,20 @@ abstract class Member implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initauthentication_codes($overrideExisting = true)
+    public function initAuthenticationCodes($overrideExisting = true)
     {
-        if (null !== $this->collauthentication_codes && !$overrideExisting) {
+        if (null !== $this->collAuthenticationCodes && !$overrideExisting) {
             return;
         }
 
-        $collectionClassName = authentication_codeTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = AuthenticationCodeTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collauthentication_codes = new $collectionClassName;
-        $this->collauthentication_codes->setModel('\authentication_code');
+        $this->collAuthenticationCodes = new $collectionClassName;
+        $this->collAuthenticationCodes->setModel('\AuthenticationCode');
     }
 
     /**
-     * Gets an array of Childauthentication_code objects which contain a foreign key that references this object.
+     * Gets an array of ChildAuthenticationCode objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -1606,118 +1606,118 @@ abstract class Member implements ActiveRecordInterface
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|Childauthentication_code[] List of Childauthentication_code objects
-     * @phpstan-return ObjectCollection&\Traversable<Childauthentication_code> List of Childauthentication_code objects
+     * @return ObjectCollection|ChildAuthenticationCode[] List of ChildAuthenticationCode objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildAuthenticationCode> List of ChildAuthenticationCode objects
      * @throws PropelException
      */
-    public function getauthentication_codes(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getAuthenticationCodes(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collauthentication_codesPartial && !$this->isNew();
-        if (null === $this->collauthentication_codes || null !== $criteria || $partial) {
+        $partial = $this->collAuthenticationCodesPartial && !$this->isNew();
+        if (null === $this->collAuthenticationCodes || null !== $criteria || $partial) {
             if ($this->isNew()) {
                 // return empty collection
-                if (null === $this->collauthentication_codes) {
-                    $this->initauthentication_codes();
+                if (null === $this->collAuthenticationCodes) {
+                    $this->initAuthenticationCodes();
                 } else {
-                    $collectionClassName = authentication_codeTableMap::getTableMap()->getCollectionClassName();
+                    $collectionClassName = AuthenticationCodeTableMap::getTableMap()->getCollectionClassName();
 
-                    $collauthentication_codes = new $collectionClassName;
-                    $collauthentication_codes->setModel('\authentication_code');
+                    $collAuthenticationCodes = new $collectionClassName;
+                    $collAuthenticationCodes->setModel('\AuthenticationCode');
 
-                    return $collauthentication_codes;
+                    return $collAuthenticationCodes;
                 }
             } else {
-                $collauthentication_codes = Childauthentication_codeQuery::create(null, $criteria)
+                $collAuthenticationCodes = ChildAuthenticationCodeQuery::create(null, $criteria)
                     ->filterByMember($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collauthentication_codesPartial && count($collauthentication_codes)) {
-                        $this->initauthentication_codes(false);
+                    if (false !== $this->collAuthenticationCodesPartial && count($collAuthenticationCodes)) {
+                        $this->initAuthenticationCodes(false);
 
-                        foreach ($collauthentication_codes as $obj) {
-                            if (false == $this->collauthentication_codes->contains($obj)) {
-                                $this->collauthentication_codes->append($obj);
+                        foreach ($collAuthenticationCodes as $obj) {
+                            if (false == $this->collAuthenticationCodes->contains($obj)) {
+                                $this->collAuthenticationCodes->append($obj);
                             }
                         }
 
-                        $this->collauthentication_codesPartial = true;
+                        $this->collAuthenticationCodesPartial = true;
                     }
 
-                    return $collauthentication_codes;
+                    return $collAuthenticationCodes;
                 }
 
-                if ($partial && $this->collauthentication_codes) {
-                    foreach ($this->collauthentication_codes as $obj) {
+                if ($partial && $this->collAuthenticationCodes) {
+                    foreach ($this->collAuthenticationCodes as $obj) {
                         if ($obj->isNew()) {
-                            $collauthentication_codes[] = $obj;
+                            $collAuthenticationCodes[] = $obj;
                         }
                     }
                 }
 
-                $this->collauthentication_codes = $collauthentication_codes;
-                $this->collauthentication_codesPartial = false;
+                $this->collAuthenticationCodes = $collAuthenticationCodes;
+                $this->collAuthenticationCodesPartial = false;
             }
         }
 
-        return $this->collauthentication_codes;
+        return $this->collAuthenticationCodes;
     }
 
     /**
-     * Sets a collection of Childauthentication_code objects related by a one-to-many relationship
+     * Sets a collection of ChildAuthenticationCode objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $authentication_codes A Propel collection.
+     * @param      Collection $authenticationCodes A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildMember The current object (for fluent API support)
      */
-    public function setauthentication_codes(Collection $authentication_codes, ConnectionInterface $con = null)
+    public function setAuthenticationCodes(Collection $authenticationCodes, ConnectionInterface $con = null)
     {
-        /** @var Childauthentication_code[] $authentication_codesToDelete */
-        $authentication_codesToDelete = $this->getauthentication_codes(new Criteria(), $con)->diff($authentication_codes);
+        /** @var ChildAuthenticationCode[] $authenticationCodesToDelete */
+        $authenticationCodesToDelete = $this->getAuthenticationCodes(new Criteria(), $con)->diff($authenticationCodes);
 
 
-        $this->authentication_codesScheduledForDeletion = $authentication_codesToDelete;
+        $this->authenticationCodesScheduledForDeletion = $authenticationCodesToDelete;
 
-        foreach ($authentication_codesToDelete as $authentication_codeRemoved) {
-            $authentication_codeRemoved->setMember(null);
+        foreach ($authenticationCodesToDelete as $authenticationCodeRemoved) {
+            $authenticationCodeRemoved->setMember(null);
         }
 
-        $this->collauthentication_codes = null;
-        foreach ($authentication_codes as $authentication_code) {
-            $this->addauthentication_code($authentication_code);
+        $this->collAuthenticationCodes = null;
+        foreach ($authenticationCodes as $authenticationCode) {
+            $this->addAuthenticationCode($authenticationCode);
         }
 
-        $this->collauthentication_codes = $authentication_codes;
-        $this->collauthentication_codesPartial = false;
+        $this->collAuthenticationCodes = $authenticationCodes;
+        $this->collAuthenticationCodesPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related authentication_code objects.
+     * Returns the number of related AuthenticationCode objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related authentication_code objects.
+     * @return int             Count of related AuthenticationCode objects.
      * @throws PropelException
      */
-    public function countauthentication_codes(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countAuthenticationCodes(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collauthentication_codesPartial && !$this->isNew();
-        if (null === $this->collauthentication_codes || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collauthentication_codes) {
+        $partial = $this->collAuthenticationCodesPartial && !$this->isNew();
+        if (null === $this->collAuthenticationCodes || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collAuthenticationCodes) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getauthentication_codes());
+                return count($this->getAuthenticationCodes());
             }
 
-            $query = Childauthentication_codeQuery::create(null, $criteria);
+            $query = ChildAuthenticationCodeQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -1727,28 +1727,28 @@ abstract class Member implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collauthentication_codes);
+        return count($this->collAuthenticationCodes);
     }
 
     /**
-     * Method called to associate a Childauthentication_code object to this object
-     * through the Childauthentication_code foreign key attribute.
+     * Method called to associate a ChildAuthenticationCode object to this object
+     * through the ChildAuthenticationCode foreign key attribute.
      *
-     * @param  Childauthentication_code $l Childauthentication_code
+     * @param  ChildAuthenticationCode $l ChildAuthenticationCode
      * @return $this|\Member The current object (for fluent API support)
      */
-    public function addauthentication_code(Childauthentication_code $l)
+    public function addAuthenticationCode(ChildAuthenticationCode $l)
     {
-        if ($this->collauthentication_codes === null) {
-            $this->initauthentication_codes();
-            $this->collauthentication_codesPartial = true;
+        if ($this->collAuthenticationCodes === null) {
+            $this->initAuthenticationCodes();
+            $this->collAuthenticationCodesPartial = true;
         }
 
-        if (!$this->collauthentication_codes->contains($l)) {
-            $this->doAddauthentication_code($l);
+        if (!$this->collAuthenticationCodes->contains($l)) {
+            $this->doAddAuthenticationCode($l);
 
-            if ($this->authentication_codesScheduledForDeletion and $this->authentication_codesScheduledForDeletion->contains($l)) {
-                $this->authentication_codesScheduledForDeletion->remove($this->authentication_codesScheduledForDeletion->search($l));
+            if ($this->authenticationCodesScheduledForDeletion and $this->authenticationCodesScheduledForDeletion->contains($l)) {
+                $this->authenticationCodesScheduledForDeletion->remove($this->authenticationCodesScheduledForDeletion->search($l));
             }
         }
 
@@ -1756,29 +1756,29 @@ abstract class Member implements ActiveRecordInterface
     }
 
     /**
-     * @param Childauthentication_code $authentication_code The Childauthentication_code object to add.
+     * @param ChildAuthenticationCode $authenticationCode The ChildAuthenticationCode object to add.
      */
-    protected function doAddauthentication_code(Childauthentication_code $authentication_code)
+    protected function doAddAuthenticationCode(ChildAuthenticationCode $authenticationCode)
     {
-        $this->collauthentication_codes[]= $authentication_code;
-        $authentication_code->setMember($this);
+        $this->collAuthenticationCodes[]= $authenticationCode;
+        $authenticationCode->setMember($this);
     }
 
     /**
-     * @param  Childauthentication_code $authentication_code The Childauthentication_code object to remove.
+     * @param  ChildAuthenticationCode $authenticationCode The ChildAuthenticationCode object to remove.
      * @return $this|ChildMember The current object (for fluent API support)
      */
-    public function removeauthentication_code(Childauthentication_code $authentication_code)
+    public function removeAuthenticationCode(ChildAuthenticationCode $authenticationCode)
     {
-        if ($this->getauthentication_codes()->contains($authentication_code)) {
-            $pos = $this->collauthentication_codes->search($authentication_code);
-            $this->collauthentication_codes->remove($pos);
-            if (null === $this->authentication_codesScheduledForDeletion) {
-                $this->authentication_codesScheduledForDeletion = clone $this->collauthentication_codes;
-                $this->authentication_codesScheduledForDeletion->clear();
+        if ($this->getAuthenticationCodes()->contains($authenticationCode)) {
+            $pos = $this->collAuthenticationCodes->search($authenticationCode);
+            $this->collAuthenticationCodes->remove($pos);
+            if (null === $this->authenticationCodesScheduledForDeletion) {
+                $this->authenticationCodesScheduledForDeletion = clone $this->collAuthenticationCodes;
+                $this->authenticationCodesScheduledForDeletion->clear();
             }
-            $this->authentication_codesScheduledForDeletion[]= clone $authentication_code;
-            $authentication_code->setMember(null);
+            $this->authenticationCodesScheduledForDeletion[]= clone $authenticationCode;
+            $authenticationCode->setMember(null);
         }
 
         return $this;
@@ -1819,14 +1819,14 @@ abstract class Member implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
-            if ($this->collauthentication_codes) {
-                foreach ($this->collauthentication_codes as $o) {
+            if ($this->collAuthenticationCodes) {
+                foreach ($this->collAuthenticationCodes as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
         } // if ($deep)
 
-        $this->collauthentication_codes = null;
+        $this->collAuthenticationCodes = null;
     }
 
     /**

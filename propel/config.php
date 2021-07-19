@@ -5,7 +5,7 @@ $serviceContainer->setAdapterClass('whoo', 'mysql');
 $manager = new \Propel\Runtime\Connection\ConnectionManagerSingle();
 $manager->setConfiguration(array (
   'classname' => 'Propel\\Runtime\\Connection\\ConnectionWrapper',
-  'dsn' => 'mysql:host=localhost;dbname=whoo',
+  'dsn' => 'mysql:host=127.0.0.1;dbname=whoo',
   'user' => 'root',
   'password' => '',
   'attributes' =>
