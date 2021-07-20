@@ -21,6 +21,9 @@
         <testsuite name="model">
             <directory>tests/unit/Model</directory>
         </testsuite>
+        <testsuite name="controller">
+            <directory>tests/unit/Controller</directory>
+        </testsuite>
 
     </testsuites>
 

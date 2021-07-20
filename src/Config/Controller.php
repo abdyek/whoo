@@ -47,6 +47,13 @@ class Controller {
                     'max'=>255
                 ]
             ],
+            'username'=>[
+                'type'=>'str',
+                'limits'=>[
+                    'min'=>1,
+                    'max'=>40
+                ]
+            ],
             'password'=>[
                 'type'=>'str',
                 'limits'=>[

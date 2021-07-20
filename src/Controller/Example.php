@@ -6,6 +6,6 @@ use Whoo\Core\Response;
 
 class Example extends Controller {
     protected function run() {
-        $this->setResponseData($this->data);
+        $this->setSuccess();
     }
 }
