@@ -20,6 +20,9 @@ class Member {
         $member->save();
         return $member;
     }
+    public static function getByEmail($email) {
+        return self::query()->findOneByEmail($email);
+    }
     private static function query() {
         return \MemberQuery::create();
     }

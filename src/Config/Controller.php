@@ -62,5 +62,28 @@ class Controller {
                 ]
             ]
         ],
+        'SignIn'=>[
+            'who'=>[
+                'type'=>'str',
+                'limits'=>[
+                    'min'=>0,
+                    'max'=>50
+                ]
+            ],
+            'email'=>[
+                'type'=>'email',
+                'limits'=>[
+                    'min'=>1,
+                    'max'=>255
+                ]
+            ],
+            'password'=>[
+                'type'=>'str',
+                'limits'=>[
+                    'min'=>8,
+                    'max'=>50
+                ]
+            ]
+        ]
     ];
 }

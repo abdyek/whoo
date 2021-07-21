@@ -45,6 +45,16 @@ class MemberTest extends TestCase {
         $this->assertEquals($data['providerId'], $member->getProviderId());
         $this->assertTrue($member->getEmailVerified());
     }
+    public function testGetByEmail() {
+        $member = $this->createExample();
+        $memberFromModel = Member::getByEmail($member->getEmail());
+        $member2FromModel = Member::getByEmail('willBeNull@abc.com');
+        $this->assertNotNull($memberFromModel);
+        $this->assertSame(self::$traitEmail, $memberFromModel->getEmail());
+        $this->assertSame($member->getId(), $memberFromModel->getId());
+        $this->assertSame($member->getUsername(), $memberFromModel->getUsername());
+        $this->assertNull($member2FromModel);
+    }
     private function getData() {
         return [
             'email'=>'example@example.com',
