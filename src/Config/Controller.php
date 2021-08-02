@@ -295,6 +295,15 @@ class Controller {
             'open'=>[
                 'type'=>'bool'
             ]
+        ],
+        'FetchInfo'=> [
+            'jwt'=>[
+                'type'=>'str',
+                'limits'=>[
+                    'min'=>1,
+                    'max'=>1000
+                ]
+            ]
         ]
     ];
 }
