@@ -24,20 +24,17 @@ class SignInTest extends TestCase {
         if($signUp->isSuccess) {
             $data = $this->getData();
             unset($data['username']);
-            $data['who'] = 'member';
             $signIn = new SignIn($data);
             $this->assertTrue($signIn->isSuccess);
             $decoded = (array) JWT::decode($signIn->jwt, JWTConfig::SECRET_KEY, array('HS256'));
             $this->assertNotNull($decoded);
             $this->assertEquals($signIn->user->getId(), $decoded['userId']);
-            $this->assertEquals($data['who'], $decoded['who']);
         }
     }
     public function testNotFoundException() {
         $this->expectException(NotFoundException::class);
         $data = $this->getData();
         unset($data['username']);
-        $data['who'] = 'member';
         $data['email'] = 'notFoundEmail@123.com';
         $signIn = new SignIn($data);
     }
@@ -48,7 +45,6 @@ class SignInTest extends TestCase {
         if($signUp->isSuccess) {
             $data = $this->getData();
             unset($data['username']);
-            $data['who'] = 'member';
             $data['password'] = 'wrong password';
             $signIn = new SignIn($data);
         }

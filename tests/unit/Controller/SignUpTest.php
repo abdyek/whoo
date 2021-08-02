@@ -5,7 +5,6 @@ use PHPUnit\Framework\TestCase;
 use Whoo\Controller\SignUp;
 use Whoo\Controller\Example;
 use Whoo\Exception\NotUniqueEmailException;
-use Whoo\Exception\NotUniqueUsernameException;
 
 /**
  * @covers SignUp::
@@ -27,13 +26,6 @@ class SignUpTest extends TestCase {
         $member = self::createExample();
         $data = $this->getData();
         $data['email'] = self::$traitEmail;
-        $signUp = new SignUp($data);
-    }
-    public function testRunNotUniqueUsernameException() {
-        $this->expectException(NotUniqueUsernameException::class);
-        $member = self::createExample();
-        $data = $this->getData();
-        $data['username'] = self::$traitUsername;
         $signUp = new SignUp($data);
     }
     private function getData() {

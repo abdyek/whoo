@@ -13,7 +13,7 @@ CREATE TABLE `whoo_member`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `email` VARCHAR(255) NOT NULL,
-    `username` VARCHAR(40) NOT NULL,
+    `username` VARCHAR(40),
     `password_hash` VARCHAR(60),
     `email_verified` TINYINT(1) DEFAULT 0 NOT NULL,
     `sign_up_date_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

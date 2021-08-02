@@ -12,7 +12,6 @@ class Member {
     public static function create($args) {
         $member = new \Member();
         $member->setEmail($args['email']);
-        $member->setUsername($args['username']);
         $member->setPasswordHash((isset($args['password'])?password_hash($args['password'], PASSWORD_DEFAULT):null));
         $member->setProvider((isset($args['provider'])?$args['provider']:null));
         $member->setProviderId((isset($args['providerId'])?$args['providerId']:null));

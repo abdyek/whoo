@@ -56,13 +56,6 @@ class Controller {
             ]
         ],
         'SignIn'=>[
-            'who'=>[
-                'type'=>'str',
-                'limits'=>[
-                    'min'=>0,
-                    'max'=>50
-                ]
-            ],
             'email'=>[
                 'type'=>'email',
                 'limits'=>[
@@ -79,13 +72,6 @@ class Controller {
             ]
         ],
         'SignInByUsername'=>[
-            'who'=>[
-                'type'=>'str',
-                'limits'=>[
-                    'min'=>0,
-                    'max'=>50
-                ]
-            ],
             'username'=>[
                 'type'=>'str',
                 'limits'=>[
@@ -152,13 +138,6 @@ class Controller {
             ]
         ],
         'SignInByProvider'=>[
-            'who'=>[
-                'type'=>'str',
-                'limits'=>[
-                    'min'=>0,
-                    'max'=>50
-                ]
-            ],
             'email'=>[
                 'type'=>'email',
                 'limits'=>[

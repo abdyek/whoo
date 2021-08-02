@@ -3,7 +3,7 @@
     <table name="whoo_member" phpName="Member">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
         <column name="email" type="varchar" size="255" required="true" />
-        <column name="username" type="varchar" size="40" required="true" />
+        <column name="username" type="varchar" size="40" required="false" />
         <column name="password_hash" type="varchar" size="60" required="false"/>
         <column name="email_verified" type="boolean" required="true" defaultValue="false"/>
         <column name="sign_up_date_time" type="timestamp" required="true" defaultExpr="CURRENT_TIMESTAMP"/>

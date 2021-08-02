@@ -9,7 +9,6 @@ use Whoo\Exception\InvalidDataException;
 class Controller {
     public $isSuccess = false;
     protected $userId = null;
-    protected $who = 'guest';
     public function __construct($data) {
         $this->data = $data;
         $this->setClassName();
@@ -37,7 +36,6 @@ class Controller {
             try {
                 $userInfo = (array) JWT::decode($this->data['jwt'], JWTConfig::SECRET_KEY, array('HS256'));
                 $this->userId = $userInfo['userId'];
-                $this->who = $userInfo['who'];
             } catch (\Firebase\JWT\ExpiredException $e) {
                 // nothing
             } catch (\Firebase\JWT\SignatureInvalidException $e) {

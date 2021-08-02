@@ -24,7 +24,6 @@ class SignIn extends Controller {
             'aud' => JWTConfig::AUD,
             'iat' => JWTConfig::IAT,
             'nbf' => JWTConfig::NBF,
-            'who' => $this->data['who'],
             'userId' => $this->user ->getId(),
         ], JWTConfig::SECRET_KEY);
         $this->setSuccess();
