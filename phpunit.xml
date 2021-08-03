@@ -24,6 +24,9 @@
         <testsuite name="controller">
             <directory>tests/unit/Controller</directory>
         </testsuite>
+        <testsuite name="tool">
+            <directory>tests/unit/Tool</directory>
+        </testsuite>
 
     </testsuites>
 
