@@ -8,7 +8,6 @@ require 'propel/config.php';
 
 class Example extends Controller {
     protected function run() {
-        $this->setSuccess();
     }
 }
 
@@ -26,7 +25,7 @@ class ControllerTest extends TestCase {
             'boolValue'=>true
         ];
         $example = new Example($data);
-        $this->assertTrue($example->isSuccess);
+        $this->assertSame($data, $example->data);
     }
     /**
      * @dataProvider dataProvider

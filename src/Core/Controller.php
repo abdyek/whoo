@@ -7,7 +7,6 @@ use Whoo\Config\Controller as ControllerConfig;
 use Whoo\Exception\InvalidDataException;
 
 class Controller {
-    public $isSuccess = false;
     protected $userId = null;
     public function __construct($data) {
         $this->data = $data;
@@ -87,8 +86,5 @@ class Controller {
     }
     private function emailPatternCheck($email) {
         return filter_var($email, FILTER_VALIDATE_EMAIL);
-    }
-    protected function setSuccess() {
-        $this->isSuccess = true;
     }
 }

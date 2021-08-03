@@ -13,6 +13,5 @@ class SignUp extends Controller {
         }
         $member = MemberModel::create($this->data);
         $this->temporaryToken = TemporaryToken::generate($member->getId());
-        $this->setSuccess();
     }
 }

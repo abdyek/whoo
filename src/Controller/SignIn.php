@@ -26,7 +26,6 @@ class SignIn extends Controller {
             'nbf' => JWTConfig::NBF,
             'userId' => $this->user ->getId(),
         ], JWTConfig::SECRET_KEY);
-        $this->setSuccess();
     }
     private function validateEmailPassword() {
         $pwHash = $this->user->getPasswordHash();

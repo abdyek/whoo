@@ -20,16 +20,12 @@ class SignInTest extends TestCase {
     }
     public function testRun() {
         $signUp = new SignUp($this->getData());
-        $this->assertTrue($signUp->isSuccess);
-        if($signUp->isSuccess) {
-            $data = $this->getData();
-            unset($data['username']);
-            $signIn = new SignIn($data);
-            $this->assertTrue($signIn->isSuccess);
-            $decoded = (array) JWT::decode($signIn->jwt, JWTConfig::SECRET_KEY, array('HS256'));
-            $this->assertNotNull($decoded);
-            $this->assertEquals($signIn->user->getId(), $decoded['userId']);
-        }
+        $data = $this->getData();
+        unset($data['username']);
+        $signIn = new SignIn($data);
+        $decoded = (array) JWT::decode($signIn->jwt, JWTConfig::SECRET_KEY, array('HS256'));
+        $this->assertNotNull($decoded);
+        $this->assertEquals($signIn->user->getId(), $decoded['userId']);
     }
     public function testNotFoundException() {
         $this->expectException(NotFoundException::class);
@@ -41,13 +37,10 @@ class SignInTest extends TestCase {
     public function testRunIncorrectPasswordException() {
         $this->expectException(IncorrectPasswordException::class);
         $signUp = new SignUp($this->getData());
-        $this->assertTrue($signUp->isSuccess);
-        if($signUp->isSuccess) {
-            $data = $this->getData();
-            unset($data['username']);
-            $data['password'] = 'wrong password';
-            $signIn = new SignIn($data);
-        }
+        $data = $this->getData();
+        unset($data['username']);
+        $data['password'] = 'wrong password';
+        $signIn = new SignIn($data);
     }
     private function getData() {
         return [

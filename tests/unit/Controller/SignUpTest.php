@@ -19,7 +19,7 @@ class SignUpTest extends TestCase {
     public function testRun() {
         $data = $this->getData();
         $signUp = new SignUp($data);
-        $this->assertTrue($signUp->isSuccess);
+        $this->assertEquals(60, strlen($signUp->temporaryToken));
     }
     public function testRunNotUniqueEmailException() {
         $this->expectException(NotUniqueEmailException::class);
