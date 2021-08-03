@@ -22,6 +22,20 @@ class Member {
     public static function getByEmail($email) {
         return self::query()->findOneByEmail($email);
     }
+    public static function getByUsername($username) {
+        return self::query()->findOneByUsername($username);
+    }
+    public static function getById($id) {
+        return self::query()->findPK($id);
+    }
+    public static function setUsername($user, $username) {
+        $user->setUsername($username);
+        $user->save();
+    }
+    public static function setEmailVerified($user, $value) {
+        $user->setEmailVerified($value);
+        $user->save();
+    }
     private static function query() {
         return \MemberQuery::create();
     }

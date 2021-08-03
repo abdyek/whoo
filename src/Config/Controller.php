@@ -91,8 +91,8 @@ class Controller {
             'temporaryToken'=>[
                 'type'=>'str',
                 'limits'=>[
-                    'min'=>50,
-                    'max'=>50
+                    'min'=>60,
+                    'max'=>60
                 ]
             ],
             'username'=>[
