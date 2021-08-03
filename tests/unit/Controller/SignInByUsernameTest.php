@@ -30,6 +30,7 @@ class SignInByUsernameTest extends TestCase {
             'password'=>$data['password']
         ]);
         $this->assertNotNull($signIn->jwt);
+        $this->assertSame(self::USERNAME, $signIn->user->getUsername());
     }
     public function testRunIncorrectPasswordException() {
         $this->expectException(IncorrectPasswordException::class);

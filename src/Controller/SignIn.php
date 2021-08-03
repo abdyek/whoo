@@ -7,10 +7,12 @@ use Whoo\Exception\NotFoundException;
 use Whoo\Exception\IncorrectPasswordException;
 use Firebase\JWT\JWT;
 use Whoo\Config\JWT as JWTConfig;
+use Whoo\Tool\TemporaryToken;
 
 class SignIn extends Controller {
     public $jwt = null;
     public $user = null;
+    public $temporaryToken = null;
     protected function run() {
         $this->user = MemberModel::getByEmail($this->data['email']);
         if($this->user ===null) {
@@ -18,6 +20,9 @@ class SignIn extends Controller {
         }
         if($this->validateEmailPassword()===false) {
             throw new IncorrectPasswordException;
+        }
+        if($this->user->getUsername()===null) {
+            $this->temporaryToken = TemporaryToken::generate($this->user->getId());
         }
         $this->jwt = JWT::encode([
             'iss' => JWTConfig::ISS,

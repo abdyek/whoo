@@ -17,6 +17,8 @@ class TemporaryTokenTest extends TestCase {
         $tempToken = TemporaryToken::generate(self::USERID);
         $userId = TemporaryToken::getUserId($tempToken);
         $this->assertEquals(self::USERID, $userId);
+        $userId = TemporaryToken::getUserId('wrong temp token');
+        $this->assertNull($userId);
     }
 }
 
