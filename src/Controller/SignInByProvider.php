@@ -4,7 +4,6 @@ namespace Whoo\Controller;
 use Firebase\JWT\JWT;
 use Whoo\Core\Controller;
 use Whoo\Model\Member as MemberModel;
-use Whoo\Config\Whoo as Config;
 use Whoo\Config\JWT as JWTConfig;
 use Whoo\Exception\SignUpByEmailException;
 use Whoo\Exception\NullUsernameException;
@@ -17,11 +16,11 @@ class SignInByProvider extends Controller {
         if($user===null) {
             $user = MemberModel::create($this->data);
             $this->registering = true;
-        } else if(Config::BLOCK_IF_SIGN_UP_BEFORE_BY_EMAIL and $user->getProvider()===null) {
+        } else if($this->config['BLOCK_IF_SIGN_UP_BEFORE_BY_EMAIL'] and $user->getProvider()===null) {
             throw new SignUpByEmailException;
         }
         $user = MemberModel::getByEmail($this->data['email']);
-        if(Config::USE_USERNAME and $user->getUsername()===null) {
+        if($this->config['USE_USERNAME'] and $user->getUsername()===null) {
             throw new NullUsernameException;
         }
         $this->jwt = JWT::encode([

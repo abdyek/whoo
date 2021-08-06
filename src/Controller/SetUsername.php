@@ -7,7 +7,6 @@ use Whoo\Exception\InvalidTemporaryTokenException;
 use Whoo\Exception\NotNullUsernameException;
 use Whoo\Exception\NotUniqueUsernameException;
 use Whoo\Model\Member;
-use Whoo\Config\Whoo as Config;
 
 class SetUsername extends Controller {
     protected function run() {

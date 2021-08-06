@@ -2,18 +2,25 @@
 namespace Whoo\Core;
 use Firebase\JWT\JWT;
 use Whoo\Core\Response;
+use Whoo\Config\Whoo;
 use Whoo\Config\JWT as JWTConfig;
 use Whoo\Config\Controller as ControllerConfig;
 use Whoo\Exception\InvalidDataException;
 
 class Controller {
     protected $userId = null;
-    public function __construct($data) {
+    public function __construct($data, $config=Whoo::CONFIG) {
         $this->data = $data;
         $this->setClassName();
         $this->setRequired();
         $this->detectUser();
         $this->checkRequiredWrapper();
+        $this->config = $config;
+        /*
+            ^^^^^^^^^^^^^^^^^
+            I had to add config attribute to test other states of Whoo configs by phpunit.
+            I searched solution of the issue before. https://stackoverflow.com/questions/68628154/is-there-any-way-to-manipulate-config-file-of-my-project-in-phpunit
+        */
         $this->run();
     }
     private function setClassName() {
@@ -83,6 +90,8 @@ class Controller {
             }
         }
         return true;
+    }
+    public function setConfig($configObject) {
     }
     private function emailPatternCheck($email) {
         return filter_var($email, FILTER_VALIDATE_EMAIL);
