@@ -23,8 +23,9 @@ class SignInByProviderTest extends TestCase {
         $newConfig = $this->changeConfig(['USE_USERNAME'=>true]);
         $dataForProvider = self::getDataForProvider();
         $signUp = new SignInByProvider($dataForProvider, $newConfig);
-        $member = MemberModel::getByEmail($dataForProvider['email']);
+        $user = MemberModel::getByEmail($dataForProvider['email']);
         $this->assertTrue($signUp->registering);
+        $this->assertNotNull($user->getId());
         $this->assertNull($signUp->jwt);
     }
     public function testSignUpUseUsernameFalseOK() {
@@ -40,11 +41,9 @@ class SignInByProviderTest extends TestCase {
             'BLOCK_IF_SIGN_UP_BEFORE_BY_EMAIL'=>true
         ]);
         $dataForProvider = self::getDataForProvider();
-        $signUp = new SignInByProvider($dataForProvider, $newConfig);
-        $signIn = new SignInByProvider($dataForProvider, $newConfig);
-        $this->assertTrue($signUp->registering);
-        $this->assertFalse($signIn->registering);
-        $this->assertNotNull($signUp->jwt);
+        $signUpIn= new SignInByProvider($dataForProvider, $newConfig);
+        $this->assertTrue($signUpIn->registering);
+        $this->assertNotNull($signUpIn->jwt);
     }
     public function testSignInBlockIfSignUpBeforeByEmailTrueException() {
         $this->expectException(SignUpByEmailException::class);
@@ -55,11 +54,18 @@ class SignInByProviderTest extends TestCase {
         ]);
         $signUpNormally = new SignUp($data, $newConfig);
         $dataForProvider = $this->getDataForProvider();
-        $signIn = new signInByProvider($dataForProvider, $newConfig);
+        $signIn = new SignInByProvider($dataForProvider, $newConfig);
     }
     public function testSignInBlockIfSignUpBeforeByEmailFalse() {
-        // NOT completed
-        $this->assertEquals(1,1);
+        $newConfig = $this->changeConfig([
+            'USE_USERNAME'=>false,
+            'BLOCK_IF_SIGN_UP_BEFORE_BY_EMAIL'=>false
+        ]);
+        $data = self::getData();
+        $signUp = new SignUp($data, $newConfig);
+        $dataForProvider = self::getDataForProvider();
+        $signIn = new SignInByProvider($dataForProvider, $newConfig);
+        $this->assertNotNull($signIn->jwt);
     }
     private function getData() {
         return [
