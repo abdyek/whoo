@@ -12,7 +12,7 @@ use Whoo\Exception\NotUniqueEmailException;
 
 class SignUpTest extends TestCase {
     use Reset;
-    use MemberTool;
+    use UserTool;
     public function setUp(): void {
         self::reset();
     }
@@ -23,7 +23,7 @@ class SignUpTest extends TestCase {
     }
     public function testRunNotUniqueEmailException() {
         $this->expectException(NotUniqueEmailException::class);
-        $member = self::createExample();
+        $user = self::createExample();
         $data = $this->getData();
         $data['email'] = self::$traitEmail;
         $signUp = new SignUp($data);

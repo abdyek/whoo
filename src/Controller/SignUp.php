@@ -2,16 +2,16 @@
 
 namespace Whoo\Controller;
 use Whoo\Core\Controller;
-use Whoo\Model\Member as MemberModel;
+use Whoo\Model\User as UserModel;
 use Whoo\Exception\NotUniqueEmailException;
 use Whoo\Tool\TemporaryToken;
 
 class SignUp extends Controller {
     protected function run() {
-        if(!MemberModel::isUniqueEmail($this->data['email'])) {
+        if(!UserModel::isUniqueEmail($this->data['email'])) {
             throw new NotUniqueEmailException;
         }
-        $member = MemberModel::create($this->data);
-        $this->temporaryToken = TemporaryToken::generate($member->getId());
+        $user = UserModel::create($this->data);
+        $this->temporaryToken = TemporaryToken::generate($user->getId());
     }
 }

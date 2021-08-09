@@ -4,7 +4,7 @@ require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
 use Whoo\Controller\SignUp;
 use Whoo\Controller\SignInByUsername;
-use Whoo\Model\Member as MemberModel;
+use Whoo\Model\User as UserModel;
 use Whoo\Exception\IncorrectPasswordException;
 use Whoo\Exception\NotFoundException;
 use Whoo\Exception\NotVerifiedEmailException;
@@ -22,9 +22,9 @@ class SignInByUsernameTest extends TestCase {
     public function testRun() {
         $data = $this->getData();
         $signUp = new SignUp($data);
-        $user= MemberModel::getByEmail($data['email']);
-        MemberModel::setUsername($user, self::USERNAME);
-        MemberModel::setEmailVerified($user, true);
+        $user= UserModel::getByEmail($data['email']);
+        UserModel::setUsername($user, self::USERNAME);
+        UserModel::setEmailVerified($user, true);
         $signIn = new SignInByUsername([
             'username'=>self::USERNAME,
             'password'=>$data['password']
@@ -36,9 +36,9 @@ class SignInByUsernameTest extends TestCase {
         $this->expectException(IncorrectPasswordException::class);
         $data = $this->getData();
         $signUp = new SignUp($data);
-        $user = MemberModel::getByEmail($data['email']);
-        MemberModel::setUsername($user, self::USERNAME);
-        MemberModel::setEmailVerified($user, true);
+        $user = UserModel::getByEmail($data['email']);
+        UserModel::setUsername($user, self::USERNAME);
+        UserModel::setEmailVerified($user, true);
         $signIn = new SignInByUsername([
             'username'=>self::USERNAME,
             'password'=>'wR0ng paSsWorD'
@@ -56,8 +56,8 @@ class SignInByUsernameTest extends TestCase {
         $this->expectException(NotVerifiedEmailException::class);
         $data = $this->getData();
         $signUp = new SignUp($data);
-        $user = MemberModel::getByEmail($data['email']);
-        MemberModel::setUsername($user, self::USERNAME);
+        $user = UserModel::getByEmail($data['email']);
+        UserModel::setUsername($user, self::USERNAME);
         $signIn = new SignInByUsername([
             'username'=>self::USERNAME,
             'password'=>$data['password']

@@ -4,6 +4,6 @@ $serviceContainer->initDatabaseMaps(array (
   'whoo' => 
   array (
     0 => '\\Map\\AuthenticationCodeTableMap',
-    1 => '\\Map\\MemberTableMap',
+    1 => '\\Map\\UserTableMap',
   ),
 ));

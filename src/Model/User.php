@@ -2,7 +2,7 @@
 
 namespace Whoo\Model;
 
-class Member {
+class User {
     public static function isUniqueEmail($email) : bool {
         return (self::query()->findOneByEmail($email)?false:true);
     }
@@ -10,14 +10,14 @@ class Member {
         return (self::query()->findOneByUsername($username)? false:true);
     }
     public static function create($args) {
-        $member = new \Member();
-        $member->setEmail($args['email']);
-        $member->setPasswordHash((isset($args['password'])?password_hash($args['password'], PASSWORD_DEFAULT):null));
-        $member->setProvider((isset($args['provider'])?$args['provider']:null));
-        $member->setProviderId((isset($args['providerId'])?$args['providerId']:null));
-        $member->setEmailVerified(((isset($args['provider']) and isset($args['providerId']))?true:false));
-        $member->save();
-        return $member;
+        $user = new \User();
+        $user->setEmail($args['email']);
+        $user->setPasswordHash((isset($args['password'])?password_hash($args['password'], PASSWORD_DEFAULT):null));
+        $user->setProvider((isset($args['provider'])?$args['provider']:null));
+        $user->setProviderId((isset($args['providerId'])?$args['providerId']:null));
+        $user->setEmailVerified(((isset($args['provider']) and isset($args['providerId']))?true:false));
+        $user->save();
+        return $user;
     }
     public static function getByEmail($email) {
         return self::query()->findOneByEmail($email);
@@ -37,6 +37,6 @@ class Member {
         $user->save();
     }
     private static function query() {
-        return \MemberQuery::create();
+        return \UserQuery::create();
     }
 }

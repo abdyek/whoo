@@ -3,7 +3,7 @@
 namespace Whoo\Controller;
 use Firebase\JWT\JWT;
 use Whoo\Core\Controller;
-use Whoo\Model\Member;
+use Whoo\Model\User;
 use Whoo\Config\JWT as JWTConfig;
 use Whoo\Exception\NotFoundException;
 use Whoo\Exception\NotVerifiedEmailException;
@@ -12,7 +12,7 @@ use Whoo\Exception\IncorrectPasswordException;
 class SignInByUsername extends Controller {
     public $jwt = null;
     protected function run() {
-        $this->user = Member::getByUsername($this->data['username']);
+        $this->user = User::getByUsername($this->data['username']);
         if($this->user===null) {
             throw new NotFoundException;
         }

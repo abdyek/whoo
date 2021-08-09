@@ -4,12 +4,12 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ---------------------------------------------------------------------
--- whoo_member
+-- whoo_user
 -- ---------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `whoo_member`;
+DROP TABLE IF EXISTS `whoo_user`;
 
-CREATE TABLE `whoo_member`
+CREATE TABLE `whoo_user`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `email` VARCHAR(255) NOT NULL,
@@ -36,12 +36,12 @@ CREATE TABLE `whoo_authentication_code`
     `code` VARCHAR(64) NOT NULL,
     `trial_count` INTEGER DEFAULT 0 NOT NULL,
     `date_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `member_id` INTEGER NOT NULL,
+    `user_id` INTEGER NOT NULL,
     PRIMARY KEY (`id`),
-    INDEX `whoo_authentication_code_fi_8ef1de` (`member_id`),
-    CONSTRAINT `whoo_authentication_code_fk_8ef1de`
-        FOREIGN KEY (`member_id`)
-        REFERENCES `whoo_member` (`id`)
+    INDEX `whoo_authentication_code_fi_00f3fa` (`user_id`),
+    CONSTRAINT `whoo_authentication_code_fk_00f3fa`
+        FOREIGN KEY (`user_id`)
+        REFERENCES `whoo_user` (`id`)
 ) ENGINE=InnoDB;
 
 # This restores the fkey checks, after having unset them earlier

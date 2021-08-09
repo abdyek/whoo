@@ -25,14 +25,14 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAuthenticationCodeQuery orderByCode($order = Criteria::ASC) Order by the code column
  * @method     ChildAuthenticationCodeQuery orderByTrialCount($order = Criteria::ASC) Order by the trial_count column
  * @method     ChildAuthenticationCodeQuery orderByDateTime($order = Criteria::ASC) Order by the date_time column
- * @method     ChildAuthenticationCodeQuery orderByMemberId($order = Criteria::ASC) Order by the member_id column
+ * @method     ChildAuthenticationCodeQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
  *
  * @method     ChildAuthenticationCodeQuery groupById() Group by the id column
  * @method     ChildAuthenticationCodeQuery groupByType() Group by the type column
  * @method     ChildAuthenticationCodeQuery groupByCode() Group by the code column
  * @method     ChildAuthenticationCodeQuery groupByTrialCount() Group by the trial_count column
  * @method     ChildAuthenticationCodeQuery groupByDateTime() Group by the date_time column
- * @method     ChildAuthenticationCodeQuery groupByMemberId() Group by the member_id column
+ * @method     ChildAuthenticationCodeQuery groupByUserId() Group by the user_id column
  *
  * @method     ChildAuthenticationCodeQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildAuthenticationCodeQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -42,17 +42,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAuthenticationCodeQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildAuthenticationCodeQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildAuthenticationCodeQuery leftJoinMember($relationAlias = null) Adds a LEFT JOIN clause to the query using the Member relation
- * @method     ChildAuthenticationCodeQuery rightJoinMember($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Member relation
- * @method     ChildAuthenticationCodeQuery innerJoinMember($relationAlias = null) Adds a INNER JOIN clause to the query using the Member relation
+ * @method     ChildAuthenticationCodeQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
+ * @method     ChildAuthenticationCodeQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
+ * @method     ChildAuthenticationCodeQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
  *
- * @method     ChildAuthenticationCodeQuery joinWithMember($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Member relation
+ * @method     ChildAuthenticationCodeQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
  *
- * @method     ChildAuthenticationCodeQuery leftJoinWithMember() Adds a LEFT JOIN clause and with to the query using the Member relation
- * @method     ChildAuthenticationCodeQuery rightJoinWithMember() Adds a RIGHT JOIN clause and with to the query using the Member relation
- * @method     ChildAuthenticationCodeQuery innerJoinWithMember() Adds a INNER JOIN clause and with to the query using the Member relation
+ * @method     ChildAuthenticationCodeQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
+ * @method     ChildAuthenticationCodeQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
+ * @method     ChildAuthenticationCodeQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
- * @method     \MemberQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \UserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildAuthenticationCode|null findOne(ConnectionInterface $con = null) Return the first ChildAuthenticationCode matching the query
  * @method     ChildAuthenticationCode findOneOrCreate(ConnectionInterface $con = null) Return the first ChildAuthenticationCode matching the query, or a new ChildAuthenticationCode object populated from the query conditions when no match is found
@@ -62,7 +62,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAuthenticationCode|null findOneByCode(string $code) Return the first ChildAuthenticationCode filtered by the code column
  * @method     ChildAuthenticationCode|null findOneByTrialCount(int $trial_count) Return the first ChildAuthenticationCode filtered by the trial_count column
  * @method     ChildAuthenticationCode|null findOneByDateTime(string $date_time) Return the first ChildAuthenticationCode filtered by the date_time column
- * @method     ChildAuthenticationCode|null findOneByMemberId(int $member_id) Return the first ChildAuthenticationCode filtered by the member_id column *
+ * @method     ChildAuthenticationCode|null findOneByUserId(int $user_id) Return the first ChildAuthenticationCode filtered by the user_id column *
 
  * @method     ChildAuthenticationCode requirePk($key, ConnectionInterface $con = null) Return the ChildAuthenticationCode by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAuthenticationCode requireOne(ConnectionInterface $con = null) Return the first ChildAuthenticationCode matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -72,7 +72,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAuthenticationCode requireOneByCode(string $code) Return the first ChildAuthenticationCode filtered by the code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAuthenticationCode requireOneByTrialCount(int $trial_count) Return the first ChildAuthenticationCode filtered by the trial_count column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAuthenticationCode requireOneByDateTime(string $date_time) Return the first ChildAuthenticationCode filtered by the date_time column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAuthenticationCode requireOneByMemberId(int $member_id) Return the first ChildAuthenticationCode filtered by the member_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAuthenticationCode requireOneByUserId(int $user_id) Return the first ChildAuthenticationCode filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildAuthenticationCode[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildAuthenticationCode objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildAuthenticationCode> find(ConnectionInterface $con = null) Return ChildAuthenticationCode objects based on current ModelCriteria
@@ -86,8 +86,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildAuthenticationCode> findByTrialCount(int $trial_count) Return ChildAuthenticationCode objects filtered by the trial_count column
  * @method     ChildAuthenticationCode[]|ObjectCollection findByDateTime(string $date_time) Return ChildAuthenticationCode objects filtered by the date_time column
  * @psalm-method ObjectCollection&\Traversable<ChildAuthenticationCode> findByDateTime(string $date_time) Return ChildAuthenticationCode objects filtered by the date_time column
- * @method     ChildAuthenticationCode[]|ObjectCollection findByMemberId(int $member_id) Return ChildAuthenticationCode objects filtered by the member_id column
- * @psalm-method ObjectCollection&\Traversable<ChildAuthenticationCode> findByMemberId(int $member_id) Return ChildAuthenticationCode objects filtered by the member_id column
+ * @method     ChildAuthenticationCode[]|ObjectCollection findByUserId(int $user_id) Return ChildAuthenticationCode objects filtered by the user_id column
+ * @psalm-method ObjectCollection&\Traversable<ChildAuthenticationCode> findByUserId(int $user_id) Return ChildAuthenticationCode objects filtered by the user_id column
  * @method     ChildAuthenticationCode[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildAuthenticationCode> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -187,7 +187,7 @@ abstract class AuthenticationCodeQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, type, code, trial_count, date_time, member_id FROM whoo_authentication_code WHERE id = :p0';
+        $sql = 'SELECT id, type, code, trial_count, date_time, user_id FROM whoo_authentication_code WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -453,18 +453,18 @@ abstract class AuthenticationCodeQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the member_id column
+     * Filter the query on the user_id column
      *
      * Example usage:
      * <code>
-     * $query->filterByMemberId(1234); // WHERE member_id = 1234
-     * $query->filterByMemberId(array(12, 34)); // WHERE member_id IN (12, 34)
-     * $query->filterByMemberId(array('min' => 12)); // WHERE member_id > 12
+     * $query->filterByUserId(1234); // WHERE user_id = 1234
+     * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
+     * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
      * </code>
      *
-     * @see       filterByMember()
+     * @see       filterByUser()
      *
-     * @param     mixed $memberId The value to use as filter.
+     * @param     mixed $userId The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -472,16 +472,16 @@ abstract class AuthenticationCodeQuery extends ModelCriteria
      *
      * @return $this|ChildAuthenticationCodeQuery The current query, for fluid interface
      */
-    public function filterByMemberId($memberId = null, $comparison = null)
+    public function filterByUserId($userId = null, $comparison = null)
     {
-        if (is_array($memberId)) {
+        if (is_array($userId)) {
             $useMinMax = false;
-            if (isset($memberId['min'])) {
-                $this->addUsingAlias(AuthenticationCodeTableMap::COL_MEMBER_ID, $memberId['min'], Criteria::GREATER_EQUAL);
+            if (isset($userId['min'])) {
+                $this->addUsingAlias(AuthenticationCodeTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($memberId['max'])) {
-                $this->addUsingAlias(AuthenticationCodeTableMap::COL_MEMBER_ID, $memberId['max'], Criteria::LESS_EQUAL);
+            if (isset($userId['max'])) {
+                $this->addUsingAlias(AuthenticationCodeTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -492,48 +492,48 @@ abstract class AuthenticationCodeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(AuthenticationCodeTableMap::COL_MEMBER_ID, $memberId, $comparison);
+        return $this->addUsingAlias(AuthenticationCodeTableMap::COL_USER_ID, $userId, $comparison);
     }
 
     /**
-     * Filter the query by a related \Member object
+     * Filter the query by a related \User object
      *
-     * @param \Member|ObjectCollection $member The related object(s) to use as filter
+     * @param \User|ObjectCollection $user The related object(s) to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
      * @return ChildAuthenticationCodeQuery The current query, for fluid interface
      */
-    public function filterByMember($member, $comparison = null)
+    public function filterByUser($user, $comparison = null)
     {
-        if ($member instanceof \Member) {
+        if ($user instanceof \User) {
             return $this
-                ->addUsingAlias(AuthenticationCodeTableMap::COL_MEMBER_ID, $member->getId(), $comparison);
-        } elseif ($member instanceof ObjectCollection) {
+                ->addUsingAlias(AuthenticationCodeTableMap::COL_USER_ID, $user->getId(), $comparison);
+        } elseif ($user instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(AuthenticationCodeTableMap::COL_MEMBER_ID, $member->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(AuthenticationCodeTableMap::COL_USER_ID, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
         } else {
-            throw new PropelException('filterByMember() only accepts arguments of type \Member or Collection');
+            throw new PropelException('filterByUser() only accepts arguments of type \User or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the Member relation
+     * Adds a JOIN clause to the query using the User relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildAuthenticationCodeQuery The current query, for fluid interface
      */
-    public function joinMember($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinUser($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Member');
+        $relationMap = $tableMap->getRelation('User');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -548,14 +548,14 @@ abstract class AuthenticationCodeQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'Member');
+            $this->addJoinObject($join, 'User');
         }
 
         return $this;
     }
 
     /**
-     * Use the Member relation Member object
+     * Use the User relation User object
      *
      * @see useQuery()
      *
@@ -563,19 +563,19 @@ abstract class AuthenticationCodeQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \MemberQuery A secondary query class using the current class as primary query
+     * @return \UserQuery A secondary query class using the current class as primary query
      */
-    public function useMemberQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useUserQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinMember($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Member', '\MemberQuery');
+            ->joinUser($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'User', '\UserQuery');
     }
 
     /**
-     * Use the Member relation Member object
+     * Use the User relation User object
      *
-     * @param callable(\MemberQuery):\MemberQuery $callable A function working on the related query
+     * @param callable(\UserQuery):\UserQuery $callable A function working on the related query
      *
      * @param string|null $relationAlias optional alias for the relation
      *
@@ -583,12 +583,12 @@ abstract class AuthenticationCodeQuery extends ModelCriteria
      *
      * @return $this
      */
-    public function withMemberQuery(
+    public function withUserQuery(
         callable $callable,
         string $relationAlias = null,
         ?string $joinType = Criteria::INNER_JOIN
     ) {
-        $relatedQuery = $this->useMemberQuery(
+        $relatedQuery = $this->useUserQuery(
             $relationAlias,
             $joinType
         );
@@ -598,7 +598,7 @@ abstract class AuthenticationCodeQuery extends ModelCriteria
         return $this;
     }
     /**
-     * Use the relation to Member table for an EXISTS query.
+     * Use the relation to User table for an EXISTS query.
      *
      * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
      *
@@ -606,26 +606,26 @@ abstract class AuthenticationCodeQuery extends ModelCriteria
      * @param string|null $modelAlias sets an alias for the nested query
      * @param string $typeOfExists Either ExistsCriterion::TYPE_EXISTS or ExistsCriterion::TYPE_NOT_EXISTS
      *
-     * @return \MemberQuery The inner query object of the EXISTS statement
+     * @return \UserQuery The inner query object of the EXISTS statement
      */
-    public function useMemberExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    public function useUserExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
     {
-        return $this->useExistsQuery('Member', $modelAlias, $queryClass, $typeOfExists);
+        return $this->useExistsQuery('User', $modelAlias, $queryClass, $typeOfExists);
     }
 
     /**
-     * Use the relation to Member table for a NOT EXISTS query.
+     * Use the relation to User table for a NOT EXISTS query.
      *
-     * @see useMemberExistsQuery()
+     * @see useUserExistsQuery()
      *
      * @param string|null $modelAlias sets an alias for the nested query
      * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
      *
-     * @return \MemberQuery The inner query object of the NOT EXISTS statement
+     * @return \UserQuery The inner query object of the NOT EXISTS statement
      */
-    public function useMemberNotExistsQuery($modelAlias = null, $queryClass = null)
+    public function useUserNotExistsQuery($modelAlias = null, $queryClass = null)
     {
-        return $this->useExistsQuery('Member', $modelAlias, $queryClass, 'NOT EXISTS');
+        return $this->useExistsQuery('User', $modelAlias, $queryClass, 'NOT EXISTS');
     }
     /**
      * Exclude object from result

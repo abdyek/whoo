@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database name="whoo" defaultIdMethod="native">
-    <table name="whoo_member" phpName="Member">
+    <table name="whoo_user" phpName="User">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
         <column name="email" type="varchar" size="255" required="true" />
         <column name="username" type="varchar" size="40" required="false" />
@@ -17,9 +17,9 @@
         <column name="code" type="varchar" size="64" required="true" />
         <column name="trial_count" type="integer" required="true" defaultValue="0" />
         <column name="date_time" type="timestamp" required="true" defaultExpr="CURRENT_TIMESTAMP"/>
-        <column name="member_id" type="integer" required="true" />
-        <foreign-key foreignTable="whoo_member">
-            <reference local="member_id" foreign="id" />
+        <column name="user_id" type="integer" required="true" />
+        <foreign-key foreignTable="whoo_user">
+            <reference local="user_id" foreign="id" />
         </foreign-key>
     </table>
 </database>

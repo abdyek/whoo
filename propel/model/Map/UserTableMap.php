@@ -2,8 +2,8 @@
 
 namespace Map;
 
-use \AuthenticationCode;
-use \AuthenticationCodeQuery;
+use \User;
+use \UserQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'whoo_authentication_code' table.
+ * This class defines the structure of the 'whoo_user' table.
  *
  *
  *
@@ -25,7 +25,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
  */
-class AuthenticationCodeTableMap extends TableMap
+class UserTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -33,7 +33,7 @@ class AuthenticationCodeTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = '.Map.AuthenticationCodeTableMap';
+    const CLASS_NAME = '.Map.UserTableMap';
 
     /**
      * The default database name for this class
@@ -43,22 +43,22 @@ class AuthenticationCodeTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'whoo_authentication_code';
+    const TABLE_NAME = 'whoo_user';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\AuthenticationCode';
+    const OM_CLASS = '\\User';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'AuthenticationCode';
+    const CLASS_DEFAULT = 'User';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 9;
 
     /**
      * The number of lazy-loaded columns
@@ -68,37 +68,52 @@ class AuthenticationCodeTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 9;
 
     /**
      * the column name for the id field
      */
-    const COL_ID = 'whoo_authentication_code.id';
+    const COL_ID = 'whoo_user.id';
 
     /**
-     * the column name for the type field
+     * the column name for the email field
      */
-    const COL_TYPE = 'whoo_authentication_code.type';
+    const COL_EMAIL = 'whoo_user.email';
 
     /**
-     * the column name for the code field
+     * the column name for the username field
      */
-    const COL_CODE = 'whoo_authentication_code.code';
+    const COL_USERNAME = 'whoo_user.username';
 
     /**
-     * the column name for the trial_count field
+     * the column name for the password_hash field
      */
-    const COL_TRIAL_COUNT = 'whoo_authentication_code.trial_count';
+    const COL_PASSWORD_HASH = 'whoo_user.password_hash';
 
     /**
-     * the column name for the date_time field
+     * the column name for the email_verified field
      */
-    const COL_DATE_TIME = 'whoo_authentication_code.date_time';
+    const COL_EMAIL_VERIFIED = 'whoo_user.email_verified';
 
     /**
-     * the column name for the user_id field
+     * the column name for the sign_up_date_time field
      */
-    const COL_USER_ID = 'whoo_authentication_code.user_id';
+    const COL_SIGN_UP_DATE_TIME = 'whoo_user.sign_up_date_time';
+
+    /**
+     * the column name for the sign_out_count field
+     */
+    const COL_SIGN_OUT_COUNT = 'whoo_user.sign_out_count';
+
+    /**
+     * the column name for the provider field
+     */
+    const COL_PROVIDER = 'whoo_user.provider';
+
+    /**
+     * the column name for the provider_id field
+     */
+    const COL_PROVIDER_ID = 'whoo_user.provider_id';
 
     /**
      * The default string format for model objects of the related table
@@ -112,11 +127,11 @@ class AuthenticationCodeTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Type', 'Code', 'TrialCount', 'DateTime', 'UserId', ),
-        self::TYPE_CAMELNAME     => array('id', 'type', 'code', 'trialCount', 'dateTime', 'userId', ),
-        self::TYPE_COLNAME       => array(AuthenticationCodeTableMap::COL_ID, AuthenticationCodeTableMap::COL_TYPE, AuthenticationCodeTableMap::COL_CODE, AuthenticationCodeTableMap::COL_TRIAL_COUNT, AuthenticationCodeTableMap::COL_DATE_TIME, AuthenticationCodeTableMap::COL_USER_ID, ),
-        self::TYPE_FIELDNAME     => array('id', 'type', 'code', 'trial_count', 'date_time', 'user_id', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Id', 'Email', 'Username', 'PasswordHash', 'EmailVerified', 'SignUpDateTime', 'SignOutCount', 'Provider', 'ProviderId', ),
+        self::TYPE_CAMELNAME     => array('id', 'email', 'username', 'passwordHash', 'emailVerified', 'signUpDateTime', 'signOutCount', 'provider', 'providerId', ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_ID, UserTableMap::COL_EMAIL, UserTableMap::COL_USERNAME, UserTableMap::COL_PASSWORD_HASH, UserTableMap::COL_EMAIL_VERIFIED, UserTableMap::COL_SIGN_UP_DATE_TIME, UserTableMap::COL_SIGN_OUT_COUNT, UserTableMap::COL_PROVIDER, UserTableMap::COL_PROVIDER_ID, ),
+        self::TYPE_FIELDNAME     => array('id', 'email', 'username', 'password_hash', 'email_verified', 'sign_up_date_time', 'sign_out_count', 'provider', 'provider_id', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -126,11 +141,11 @@ class AuthenticationCodeTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Type' => 1, 'Code' => 2, 'TrialCount' => 3, 'DateTime' => 4, 'UserId' => 5, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'type' => 1, 'code' => 2, 'trialCount' => 3, 'dateTime' => 4, 'userId' => 5, ),
-        self::TYPE_COLNAME       => array(AuthenticationCodeTableMap::COL_ID => 0, AuthenticationCodeTableMap::COL_TYPE => 1, AuthenticationCodeTableMap::COL_CODE => 2, AuthenticationCodeTableMap::COL_TRIAL_COUNT => 3, AuthenticationCodeTableMap::COL_DATE_TIME => 4, AuthenticationCodeTableMap::COL_USER_ID => 5, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'type' => 1, 'code' => 2, 'trial_count' => 3, 'date_time' => 4, 'user_id' => 5, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Email' => 1, 'Username' => 2, 'PasswordHash' => 3, 'EmailVerified' => 4, 'SignUpDateTime' => 5, 'SignOutCount' => 6, 'Provider' => 7, 'ProviderId' => 8, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'email' => 1, 'username' => 2, 'passwordHash' => 3, 'emailVerified' => 4, 'signUpDateTime' => 5, 'signOutCount' => 6, 'provider' => 7, 'providerId' => 8, ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_ID => 0, UserTableMap::COL_EMAIL => 1, UserTableMap::COL_USERNAME => 2, UserTableMap::COL_PASSWORD_HASH => 3, UserTableMap::COL_EMAIL_VERIFIED => 4, UserTableMap::COL_SIGN_UP_DATE_TIME => 5, UserTableMap::COL_SIGN_OUT_COUNT => 6, UserTableMap::COL_PROVIDER => 7, UserTableMap::COL_PROVIDER_ID => 8, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'email' => 1, 'username' => 2, 'password_hash' => 3, 'email_verified' => 4, 'sign_up_date_time' => 5, 'sign_out_count' => 6, 'provider' => 7, 'provider_id' => 8, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -140,50 +155,73 @@ class AuthenticationCodeTableMap extends TableMap
      */
     protected $normalizedColumnNameMap = [
         'Id' => 'ID',
-        'AuthenticationCode.Id' => 'ID',
+        'User.Id' => 'ID',
         'id' => 'ID',
-        'authenticationCode.id' => 'ID',
-        'AuthenticationCodeTableMap::COL_ID' => 'ID',
+        'user.id' => 'ID',
+        'UserTableMap::COL_ID' => 'ID',
         'COL_ID' => 'ID',
-        'whoo_authentication_code.id' => 'ID',
-        'Type' => 'TYPE',
-        'AuthenticationCode.Type' => 'TYPE',
-        'type' => 'TYPE',
-        'authenticationCode.type' => 'TYPE',
-        'AuthenticationCodeTableMap::COL_TYPE' => 'TYPE',
-        'COL_TYPE' => 'TYPE',
-        'whoo_authentication_code.type' => 'TYPE',
-        'Code' => 'CODE',
-        'AuthenticationCode.Code' => 'CODE',
-        'code' => 'CODE',
-        'authenticationCode.code' => 'CODE',
-        'AuthenticationCodeTableMap::COL_CODE' => 'CODE',
-        'COL_CODE' => 'CODE',
-        'whoo_authentication_code.code' => 'CODE',
-        'TrialCount' => 'TRIAL_COUNT',
-        'AuthenticationCode.TrialCount' => 'TRIAL_COUNT',
-        'trialCount' => 'TRIAL_COUNT',
-        'authenticationCode.trialCount' => 'TRIAL_COUNT',
-        'AuthenticationCodeTableMap::COL_TRIAL_COUNT' => 'TRIAL_COUNT',
-        'COL_TRIAL_COUNT' => 'TRIAL_COUNT',
-        'trial_count' => 'TRIAL_COUNT',
-        'whoo_authentication_code.trial_count' => 'TRIAL_COUNT',
-        'DateTime' => 'DATE_TIME',
-        'AuthenticationCode.DateTime' => 'DATE_TIME',
-        'dateTime' => 'DATE_TIME',
-        'authenticationCode.dateTime' => 'DATE_TIME',
-        'AuthenticationCodeTableMap::COL_DATE_TIME' => 'DATE_TIME',
-        'COL_DATE_TIME' => 'DATE_TIME',
-        'date_time' => 'DATE_TIME',
-        'whoo_authentication_code.date_time' => 'DATE_TIME',
-        'UserId' => 'USER_ID',
-        'AuthenticationCode.UserId' => 'USER_ID',
-        'userId' => 'USER_ID',
-        'authenticationCode.userId' => 'USER_ID',
-        'AuthenticationCodeTableMap::COL_USER_ID' => 'USER_ID',
-        'COL_USER_ID' => 'USER_ID',
-        'user_id' => 'USER_ID',
-        'whoo_authentication_code.user_id' => 'USER_ID',
+        'whoo_user.id' => 'ID',
+        'Email' => 'EMAIL',
+        'User.Email' => 'EMAIL',
+        'email' => 'EMAIL',
+        'user.email' => 'EMAIL',
+        'UserTableMap::COL_EMAIL' => 'EMAIL',
+        'COL_EMAIL' => 'EMAIL',
+        'whoo_user.email' => 'EMAIL',
+        'Username' => 'USERNAME',
+        'User.Username' => 'USERNAME',
+        'username' => 'USERNAME',
+        'user.username' => 'USERNAME',
+        'UserTableMap::COL_USERNAME' => 'USERNAME',
+        'COL_USERNAME' => 'USERNAME',
+        'whoo_user.username' => 'USERNAME',
+        'PasswordHash' => 'PASSWORD_HASH',
+        'User.PasswordHash' => 'PASSWORD_HASH',
+        'passwordHash' => 'PASSWORD_HASH',
+        'user.passwordHash' => 'PASSWORD_HASH',
+        'UserTableMap::COL_PASSWORD_HASH' => 'PASSWORD_HASH',
+        'COL_PASSWORD_HASH' => 'PASSWORD_HASH',
+        'password_hash' => 'PASSWORD_HASH',
+        'whoo_user.password_hash' => 'PASSWORD_HASH',
+        'EmailVerified' => 'EMAIL_VERIFIED',
+        'User.EmailVerified' => 'EMAIL_VERIFIED',
+        'emailVerified' => 'EMAIL_VERIFIED',
+        'user.emailVerified' => 'EMAIL_VERIFIED',
+        'UserTableMap::COL_EMAIL_VERIFIED' => 'EMAIL_VERIFIED',
+        'COL_EMAIL_VERIFIED' => 'EMAIL_VERIFIED',
+        'email_verified' => 'EMAIL_VERIFIED',
+        'whoo_user.email_verified' => 'EMAIL_VERIFIED',
+        'SignUpDateTime' => 'SIGN_UP_DATE_TIME',
+        'User.SignUpDateTime' => 'SIGN_UP_DATE_TIME',
+        'signUpDateTime' => 'SIGN_UP_DATE_TIME',
+        'user.signUpDateTime' => 'SIGN_UP_DATE_TIME',
+        'UserTableMap::COL_SIGN_UP_DATE_TIME' => 'SIGN_UP_DATE_TIME',
+        'COL_SIGN_UP_DATE_TIME' => 'SIGN_UP_DATE_TIME',
+        'sign_up_date_time' => 'SIGN_UP_DATE_TIME',
+        'whoo_user.sign_up_date_time' => 'SIGN_UP_DATE_TIME',
+        'SignOutCount' => 'SIGN_OUT_COUNT',
+        'User.SignOutCount' => 'SIGN_OUT_COUNT',
+        'signOutCount' => 'SIGN_OUT_COUNT',
+        'user.signOutCount' => 'SIGN_OUT_COUNT',
+        'UserTableMap::COL_SIGN_OUT_COUNT' => 'SIGN_OUT_COUNT',
+        'COL_SIGN_OUT_COUNT' => 'SIGN_OUT_COUNT',
+        'sign_out_count' => 'SIGN_OUT_COUNT',
+        'whoo_user.sign_out_count' => 'SIGN_OUT_COUNT',
+        'Provider' => 'PROVIDER',
+        'User.Provider' => 'PROVIDER',
+        'provider' => 'PROVIDER',
+        'user.provider' => 'PROVIDER',
+        'UserTableMap::COL_PROVIDER' => 'PROVIDER',
+        'COL_PROVIDER' => 'PROVIDER',
+        'whoo_user.provider' => 'PROVIDER',
+        'ProviderId' => 'PROVIDER_ID',
+        'User.ProviderId' => 'PROVIDER_ID',
+        'providerId' => 'PROVIDER_ID',
+        'user.providerId' => 'PROVIDER_ID',
+        'UserTableMap::COL_PROVIDER_ID' => 'PROVIDER_ID',
+        'COL_PROVIDER_ID' => 'PROVIDER_ID',
+        'provider_id' => 'PROVIDER_ID',
+        'whoo_user.provider_id' => 'PROVIDER_ID',
     ];
 
     /**
@@ -196,19 +234,22 @@ class AuthenticationCodeTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('whoo_authentication_code');
-        $this->setPhpName('AuthenticationCode');
+        $this->setName('whoo_user');
+        $this->setPhpName('User');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\AuthenticationCode');
+        $this->setClassName('\\User');
         $this->setPackage('');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('type', 'Type', 'VARCHAR', true, 32, null);
-        $this->addColumn('code', 'Code', 'VARCHAR', true, 64, null);
-        $this->addColumn('trial_count', 'TrialCount', 'INTEGER', true, null, 0);
-        $this->addColumn('date_time', 'DateTime', 'TIMESTAMP', true, null, 'CURRENT_TIMESTAMP');
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'whoo_user', 'id', true, null, null);
+        $this->addColumn('email', 'Email', 'VARCHAR', true, 255, null);
+        $this->addColumn('username', 'Username', 'VARCHAR', false, 40, null);
+        $this->addColumn('password_hash', 'PasswordHash', 'VARCHAR', false, 60, null);
+        $this->addColumn('email_verified', 'EmailVerified', 'BOOLEAN', true, 1, false);
+        $this->addColumn('sign_up_date_time', 'SignUpDateTime', 'TIMESTAMP', true, null, 'CURRENT_TIMESTAMP');
+        $this->addColumn('sign_out_count', 'SignOutCount', 'INTEGER', true, null, 0);
+        $this->addColumn('provider', 'Provider', 'VARCHAR', false, 255, null);
+        $this->addColumn('provider_id', 'ProviderId', 'VARCHAR', false, 255, null);
     } // initialize()
 
     /**
@@ -216,13 +257,13 @@ class AuthenticationCodeTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('User', '\\User', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('AuthenticationCode', '\\AuthenticationCode', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':user_id',
     1 => ':id',
   ),
-), null, null, null, false);
+), null, null, 'AuthenticationCodes', false);
     } // buildRelations()
 
     /**
@@ -282,7 +323,7 @@ class AuthenticationCodeTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? AuthenticationCodeTableMap::CLASS_DEFAULT : AuthenticationCodeTableMap::OM_CLASS;
+        return $withPrefix ? UserTableMap::CLASS_DEFAULT : UserTableMap::OM_CLASS;
     }
 
     /**
@@ -296,22 +337,22 @@ class AuthenticationCodeTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (AuthenticationCode object, last column rank)
+     * @return array           (User object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = AuthenticationCodeTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = AuthenticationCodeTableMap::getInstanceFromPool($key))) {
+        $key = UserTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = UserTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + AuthenticationCodeTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + UserTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = AuthenticationCodeTableMap::OM_CLASS;
-            /** @var AuthenticationCode $obj */
+            $cls = UserTableMap::OM_CLASS;
+            /** @var User $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            AuthenticationCodeTableMap::addInstanceToPool($obj, $key);
+            UserTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -334,18 +375,18 @@ class AuthenticationCodeTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = AuthenticationCodeTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = AuthenticationCodeTableMap::getInstanceFromPool($key))) {
+            $key = UserTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = UserTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var AuthenticationCode $obj */
+                /** @var User $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                AuthenticationCodeTableMap::addInstanceToPool($obj, $key);
+                UserTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -366,19 +407,25 @@ class AuthenticationCodeTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(AuthenticationCodeTableMap::COL_ID);
-            $criteria->addSelectColumn(AuthenticationCodeTableMap::COL_TYPE);
-            $criteria->addSelectColumn(AuthenticationCodeTableMap::COL_CODE);
-            $criteria->addSelectColumn(AuthenticationCodeTableMap::COL_TRIAL_COUNT);
-            $criteria->addSelectColumn(AuthenticationCodeTableMap::COL_DATE_TIME);
-            $criteria->addSelectColumn(AuthenticationCodeTableMap::COL_USER_ID);
+            $criteria->addSelectColumn(UserTableMap::COL_ID);
+            $criteria->addSelectColumn(UserTableMap::COL_EMAIL);
+            $criteria->addSelectColumn(UserTableMap::COL_USERNAME);
+            $criteria->addSelectColumn(UserTableMap::COL_PASSWORD_HASH);
+            $criteria->addSelectColumn(UserTableMap::COL_EMAIL_VERIFIED);
+            $criteria->addSelectColumn(UserTableMap::COL_SIGN_UP_DATE_TIME);
+            $criteria->addSelectColumn(UserTableMap::COL_SIGN_OUT_COUNT);
+            $criteria->addSelectColumn(UserTableMap::COL_PROVIDER);
+            $criteria->addSelectColumn(UserTableMap::COL_PROVIDER_ID);
         } else {
             $criteria->addSelectColumn($alias . '.id');
-            $criteria->addSelectColumn($alias . '.type');
-            $criteria->addSelectColumn($alias . '.code');
-            $criteria->addSelectColumn($alias . '.trial_count');
-            $criteria->addSelectColumn($alias . '.date_time');
-            $criteria->addSelectColumn($alias . '.user_id');
+            $criteria->addSelectColumn($alias . '.email');
+            $criteria->addSelectColumn($alias . '.username');
+            $criteria->addSelectColumn($alias . '.password_hash');
+            $criteria->addSelectColumn($alias . '.email_verified');
+            $criteria->addSelectColumn($alias . '.sign_up_date_time');
+            $criteria->addSelectColumn($alias . '.sign_out_count');
+            $criteria->addSelectColumn($alias . '.provider');
+            $criteria->addSelectColumn($alias . '.provider_id');
         }
     }
 
@@ -396,19 +443,25 @@ class AuthenticationCodeTableMap extends TableMap
     public static function removeSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->removeSelectColumn(AuthenticationCodeTableMap::COL_ID);
-            $criteria->removeSelectColumn(AuthenticationCodeTableMap::COL_TYPE);
-            $criteria->removeSelectColumn(AuthenticationCodeTableMap::COL_CODE);
-            $criteria->removeSelectColumn(AuthenticationCodeTableMap::COL_TRIAL_COUNT);
-            $criteria->removeSelectColumn(AuthenticationCodeTableMap::COL_DATE_TIME);
-            $criteria->removeSelectColumn(AuthenticationCodeTableMap::COL_USER_ID);
+            $criteria->removeSelectColumn(UserTableMap::COL_ID);
+            $criteria->removeSelectColumn(UserTableMap::COL_EMAIL);
+            $criteria->removeSelectColumn(UserTableMap::COL_USERNAME);
+            $criteria->removeSelectColumn(UserTableMap::COL_PASSWORD_HASH);
+            $criteria->removeSelectColumn(UserTableMap::COL_EMAIL_VERIFIED);
+            $criteria->removeSelectColumn(UserTableMap::COL_SIGN_UP_DATE_TIME);
+            $criteria->removeSelectColumn(UserTableMap::COL_SIGN_OUT_COUNT);
+            $criteria->removeSelectColumn(UserTableMap::COL_PROVIDER);
+            $criteria->removeSelectColumn(UserTableMap::COL_PROVIDER_ID);
         } else {
             $criteria->removeSelectColumn($alias . '.id');
-            $criteria->removeSelectColumn($alias . '.type');
-            $criteria->removeSelectColumn($alias . '.code');
-            $criteria->removeSelectColumn($alias . '.trial_count');
-            $criteria->removeSelectColumn($alias . '.date_time');
-            $criteria->removeSelectColumn($alias . '.user_id');
+            $criteria->removeSelectColumn($alias . '.email');
+            $criteria->removeSelectColumn($alias . '.username');
+            $criteria->removeSelectColumn($alias . '.password_hash');
+            $criteria->removeSelectColumn($alias . '.email_verified');
+            $criteria->removeSelectColumn($alias . '.sign_up_date_time');
+            $criteria->removeSelectColumn($alias . '.sign_out_count');
+            $criteria->removeSelectColumn($alias . '.provider');
+            $criteria->removeSelectColumn($alias . '.provider_id');
         }
     }
 
@@ -421,13 +474,13 @@ class AuthenticationCodeTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(AuthenticationCodeTableMap::DATABASE_NAME)->getTable(AuthenticationCodeTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(UserTableMap::DATABASE_NAME)->getTable(UserTableMap::TABLE_NAME);
     }
 
     /**
-     * Performs a DELETE on the database, given a AuthenticationCode or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a User or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or AuthenticationCode object or primary key or array of primary keys
+     * @param mixed               $values Criteria or User object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -438,27 +491,27 @@ class AuthenticationCodeTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AuthenticationCodeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \AuthenticationCode) { // it's a model object
+        } elseif ($values instanceof \User) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(AuthenticationCodeTableMap::DATABASE_NAME);
-            $criteria->add(AuthenticationCodeTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(UserTableMap::DATABASE_NAME);
+            $criteria->add(UserTableMap::COL_ID, (array) $values, Criteria::IN);
         }
 
-        $query = AuthenticationCodeQuery::create()->mergeWith($criteria);
+        $query = UserQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            AuthenticationCodeTableMap::clearInstancePool();
+            UserTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                AuthenticationCodeTableMap::removeInstanceFromPool($singleval);
+                UserTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -466,20 +519,20 @@ class AuthenticationCodeTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the whoo_authentication_code table.
+     * Deletes all rows from the whoo_user table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return AuthenticationCodeQuery::create()->doDeleteAll($con);
+        return UserQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a AuthenticationCode or Criteria object.
+     * Performs an INSERT on the database, given a User or Criteria object.
      *
-     * @param mixed               $criteria Criteria or AuthenticationCode object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or User object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -488,22 +541,22 @@ class AuthenticationCodeTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(AuthenticationCodeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from AuthenticationCode object
+            $criteria = $criteria->buildCriteria(); // build Criteria from User object
         }
 
-        if ($criteria->containsKey(AuthenticationCodeTableMap::COL_ID) && $criteria->keyContainsValue(AuthenticationCodeTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.AuthenticationCodeTableMap::COL_ID.')');
+        if ($criteria->containsKey(UserTableMap::COL_ID) && $criteria->keyContainsValue(UserTableMap::COL_ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.UserTableMap::COL_ID.')');
         }
 
 
         // Set the correct dbName
-        $query = AuthenticationCodeQuery::create()->mergeWith($criteria);
+        $query = UserQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -512,4 +565,4 @@ class AuthenticationCodeTableMap extends TableMap
         });
     }
 
-} // AuthenticationCodeTableMap
+} // UserTableMap

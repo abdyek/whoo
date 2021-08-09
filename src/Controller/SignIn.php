@@ -2,7 +2,7 @@
 
 namespace Whoo\Controller;
 use Whoo\Core\Controller;
-use Whoo\Model\Member as MemberModel;
+use Whoo\Model\User as UserModel;
 use Whoo\Exception\NotFoundException;
 use Whoo\Exception\IncorrectPasswordException;
 use Firebase\JWT\JWT;
@@ -14,7 +14,7 @@ class SignIn extends Controller {
     public $user = null;
     public $temporaryToken = null;
     protected function run() {
-        $this->user = MemberModel::getByEmail($this->data['email']);
+        $this->user = UserModel::getByEmail($this->data['email']);
         if($this->user ===null) {
             throw new NotFoundException;
         }

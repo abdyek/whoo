@@ -4,7 +4,7 @@ require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
 use Whoo\Controller\SetUsername;
 use Whoo\Controller\SignUp;
-use Whoo\Model\Member as MemberModel;
+use Whoo\Model\User as UserModel;
 use Whoo\Exception\InvalidTemporaryTokenException;
 use Whoo\Exception\NotNullUsernameException;
 use Whoo\Exception\NotUniqueUsernameException;
@@ -26,8 +26,8 @@ class SetUsernameTest extends TestCase {
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>self::USERNAME
         ]);
-        $member = MemberModel::getByEmail($data['email']);
-        $this->assertSame(self::USERNAME, $member->getUsername());
+        $user = UserModel::getByEmail($data['email']);
+        $this->assertSame(self::USERNAME, $user->getUsername());
     }
     public function testRunInvalidTemporaryTokenException() {
         $this->expectException(InvalidTemporaryTokenException::class);

@@ -6,7 +6,7 @@ use Whoo\Controller\SignInByProvider;
 use Whoo\Controller\SignUp;
 use Whoo\Exception\NullUsernameException;
 use Whoo\Exception\SignUpByEmailException;
-use Whoo\Model\Member as MemberModel;
+use Whoo\Model\User as UserModel;
 
 /**
  * @covers SignInByProvider::
@@ -23,7 +23,7 @@ class SignInByProviderTest extends TestCase {
         $newConfig = $this->changeConfig(['USE_USERNAME'=>true]);
         $dataForProvider = self::getDataForProvider();
         $signUp = new SignInByProvider($dataForProvider, $newConfig);
-        $user = MemberModel::getByEmail($dataForProvider['email']);
+        $user = UserModel::getByEmail($dataForProvider['email']);
         $this->assertTrue($signUp->registering);
         $this->assertNotNull($user->getId());
         $this->assertNull($signUp->jwt);
