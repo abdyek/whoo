@@ -80,6 +80,12 @@ class UserTest extends TestCase {
         User::setEmailVerified($user, false);
         $this->assertFalse($user->getEmailVerified());
     }
+    public function testIncreaseSignOutCount() {
+        $user = $this->createExample();
+        $defaultCount = $user->getSignOutCount();
+        User::increaseSignOutCount($user);
+        $this->assertEquals($defaultCount+1, $user->getSignOutCount());
+    }
     private function getData() {
         return [
             'email'=>'example@example.com',

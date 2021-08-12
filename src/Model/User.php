@@ -36,6 +36,11 @@ class User {
         $user->setEmailVerified($value);
         $user->save();
     }
+    public static function increaseSignOutCount($user) {
+        $count = $user->getSignOutCount() + 1;
+        $user->setSignOutCount($count);
+        $user->save();
+    }
     private static function query() {
         return \UserQuery::create();
     }
