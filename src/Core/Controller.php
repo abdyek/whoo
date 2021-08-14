@@ -5,17 +5,19 @@ use Whoo\Core\Response;
 use Whoo\Config\Whoo;
 use Whoo\Config\JWT as JWTConfig;
 use Whoo\Config\Controller as ControllerConfig;
+use Whoo\Model\User;
 use Whoo\Exception\InvalidDataException;
+use Whoo\Exception\InvalidTokenException;
 
 class Controller {
     protected $userId = null;
     public function __construct($data, $config=Whoo::CONFIG) {
+        $this->config = $config;
         $this->data = $data;
         $this->setClassName();
         $this->setRequired();
         $this->detectUser();
         $this->checkRequiredWrapper();
-        $this->config = $config;
         /*
             ^^^^^^^^^^^^^^^^^
             I had to add config attribute to test other states of Whoo configs by phpunit.
@@ -41,12 +43,16 @@ class Controller {
         if(isset($this->data['jwt'])) {
             try {
                 $userInfo = (array) JWT::decode($this->data['jwt'], JWTConfig::SECRET_KEY, array('HS256'));
-                $this->userId = $userInfo['userId'];
-            } catch (\Firebase\JWT\ExpiredException $e) {
-                // nothing
-            } catch (\Firebase\JWT\SignatureInvalidException $e) {
-                // nothing
+            } catch (\UnexpectedValueException $e) {
+                throw new InvalidTokenException;
             }
+            if($this->config['REAL_STATELESS']===false) {
+                $user = User::getById($userInfo['userId']);
+                if($user->getSignOutCount()!==$userInfo['signOutCount']) {
+                    throw new InvalidTokenException;
+                }
+            } 
+            $this->userId = $userInfo['userId'];
         }
     }
     private function checkRequiredWrapper() {

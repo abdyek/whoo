@@ -5,7 +5,8 @@ use PHPUnit\Framework\TestCase;
 use Whoo\Controller\SignOut;
 use Whoo\Controller\SignUp;
 use Whoo\Controller\SignIn;
-use Whoo\Controller\SetUsername;
+use Whoo\Controller\FetchInfo;
+use Whoo\Exception\InvalidTokenException;
 
 /**
  * @covers SignOut::
@@ -13,32 +14,52 @@ use Whoo\Controller\SetUsername;
 
 class SignOutTest extends TestCase {
     use Reset;
-    use UserTool;
+    use ChangeConfig;
     public function setUp(): void {
         self::reset();
     }
     public function testRunRealStatelessFalse() {
-        $user = $this->createExample();
-        $emailPassword = self::getData();
-        $username = self::getData()['username'];
-        unset($emailPassword['username']);
-        $signUp = new SignUp($emailPassword);
-        new SetUsername([
-            'temporaryToken' => $signUp->temporaryToken,
-            'username'=>$username
+        $this->expectException(InvalidTokenException::class);
+        $config = $this->changeConfig([
+            'USE_USERNAME'=>false,
+            'REAL_STATELESS'=>false
         ]);
-        $signIn = new SignIn($emailPassword);
+        $data = self::getData();
+        $signUp = new SignUp($data, $config);
+        $signIn = new SignIn($data, $config);
         $jwt = $signIn->jwt;
-        SignOut([
+        new SignOut([
             'jwt'=>$jwt
+        ], $config);
+        // Signed out. So FetchInfo throws exception
+        new FetchInfo([
+            'jwt'=>$jwt
+        ], $config);
+    }
+    public function testRunRealStatelessTrue() {
+        $config = $this->changeConfig([
+            'USE_USERNAME'=>false,
+            'REAL_STATELESS'=>true
         ]);
-        // Here will be FetchInfo controller class to check sign out
+        $data = self::getData();
+        $signUp = new SignUp($data, $config);
+        $signIn = new SignIn($data, $config);
+        $jwt = $signIn->jwt;
+        new SignOut([
+            'jwt'=>$jwt
+        ], $config);
+        $fetchInfo = new FetchInfo([
+            'jwt'=>$jwt
+        ], $config);
+        $this->assertNotNull($fetchInfo->user);
+    }
+    public function testTest() {
+        $this->assertTrue(True);
     }
     private function getData() {
         return [
             'email'=>'example@example.com',
-            'password'=>'this is password',
-            'username'=>'userName123'
+            'password'=>'this is password'
         ];
     }
 }

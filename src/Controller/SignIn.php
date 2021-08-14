@@ -29,7 +29,8 @@ class SignIn extends Controller {
             'aud' => JWTConfig::AUD,
             'iat' => JWTConfig::IAT,
             'nbf' => JWTConfig::NBF,
-            'userId' => $this->user ->getId(),
+            'userId' => $this->user->getId(),
+            'signOutCount'=> $this->user->getSignOutCount()
         ], JWTConfig::SECRET_KEY);
     }
     private function validateEmailPassword() {
