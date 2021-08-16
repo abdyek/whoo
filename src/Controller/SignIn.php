@@ -5,6 +5,8 @@ use Whoo\Core\Controller;
 use Whoo\Model\User as UserModel;
 use Whoo\Exception\NotFoundException;
 use Whoo\Exception\IncorrectPasswordException;
+use Whoo\Exception\NullUsernameException;
+use Whoo\Exception\NotVerifiedEmailException;
 use Firebase\JWT\JWT;
 use Whoo\Config\JWT as JWTConfig;
 use Whoo\Tool\TemporaryToken;
@@ -21,7 +23,13 @@ class SignIn extends Controller {
         if($this->validateEmailPassword()===false) {
             throw new IncorrectPasswordException;
         }
-        if($this->user->getUsername()===null) {
+        if($this->config['BLOCK_NOT_VERIFIED'] and $this->user->getEmailVerified()===false) {
+            throw new NotVerifiedEmailException;
+        }
+        if($this->config['USE_USERNAME'] and $this->user->getUsername()===null) {
+            throw new NullUsernameException;
+        }
+        if($this->config['USE_USERNAME'] and $this->user->getUsername()===null) {
             $this->temporaryToken = TemporaryToken::generate($this->user->getId());
         }
         $this->jwt = JWT::encode([

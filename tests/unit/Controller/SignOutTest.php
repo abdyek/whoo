@@ -22,6 +22,7 @@ class SignOutTest extends TestCase {
         $this->expectException(InvalidTokenException::class);
         $config = $this->changeConfig([
             'USE_USERNAME'=>false,
+            'BLOCK_NOT_VERIFIED'=>false,
             'REAL_STATELESS'=>false
         ]);
         $data = self::getData();
@@ -39,7 +40,8 @@ class SignOutTest extends TestCase {
     public function testRunRealStatelessTrue() {
         $config = $this->changeConfig([
             'USE_USERNAME'=>false,
-            'REAL_STATELESS'=>true
+            'REAL_STATELESS'=>true,
+            'BLOCK_NOT_VERIFIED'=>false
         ]);
         $data = self::getData();
         $signUp = new SignUp($data, $config);

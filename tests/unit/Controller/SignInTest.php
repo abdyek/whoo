@@ -7,6 +7,8 @@ use Whoo\Controller\SignIn;
 use Whoo\Controller\SetUsername;
 use Whoo\Exception\NotFoundException;
 use Whoo\Exception\IncorrectPasswordException;
+use Whoo\Exception\NotVerifiedEmailException;
+use Whoo\Exception\NullUsernameException;
 use Firebase\JWT\JWT;
 use Whoo\Config\JWT as JWTConfig;
 
@@ -17,23 +19,42 @@ use Whoo\Config\JWT as JWTConfig;
 class SignInTest extends TestCase {
     const USERNAME = 'usernamee';
     use Reset;
+    use ChangeConfig;
     public function setUp(): void {
         self::reset();
     }
     public function testRun() {
-        $signUp = new SignUp($this->getData());
         $data = $this->getData();
-        $signIn = new SignIn($data);
+        $signUp = new SignUp($data);
+        $config = $this->changeConfig([
+            'BLOCK_NOT_VERIFIED'=>false,
+            'USE_USERNAME'=>false
+        ]);
+        $signIn = new SignIn($data, $config);
+        $decoded = (array) JWT::decode($signIn->jwt, JWTConfig::SECRET_KEY, array('HS256'));
+        $this->assertNotNull($decoded);
+        $this->assertNotNull($signIn->user);
+        $this->assertNull($signIn->temporaryToken);
+        $this->assertEquals($signIn->user->getId(), $decoded['userId']);
+        $signIn = new SignIn($data, $config);
+    }
+    public function testRunUseUsernameTrue() {
+        $data = $this->getData();
+        $signUp = new SignUp($data);
+        $config = $this->changeConfig([
+            'BLOCK_NOT_VERIFIED'=>false,
+            'USE_USERNAME'=>true
+        ]);
+        new SetUsername([
+            'temporaryToken'=>$signUp->temporaryToken,
+            'username'=>self::USERNAME
+        ]);
+        $signIn = new SignIn($data, $config);
         $decoded = (array) JWT::decode($signIn->jwt, JWTConfig::SECRET_KEY, array('HS256'));
         $this->assertNotNull($decoded);
         $this->assertNotNull($signIn->user);
         $this->assertEquals($signIn->user->getId(), $decoded['userId']);
-        $this->assertEquals(60,strlen($signIn->temporaryToken));
-        new SetUsername([
-            'temporaryToken'=>$signIn->temporaryToken,
-            'username'=>self::USERNAME
-        ]);
-        $signIn = new SignIn($data);
+        $this->assertSame(self::USERNAME, $signIn->user->getUsername());
         $this->assertNull($signIn->temporaryToken);
     }
     public function testNotFoundException() {
@@ -44,10 +65,30 @@ class SignInTest extends TestCase {
     }
     public function testRunIncorrectPasswordException() {
         $this->expectException(IncorrectPasswordException::class);
-        $signUp = new SignUp($this->getData());
         $data = $this->getData();
+        $signUp = new SignUp($data);
         $data['password'] = 'wrong password';
         $signIn = new SignIn($data);
+    }
+    public function testRunNotVerifiedEmailException() {
+        $this->expectException(NotVerifiedEmailException::class);
+        $data = $this->getData();
+        $signUp = new SignUp($data);
+        $config = $this->changeConfig([
+            'BLOCK_NOT_VERIFIED'=>true,
+            'USE_USERNAME'=>false
+        ]);
+        new SignIn($data, $config);
+    }
+    public function testRunNullUsernameException() {
+        $this->expectException(NullUsernameException::class);
+        $data = $this->getData();
+        $signUp = new SignUp($data);
+        $config = $this->changeConfig([
+            'BLOCK_NOT_VERIFIED'=>false,
+            'USE_USERNAME'=>true
+        ]);
+        new SignIn($data, $config);
     }
     private function getData() {
         return [

@@ -15,6 +15,7 @@ use Whoo\Exception\InvalidTokenException;
 
 class FetchInfoTest extends TestCase {
     use Reset;
+    use ChangeConfig;
     public function setUp(): void {
         self::reset();
     }
@@ -27,7 +28,10 @@ class FetchInfoTest extends TestCase {
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>$username
         ]);
-        $signIn = new SignIn($data);
+        $config = $this->changeConfig([
+            'BLOCK_NOT_VERIFIED'=>false
+        ]);
+        $signIn = new SignIn($data, $config);
         $fetchInfo = new FetchInfo([
             'jwt'=>$signIn->jwt
         ]);
