@@ -16,6 +16,7 @@ use Whoo\Exception\NotVerifiedEmailException;
 class SignInByUsernameTest extends TestCase {
     const USERNAME = 'uS3rN@mE';
     use Reset;
+    use ChangeConfig;
     public function setUp(): void {
         self::reset();
     }
@@ -54,6 +55,9 @@ class SignInByUsernameTest extends TestCase {
     }
     public function testRunNotVerifiedEmailException() {
         $this->expectException(NotVerifiedEmailException::class);
+        $config = $this->changeConfig([
+            'BLOCK_NOT_VERIFIED'=>true
+        ]);
         $data = $this->getData();
         $signUp = new SignUp($data);
         $user = UserModel::getByEmail($data['email']);
@@ -61,7 +65,7 @@ class SignInByUsernameTest extends TestCase {
         $signIn = new SignInByUsername([
             'username'=>self::USERNAME,
             'password'=>$data['password']
-        ]);
+        ], $config);
     }
     private function getData() {
         return [

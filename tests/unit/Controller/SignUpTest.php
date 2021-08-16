@@ -19,7 +19,10 @@ class SignUpTest extends TestCase {
     }
     public function testRun() {
         $data = $this->getData();
-        $signUp = new SignUp($data);
+        $config = $this->changeConfig([
+            'USE_USERNAME'=>true
+        ]);
+        $signUp = new SignUp($data, $config);
         $this->assertEquals(60, strlen($signUp->temporaryToken));
     }
     public function testRunNotUniqueEmailException() {

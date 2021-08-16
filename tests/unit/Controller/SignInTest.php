@@ -40,15 +40,15 @@ class SignInTest extends TestCase {
     }
     public function testRunUseUsernameTrue() {
         $data = $this->getData();
-        $signUp = new SignUp($data);
         $config = $this->changeConfig([
             'BLOCK_NOT_VERIFIED'=>false,
             'USE_USERNAME'=>true
         ]);
+        $signUp = new SignUp($data, $config);
         new SetUsername([
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>self::USERNAME
-        ]);
+        ], $config);
         $signIn = new SignIn($data, $config);
         $decoded = (array) JWT::decode($signIn->jwt, JWTConfig::SECRET_KEY, array('HS256'));
         $this->assertNotNull($decoded);

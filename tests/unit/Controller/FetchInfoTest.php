@@ -20,21 +20,22 @@ class FetchInfoTest extends TestCase {
         self::reset();
     }
     public function testRun() {
+        $config = $this->changeConfig([
+            'BLOCK_NOT_VERIFIED'=>false,
+            'USE_USERNAME'=>true
+        ]);
         $data = $this->getData();
         unset($data['username']);
         $username  = $this->getData()['username'];
-        $signUp = new SignUp($data);
+        $signUp = new SignUp($data, $config);
         new SetUsername([
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>$username
         ]);
-        $config = $this->changeConfig([
-            'BLOCK_NOT_VERIFIED'=>false
-        ]);
         $signIn = new SignIn($data, $config);
         $fetchInfo = new FetchInfo([
             'jwt'=>$signIn->jwt
-        ]);
+        ], $config);
         $user = User::getByUsername($username);
         $this->assertSame($user, $fetchInfo->user);
     }

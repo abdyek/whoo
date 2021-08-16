@@ -16,16 +16,20 @@ use Whoo\Exception\NotUniqueUsernameException;
 class SetUsernameTest extends TestCase {
     const USERNAME = 'uSeRNaMe';
     use Reset;
+    use ChangeConfig;
     public function setUp(): void {
         self::reset();
     }
     public function testRun() {
         $data = $this->getData();
-        $signUp = new SignUp($data);
+        $config = $this->changeConfig([
+            'USE_USERNAME'=>true
+        ]);
+        $signUp = new SignUp($data, $config);
         new SetUsername([
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>self::USERNAME
-        ]);
+        ], $config);
         $user = UserModel::getByEmail($data['email']);
         $this->assertSame(self::USERNAME, $user->getUsername());
     }
@@ -40,33 +44,39 @@ class SetUsernameTest extends TestCase {
     }
     public function testRunNotNullUsernameException() {
         $this->expectException(NotNullUsernameException::class);
+        $config = $this->changeConfig([
+            'USE_USERNAME'=>true
+        ]);
         $data = $this->getData();
-        $signUp = new SignUp($data);
+        $signUp = new SignUp($data, $config);
         new SetUsername([
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>self::USERNAME
-        ]);
+        ], $config);
         new SetUsername([
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>self::USERNAME
-        ]);
+        ], $config);
     }
     public function testRunNotUniqueUsernameException() {
         $this->expectException(NotUniqueUsernameException::class);
+        $config = $this->changeConfig([
+            'USE_USERNAME'=>true
+        ]);
         $data = $this->getData();
-        $signUp = new SignUp($data);
+        $signUp = new SignUp($data, $config);
         new SetUsername([
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>self::USERNAME
-        ]);
+        ], $config);
         $otherUser = new SignUp([
             'email'=>'other@user.com',
             'password'=>'top_secret_pass'
-        ]);
+        ], $config);
         new SetUsername([
             'temporaryToken'=>$otherUser->temporaryToken,
             'username'=>self::USERNAME
-        ]);
+        ], $config);
     }
     private function getData() {
         return [
