@@ -20,7 +20,7 @@ class SignInByUsername extends Controller {
         if(password_verify($this->data['password'], $pwHash)===false) {
             throw new IncorrectPasswordException;
         }
-        if($this->config['BLOCK_NOT_VERIFIED'] and $this->user->getEmailVerified()===false) {
+        if($this->config['DENY_IF_NOT_VERIFIED_TO_SIGN_IN'] and $this->user->getEmailVerified()===false) {
             throw new NotVerifiedEmailException;
         }
         $this->jwt = JWT::encode([

@@ -38,7 +38,7 @@ class SignInByProviderTest extends TestCase {
     public function testSignInBlockIfSignUpBeforeByEmailTrueOK() {
         $newConfig = $this->changeConfig([
             'USE_USERNAME'=>false,
-            'BLOCK_IF_SIGN_UP_BEFORE_BY_EMAIL'=>true
+            'DENY_IF_SIGN_UP_BEFORE_BY_EMAIL'=>true
         ]);
         $dataForProvider = self::getDataForProvider();
         $signUpIn= new SignInByProvider($dataForProvider, $newConfig);
@@ -50,7 +50,7 @@ class SignInByProviderTest extends TestCase {
         $data = $this->getData();
         $newConfig = $this->changeConfig([
             'USE_USERNAME'=>false,
-            'BLOCK_IF_SIGN_UP_BEFORE_BY_EMAIL'=>true
+            'DENY_IF_SIGN_UP_BEFORE_BY_EMAIL'=>true
         ]);
         $signUpNormally = new SignUp($data, $newConfig);
         $dataForProvider = $this->getDataForProvider();
@@ -59,7 +59,7 @@ class SignInByProviderTest extends TestCase {
     public function testSignInBlockIfSignUpBeforeByEmailFalse() {
         $newConfig = $this->changeConfig([
             'USE_USERNAME'=>false,
-            'BLOCK_IF_SIGN_UP_BEFORE_BY_EMAIL'=>false
+            'DENY_IF_SIGN_UP_BEFORE_BY_EMAIL'=>false
         ]);
         $data = self::getData();
         $signUp = new SignUp($data, $newConfig);

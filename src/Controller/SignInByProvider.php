@@ -16,7 +16,7 @@ class SignInByProvider extends Controller {
         if($user===null) {
             $user = UserModel::create($this->data);
             $this->registering = true;
-        } else if($this->config['BLOCK_IF_SIGN_UP_BEFORE_BY_EMAIL'] and $user->getProvider()===null) {
+        } else if($this->config['DENY_IF_SIGN_UP_BEFORE_BY_EMAIL'] and $user->getProvider()===null) {
             throw new SignUpByEmailException;
         }
         $user = UserModel::getByEmail($this->data['email']);

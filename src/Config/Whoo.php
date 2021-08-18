@@ -4,9 +4,11 @@ namespace Whoo\Config;
 
 class Whoo {
     const CONFIG = [
-        'BLOCK_NOT_VERIFIED'=>true,
+        'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>true,
+        'DENY_IF_NOT_VERIFIED_TO_RESET_PW'=>true, // I will use it for ResetPassword controller class
         'USE_USERNAME'=>true,
-        'BLOCK_IF_SIGN_UP_BEFORE_BY_EMAIL'=>false,
-        'REAL_STATELESS'=>false
+        'DENY_IF_NOT_SET_USERNAME'=>true,         // I will use it later
+        'DENY_IF_SIGN_UP_BEFORE_BY_EMAIL'=>false,
+        'REAL_STATELESS'=>false,
     ];
 }

@@ -23,7 +23,7 @@ class SignIn extends Controller {
         if($this->validateEmailPassword()===false) {
             throw new IncorrectPasswordException;
         }
-        if($this->config['BLOCK_NOT_VERIFIED'] and $this->user->getEmailVerified()===false) {
+        if($this->config['DENY_IF_NOT_VERIFIED_TO_SIGN_IN'] and $this->user->getEmailVerified()===false) {
             throw new NotVerifiedEmailException;
         }
         if($this->config['USE_USERNAME'] and $this->user->getUsername()===null) {

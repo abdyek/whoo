@@ -56,7 +56,7 @@ class SignInByUsernameTest extends TestCase {
     public function testRunNotVerifiedEmailException() {
         $this->expectException(NotVerifiedEmailException::class);
         $config = $this->changeConfig([
-            'BLOCK_NOT_VERIFIED'=>true
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>true
         ]);
         $data = $this->getData();
         $signUp = new SignUp($data);

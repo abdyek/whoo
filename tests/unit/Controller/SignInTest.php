@@ -27,7 +27,7 @@ class SignInTest extends TestCase {
         $data = $this->getData();
         $signUp = new SignUp($data);
         $config = $this->changeConfig([
-            'BLOCK_NOT_VERIFIED'=>false,
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
             'USE_USERNAME'=>false
         ]);
         $signIn = new SignIn($data, $config);
@@ -41,7 +41,7 @@ class SignInTest extends TestCase {
     public function testRunUseUsernameTrue() {
         $data = $this->getData();
         $config = $this->changeConfig([
-            'BLOCK_NOT_VERIFIED'=>false,
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
             'USE_USERNAME'=>true
         ]);
         $signUp = new SignUp($data, $config);
@@ -75,7 +75,7 @@ class SignInTest extends TestCase {
         $data = $this->getData();
         $signUp = new SignUp($data);
         $config = $this->changeConfig([
-            'BLOCK_NOT_VERIFIED'=>true,
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>true,
             'USE_USERNAME'=>false
         ]);
         new SignIn($data, $config);
@@ -85,7 +85,7 @@ class SignInTest extends TestCase {
         $data = $this->getData();
         $signUp = new SignUp($data);
         $config = $this->changeConfig([
-            'BLOCK_NOT_VERIFIED'=>false,
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
             'USE_USERNAME'=>true
         ]);
         new SignIn($data, $config);

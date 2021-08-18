@@ -21,7 +21,7 @@ class FetchInfoTest extends TestCase {
     }
     public function testRun() {
         $config = $this->changeConfig([
-            'BLOCK_NOT_VERIFIED'=>false,
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
             'USE_USERNAME'=>true
         ]);
         $data = $this->getData();
