@@ -27,10 +27,10 @@ class SignIn extends Controller {
             throw new NotVerifiedEmailException;
         }
         if($this->config['USE_USERNAME'] and $this->user->getUsername()===null) {
-            throw new NullUsernameException;
-        }
-        if($this->config['USE_USERNAME'] and $this->user->getUsername()===null) {
             $this->temporaryToken = TemporaryToken::generate($this->user->getId());
+            if($this->config['DENY_IF_NOT_SET_USERNAME']) {
+                throw new NullUsernameException;
+            }
         }
         $this->jwt = JWT::encode([
             'iss' => JWTConfig::ISS,

@@ -42,7 +42,8 @@ class SignInTest extends TestCase {
         $data = $this->getData();
         $config = $this->changeConfig([
             'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'USE_USERNAME'=>true
+            'USE_USERNAME'=>true,
+            'DENY_IF_NOT_SET_USERNAME'=>true
         ]);
         $signUp = new SignUp($data, $config);
         new SetUsername([
@@ -56,6 +57,21 @@ class SignInTest extends TestCase {
         $this->assertEquals($signIn->user->getId(), $decoded['userId']);
         $this->assertSame(self::USERNAME, $signIn->user->getUsername());
         $this->assertNull($signIn->temporaryToken);
+    }
+    public function testRunDenyIfNotSetUsernameFalse() {
+        $data = $this->getData();
+        $config = $this->changeConfig([
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
+            'USE_USERNAME'=>true,
+            'DENY_IF_NOT_SET_USERNAME'=>false
+        ]);
+        $signUp = new SignUp($data, $config);
+        $signIn = new SignIn($data, $config);
+        $decoded = (array) JWT::decode($signIn->jwt, JWTConfig::SECRET_KEY, array('HS256'));
+        $this->assertNotNull($decoded);
+        $this->assertNotNull($signIn->user);
+        $this->assertEquals($signIn->user->getId(), $decoded['userId']);
+        $this->assertNotNull($signIn->temporaryToken);
     }
     public function testNotFoundException() {
         $this->expectException(NotFoundException::class);
