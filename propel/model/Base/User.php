@@ -133,6 +133,14 @@ abstract class User implements ActiveRecordInterface
     protected $provider_id;
 
     /**
+     * The value for the two_factor_authentication field.
+     *
+     * Note: this column has a database default value of: false
+     * @var        boolean
+     */
+    protected $two_factor_authentication;
+
+    /**
      * @var        ObjectCollection|ChildAuthenticationCode[] Collection to store aggregation of ChildAuthenticationCode objects.
      * @phpstan-var ObjectCollection&\Traversable<ChildAuthenticationCode> Collection to store aggregation of ChildAuthenticationCode objects.
      */
@@ -164,6 +172,7 @@ abstract class User implements ActiveRecordInterface
     {
         $this->email_verified = false;
         $this->sign_out_count = 0;
+        $this->two_factor_authentication = false;
     }
 
     /**
@@ -505,6 +514,26 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
+     * Get the [two_factor_authentication] column value.
+     *
+     * @return boolean
+     */
+    public function getTwoFactorAuthentication()
+    {
+        return $this->two_factor_authentication;
+    }
+
+    /**
+     * Get the [two_factor_authentication] column value.
+     *
+     * @return boolean
+     */
+    public function isTwoFactorAuthentication()
+    {
+        return $this->getTwoFactorAuthentication();
+    }
+
+    /**
      * Set the value of [id] column.
      *
      * @param int $v New value
@@ -693,6 +722,34 @@ abstract class User implements ActiveRecordInterface
     } // setProviderId()
 
     /**
+     * Sets the value of the [two_factor_authentication] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param  boolean|integer|string $v The new value
+     * @return $this|\User The current object (for fluent API support)
+     */
+    public function setTwoFactorAuthentication($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->two_factor_authentication !== $v) {
+            $this->two_factor_authentication = $v;
+            $this->modifiedColumns[UserTableMap::COL_TWO_FACTOR_AUTHENTICATION] = true;
+        }
+
+        return $this;
+    } // setTwoFactorAuthentication()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -707,6 +764,10 @@ abstract class User implements ActiveRecordInterface
             }
 
             if ($this->sign_out_count !== 0) {
+                return false;
+            }
+
+            if ($this->two_factor_authentication !== false) {
                 return false;
             }
 
@@ -765,6 +826,9 @@ abstract class User implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : UserTableMap::translateFieldName('ProviderId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->provider_id = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : UserTableMap::translateFieldName('TwoFactorAuthentication', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->two_factor_authentication = (null !== $col) ? (boolean) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -773,7 +837,7 @@ abstract class User implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 9; // 9 = UserTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 10; // 10 = UserTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\User'), 0, $e);
@@ -1020,6 +1084,9 @@ abstract class User implements ActiveRecordInterface
         if ($this->isColumnModified(UserTableMap::COL_PROVIDER_ID)) {
             $modifiedColumns[':p' . $index++]  = 'provider_id';
         }
+        if ($this->isColumnModified(UserTableMap::COL_TWO_FACTOR_AUTHENTICATION)) {
+            $modifiedColumns[':p' . $index++]  = 'two_factor_authentication';
+        }
 
         $sql = sprintf(
             'INSERT INTO whoo_user (%s) VALUES (%s)',
@@ -1057,6 +1124,9 @@ abstract class User implements ActiveRecordInterface
                         break;
                     case 'provider_id':
                         $stmt->bindValue($identifier, $this->provider_id, PDO::PARAM_STR);
+                        break;
+                    case 'two_factor_authentication':
+                        $stmt->bindValue($identifier, (int) $this->two_factor_authentication, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1147,6 +1217,9 @@ abstract class User implements ActiveRecordInterface
             case 8:
                 return $this->getProviderId();
                 break;
+            case 9:
+                return $this->getTwoFactorAuthentication();
+                break;
             default:
                 return null;
                 break;
@@ -1186,6 +1259,7 @@ abstract class User implements ActiveRecordInterface
             $keys[6] => $this->getSignOutCount(),
             $keys[7] => $this->getProvider(),
             $keys[8] => $this->getProviderId(),
+            $keys[9] => $this->getTwoFactorAuthentication(),
         );
         if ($result[$keys[5]] instanceof \DateTimeInterface) {
             $result[$keys[5]] = $result[$keys[5]]->format('Y-m-d H:i:s.u');
@@ -1273,6 +1347,9 @@ abstract class User implements ActiveRecordInterface
             case 8:
                 $this->setProviderId($value);
                 break;
+            case 9:
+                $this->setTwoFactorAuthentication($value);
+                break;
         } // switch()
 
         return $this;
@@ -1325,6 +1402,9 @@ abstract class User implements ActiveRecordInterface
         }
         if (array_key_exists($keys[8], $arr)) {
             $this->setProviderId($arr[$keys[8]]);
+        }
+        if (array_key_exists($keys[9], $arr)) {
+            $this->setTwoFactorAuthentication($arr[$keys[9]]);
         }
 
         return $this;
@@ -1395,6 +1475,9 @@ abstract class User implements ActiveRecordInterface
         }
         if ($this->isColumnModified(UserTableMap::COL_PROVIDER_ID)) {
             $criteria->add(UserTableMap::COL_PROVIDER_ID, $this->provider_id);
+        }
+        if ($this->isColumnModified(UserTableMap::COL_TWO_FACTOR_AUTHENTICATION)) {
+            $criteria->add(UserTableMap::COL_TWO_FACTOR_AUTHENTICATION, $this->two_factor_authentication);
         }
 
         return $criteria;
@@ -1490,6 +1573,7 @@ abstract class User implements ActiveRecordInterface
         $copyObj->setSignOutCount($this->getSignOutCount());
         $copyObj->setProvider($this->getProvider());
         $copyObj->setProviderId($this->getProviderId());
+        $copyObj->setTwoFactorAuthentication($this->getTwoFactorAuthentication());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1800,6 +1884,7 @@ abstract class User implements ActiveRecordInterface
         $this->sign_out_count = null;
         $this->provider = null;
         $this->provider_id = null;
+        $this->two_factor_authentication = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->applyDefaultValues();

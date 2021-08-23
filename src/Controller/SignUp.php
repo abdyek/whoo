@@ -12,7 +12,8 @@ class SignUp extends Controller {
         if(!UserModel::isUniqueEmail($this->data['email'])) {
             throw new NotUniqueEmailException;
         }
-        $user = UserModel::create($this->data);
+        $data = array_merge($this->data, ['twoFactorAuthentication'=>$this->config['DEFAULT_2FA']]);
+        $user = UserModel::create($data);
         if($this->config['USE_USERNAME']) {
             $this->temporaryToken = TemporaryToken::generate($user->getId());
         }

@@ -29,6 +29,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery orderBySignOutCount($order = Criteria::ASC) Order by the sign_out_count column
  * @method     ChildUserQuery orderByProvider($order = Criteria::ASC) Order by the provider column
  * @method     ChildUserQuery orderByProviderId($order = Criteria::ASC) Order by the provider_id column
+ * @method     ChildUserQuery orderByTwoFactorAuthentication($order = Criteria::ASC) Order by the two_factor_authentication column
  *
  * @method     ChildUserQuery groupById() Group by the id column
  * @method     ChildUserQuery groupByEmail() Group by the email column
@@ -39,6 +40,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery groupBySignOutCount() Group by the sign_out_count column
  * @method     ChildUserQuery groupByProvider() Group by the provider column
  * @method     ChildUserQuery groupByProviderId() Group by the provider_id column
+ * @method     ChildUserQuery groupByTwoFactorAuthentication() Group by the two_factor_authentication column
  *
  * @method     ChildUserQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildUserQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -71,7 +73,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser|null findOneBySignUpDateTime(string $sign_up_date_time) Return the first ChildUser filtered by the sign_up_date_time column
  * @method     ChildUser|null findOneBySignOutCount(int $sign_out_count) Return the first ChildUser filtered by the sign_out_count column
  * @method     ChildUser|null findOneByProvider(string $provider) Return the first ChildUser filtered by the provider column
- * @method     ChildUser|null findOneByProviderId(string $provider_id) Return the first ChildUser filtered by the provider_id column *
+ * @method     ChildUser|null findOneByProviderId(string $provider_id) Return the first ChildUser filtered by the provider_id column
+ * @method     ChildUser|null findOneByTwoFactorAuthentication(boolean $two_factor_authentication) Return the first ChildUser filtered by the two_factor_authentication column *
 
  * @method     ChildUser requirePk($key, ConnectionInterface $con = null) Return the ChildUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOne(ConnectionInterface $con = null) Return the first ChildUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -85,6 +88,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser requireOneBySignOutCount(int $sign_out_count) Return the first ChildUser filtered by the sign_out_count column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByProvider(string $provider) Return the first ChildUser filtered by the provider column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByProviderId(string $provider_id) Return the first ChildUser filtered by the provider_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildUser requireOneByTwoFactorAuthentication(boolean $two_factor_authentication) Return the first ChildUser filtered by the two_factor_authentication column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildUser[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
  * @psalm-method ObjectCollection&\Traversable<ChildUser> find(ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
@@ -106,6 +110,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildUser> findByProvider(string $provider) Return ChildUser objects filtered by the provider column
  * @method     ChildUser[]|ObjectCollection findByProviderId(string $provider_id) Return ChildUser objects filtered by the provider_id column
  * @psalm-method ObjectCollection&\Traversable<ChildUser> findByProviderId(string $provider_id) Return ChildUser objects filtered by the provider_id column
+ * @method     ChildUser[]|ObjectCollection findByTwoFactorAuthentication(boolean $two_factor_authentication) Return ChildUser objects filtered by the two_factor_authentication column
+ * @psalm-method ObjectCollection&\Traversable<ChildUser> findByTwoFactorAuthentication(boolean $two_factor_authentication) Return ChildUser objects filtered by the two_factor_authentication column
  * @method     ChildUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildUser> paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -205,7 +211,7 @@ abstract class UserQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, email, username, password_hash, email_verified, sign_up_date_time, sign_out_count, provider, provider_id FROM whoo_user WHERE id = :p0';
+        $sql = 'SELECT id, email, username, password_hash, email_verified, sign_up_date_time, sign_out_count, provider, provider_id, two_factor_authentication FROM whoo_user WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -570,6 +576,33 @@ abstract class UserQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(UserTableMap::COL_PROVIDER_ID, $providerId, $comparison);
+    }
+
+    /**
+     * Filter the query on the two_factor_authentication column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByTwoFactorAuthentication(true); // WHERE two_factor_authentication = true
+     * $query->filterByTwoFactorAuthentication('yes'); // WHERE two_factor_authentication = true
+     * </code>
+     *
+     * @param     boolean|string $twoFactorAuthentication The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildUserQuery The current query, for fluid interface
+     */
+    public function filterByTwoFactorAuthentication($twoFactorAuthentication = null, $comparison = null)
+    {
+        if (is_string($twoFactorAuthentication)) {
+            $twoFactorAuthentication = in_array(strtolower($twoFactorAuthentication), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(UserTableMap::COL_TWO_FACTOR_AUTHENTICATION, $twoFactorAuthentication, $comparison);
     }
 
     /**

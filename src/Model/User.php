@@ -16,6 +16,7 @@ class User {
         $user->setProvider((isset($args['provider'])?$args['provider']:null));
         $user->setProviderId((isset($args['providerId'])?$args['providerId']:null));
         $user->setEmailVerified(((isset($args['provider']) and isset($args['providerId']))?true:false));
+        $user->setTwoFactorAuthentication((isset($args['twoFactorAuthentication'])?$args['twoFactorAuthentication']:false));
         $user->save();
         return $user;
     }

@@ -58,7 +58,7 @@ class UserTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 9;
+    const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
@@ -68,7 +68,7 @@ class UserTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 9;
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the id field
@@ -116,6 +116,11 @@ class UserTableMap extends TableMap
     const COL_PROVIDER_ID = 'whoo_user.provider_id';
 
     /**
+     * the column name for the two_factor_authentication field
+     */
+    const COL_TWO_FACTOR_AUTHENTICATION = 'whoo_user.two_factor_authentication';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -127,11 +132,11 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Email', 'Username', 'PasswordHash', 'EmailVerified', 'SignUpDateTime', 'SignOutCount', 'Provider', 'ProviderId', ),
-        self::TYPE_CAMELNAME     => array('id', 'email', 'username', 'passwordHash', 'emailVerified', 'signUpDateTime', 'signOutCount', 'provider', 'providerId', ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_ID, UserTableMap::COL_EMAIL, UserTableMap::COL_USERNAME, UserTableMap::COL_PASSWORD_HASH, UserTableMap::COL_EMAIL_VERIFIED, UserTableMap::COL_SIGN_UP_DATE_TIME, UserTableMap::COL_SIGN_OUT_COUNT, UserTableMap::COL_PROVIDER, UserTableMap::COL_PROVIDER_ID, ),
-        self::TYPE_FIELDNAME     => array('id', 'email', 'username', 'password_hash', 'email_verified', 'sign_up_date_time', 'sign_out_count', 'provider', 'provider_id', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('Id', 'Email', 'Username', 'PasswordHash', 'EmailVerified', 'SignUpDateTime', 'SignOutCount', 'Provider', 'ProviderId', 'TwoFactorAuthentication', ),
+        self::TYPE_CAMELNAME     => array('id', 'email', 'username', 'passwordHash', 'emailVerified', 'signUpDateTime', 'signOutCount', 'provider', 'providerId', 'twoFactorAuthentication', ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_ID, UserTableMap::COL_EMAIL, UserTableMap::COL_USERNAME, UserTableMap::COL_PASSWORD_HASH, UserTableMap::COL_EMAIL_VERIFIED, UserTableMap::COL_SIGN_UP_DATE_TIME, UserTableMap::COL_SIGN_OUT_COUNT, UserTableMap::COL_PROVIDER, UserTableMap::COL_PROVIDER_ID, UserTableMap::COL_TWO_FACTOR_AUTHENTICATION, ),
+        self::TYPE_FIELDNAME     => array('id', 'email', 'username', 'password_hash', 'email_verified', 'sign_up_date_time', 'sign_out_count', 'provider', 'provider_id', 'two_factor_authentication', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -141,11 +146,11 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Email' => 1, 'Username' => 2, 'PasswordHash' => 3, 'EmailVerified' => 4, 'SignUpDateTime' => 5, 'SignOutCount' => 6, 'Provider' => 7, 'ProviderId' => 8, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'email' => 1, 'username' => 2, 'passwordHash' => 3, 'emailVerified' => 4, 'signUpDateTime' => 5, 'signOutCount' => 6, 'provider' => 7, 'providerId' => 8, ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_ID => 0, UserTableMap::COL_EMAIL => 1, UserTableMap::COL_USERNAME => 2, UserTableMap::COL_PASSWORD_HASH => 3, UserTableMap::COL_EMAIL_VERIFIED => 4, UserTableMap::COL_SIGN_UP_DATE_TIME => 5, UserTableMap::COL_SIGN_OUT_COUNT => 6, UserTableMap::COL_PROVIDER => 7, UserTableMap::COL_PROVIDER_ID => 8, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'email' => 1, 'username' => 2, 'password_hash' => 3, 'email_verified' => 4, 'sign_up_date_time' => 5, 'sign_out_count' => 6, 'provider' => 7, 'provider_id' => 8, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Email' => 1, 'Username' => 2, 'PasswordHash' => 3, 'EmailVerified' => 4, 'SignUpDateTime' => 5, 'SignOutCount' => 6, 'Provider' => 7, 'ProviderId' => 8, 'TwoFactorAuthentication' => 9, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'email' => 1, 'username' => 2, 'passwordHash' => 3, 'emailVerified' => 4, 'signUpDateTime' => 5, 'signOutCount' => 6, 'provider' => 7, 'providerId' => 8, 'twoFactorAuthentication' => 9, ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_ID => 0, UserTableMap::COL_EMAIL => 1, UserTableMap::COL_USERNAME => 2, UserTableMap::COL_PASSWORD_HASH => 3, UserTableMap::COL_EMAIL_VERIFIED => 4, UserTableMap::COL_SIGN_UP_DATE_TIME => 5, UserTableMap::COL_SIGN_OUT_COUNT => 6, UserTableMap::COL_PROVIDER => 7, UserTableMap::COL_PROVIDER_ID => 8, UserTableMap::COL_TWO_FACTOR_AUTHENTICATION => 9, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'email' => 1, 'username' => 2, 'password_hash' => 3, 'email_verified' => 4, 'sign_up_date_time' => 5, 'sign_out_count' => 6, 'provider' => 7, 'provider_id' => 8, 'two_factor_authentication' => 9, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -222,6 +227,14 @@ class UserTableMap extends TableMap
         'COL_PROVIDER_ID' => 'PROVIDER_ID',
         'provider_id' => 'PROVIDER_ID',
         'whoo_user.provider_id' => 'PROVIDER_ID',
+        'TwoFactorAuthentication' => 'TWO_FACTOR_AUTHENTICATION',
+        'User.TwoFactorAuthentication' => 'TWO_FACTOR_AUTHENTICATION',
+        'twoFactorAuthentication' => 'TWO_FACTOR_AUTHENTICATION',
+        'user.twoFactorAuthentication' => 'TWO_FACTOR_AUTHENTICATION',
+        'UserTableMap::COL_TWO_FACTOR_AUTHENTICATION' => 'TWO_FACTOR_AUTHENTICATION',
+        'COL_TWO_FACTOR_AUTHENTICATION' => 'TWO_FACTOR_AUTHENTICATION',
+        'two_factor_authentication' => 'TWO_FACTOR_AUTHENTICATION',
+        'whoo_user.two_factor_authentication' => 'TWO_FACTOR_AUTHENTICATION',
     ];
 
     /**
@@ -250,6 +263,7 @@ class UserTableMap extends TableMap
         $this->addColumn('sign_out_count', 'SignOutCount', 'INTEGER', true, null, 0);
         $this->addColumn('provider', 'Provider', 'VARCHAR', false, 255, null);
         $this->addColumn('provider_id', 'ProviderId', 'VARCHAR', false, 255, null);
+        $this->addColumn('two_factor_authentication', 'TwoFactorAuthentication', 'BOOLEAN', true, 1, false);
     } // initialize()
 
     /**
@@ -416,6 +430,7 @@ class UserTableMap extends TableMap
             $criteria->addSelectColumn(UserTableMap::COL_SIGN_OUT_COUNT);
             $criteria->addSelectColumn(UserTableMap::COL_PROVIDER);
             $criteria->addSelectColumn(UserTableMap::COL_PROVIDER_ID);
+            $criteria->addSelectColumn(UserTableMap::COL_TWO_FACTOR_AUTHENTICATION);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.email');
@@ -426,6 +441,7 @@ class UserTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.sign_out_count');
             $criteria->addSelectColumn($alias . '.provider');
             $criteria->addSelectColumn($alias . '.provider_id');
+            $criteria->addSelectColumn($alias . '.two_factor_authentication');
         }
     }
 
@@ -452,6 +468,7 @@ class UserTableMap extends TableMap
             $criteria->removeSelectColumn(UserTableMap::COL_SIGN_OUT_COUNT);
             $criteria->removeSelectColumn(UserTableMap::COL_PROVIDER);
             $criteria->removeSelectColumn(UserTableMap::COL_PROVIDER_ID);
+            $criteria->removeSelectColumn(UserTableMap::COL_TWO_FACTOR_AUTHENTICATION);
         } else {
             $criteria->removeSelectColumn($alias . '.id');
             $criteria->removeSelectColumn($alias . '.email');
@@ -462,6 +479,7 @@ class UserTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.sign_out_count');
             $criteria->removeSelectColumn($alias . '.provider');
             $criteria->removeSelectColumn($alias . '.provider_id');
+            $criteria->removeSelectColumn($alias . '.two_factor_authentication');
         }
     }
 

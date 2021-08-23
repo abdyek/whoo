@@ -33,6 +33,18 @@ class UserTest extends TestCase {
         $this->assertTrue(password_verify($data['password'], $user->getPasswordHash()));
         $this->assertFalse($user->getEmailVerified());
     }
+    public function testCreateOpen2FA() {
+        $data = $this->getData();
+        $data['twoFactorAuthentication'] = true;
+        $user = User::create($data);
+        $this->assertTrue($user->getTwoFactorAuthentication());
+    }
+    public function testCreateClose2FA() {
+        $data = $this->getData();
+        $data['twoFactorAuthentication'] = false;
+        $user = USER::create($data);
+        $this->assertFalse($user->getTwoFactorAuthentication());
+    }
     public function testCreateViaProvider() {
         $data = $this->getData();
         unset($data['password']);

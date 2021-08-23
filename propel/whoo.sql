@@ -20,6 +20,7 @@ CREATE TABLE `whoo_user`
     `sign_out_count` INTEGER DEFAULT 0 NOT NULL,
     `provider` VARCHAR(255),
     `provider_id` VARCHAR(255),
+    `two_factor_authentication` TINYINT(1) DEFAULT 0 NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 

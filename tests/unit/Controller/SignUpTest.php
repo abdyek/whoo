@@ -25,6 +25,7 @@ class SignUpTest extends TestCase {
         $signUp = new SignUp($data, $config);
         $this->assertEquals(60, strlen($signUp->temporaryToken));
     }
+    // I will add tests for DEFAULT_2FA as true and false
     public function testRunNotUniqueEmailException() {
         $this->expectException(NotUniqueEmailException::class);
         $user = self::createExample();
