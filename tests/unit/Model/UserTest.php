@@ -86,6 +86,14 @@ class UserTest extends TestCase {
         User::increaseSignOutCount($user);
         $this->assertEquals($defaultCount+1, $user->getSignOutCount());
     }
+    public function testSetPassword() {
+        $newPw = 'new_password';
+        $data = $this->getData();
+        $user = User::create($data);
+        User::setPassword($user, $newPw);
+        $hash = $user->getPasswordHash();
+        $this->assertTrue(password_verify($newPw, $hash));
+    }
     private function getData() {
         return [
             'email'=>'example@example.com',

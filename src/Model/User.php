@@ -41,6 +41,10 @@ class User {
         $user->setSignOutCount($count);
         $user->save();
     }
+    public static function setPassword($user, $newPassword) {
+        $user->setPasswordHash(password_hash($newPassword, PASSWORD_DEFAULT));
+        $user->save();
+    }
     private static function query() {
         return \UserQuery::create();
     }

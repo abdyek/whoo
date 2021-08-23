@@ -170,6 +170,13 @@ class Controller {
             ]
         ],
         'ResetPassword'=>[
+            'email'=>[
+                'type'=>'email',
+                'limits'=>[
+                    'min'=>1,
+                    'max'=>255
+                ]
+            ],
             'newPassword'=>[
                 'type'=>'str',
                 'limits'=>[
