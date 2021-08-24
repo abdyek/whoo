@@ -7,17 +7,19 @@ use Whoo\Model\AuthenticationCode;
 use Whoo\Exception\TimeOutCodeException;
 use Whoo\Exception\InvalidCodeException;
 use Whoo\Exception\TrialCountOverException;
+use Whoo\Exception\NotFoundException;
+use Whoo\Exception\NotFoundAuthCodeException;
 use Whoo\Config\Authentication as AuthConfig;
 
 class VerifyEmail extends Controller {
     protected function run() {
         $user = User::getByEmail($this->data['email']);
         if($user === null) {
-            throw new InvalidCodeException;
+            throw new NotFoundException;
         }
         $auth = AuthenticationCode::getByUserIdType($user->getId(), 'emailVerification');
         if($auth === null) {
-            throw new InvalidCodeException;
+            throw new NotFoundAuthCodeException;
         }
         if($auth->getTrialCount()+1>=AuthConfig::TRIAL_MAX_COUNT) {
             throw new TrialCountOverException;

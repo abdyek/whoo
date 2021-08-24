@@ -6,6 +6,8 @@ use Whoo\Controller\VerifyEmail;
 use Whoo\Controller\SetAuthCodeForEmailVerification;
 use Whoo\Exception\InvalidCodeException;
 use Whoo\Exception\TrialCountOverException;
+use Whoo\Exception\NotFoundException;
+use Whoo\Exception\NotFoundAuthCodeException;
 use Whoo\Config\Authentication as AuthConfig;
 use Whoo\Model\AuthenticationCode;
 
@@ -19,14 +21,22 @@ class VerifyEmailTest extends TestCase {
     public function setUp(): void {
         self::reset();
     }
-    public function testRunInvalidCodeExceptionNoUser() {
-        $this->expectException(InvalidCodeException::class);
+    public function testRunNotFoundExcepiton() {
+        $this->expectException(NotFoundException::class);
         new VerifyEmail([
             'email'=>'notFound@notFound.com',
             'code'=>'noneNONE'
         ]);
     }
-    public function testRunInvalidCodeExceptionWrongCode() {
+    public function testRunNotFoundAuthCodeException() {
+        $this->expectException(NotFoundAuthCodeException::class);
+        $user = $this->createExample();
+        new VerifyEmail([
+            'email'=>self::$traitEmail,
+            'code'=>'codee'
+        ]);
+    }
+    public function testRunInvalidCodeException() {
         $this->expectException(InvalidCodeException::class);
         $user = $this->createExample();
         new SetAuthCodeForEmailVerification([
