@@ -46,6 +46,13 @@ class User {
         $user->setPasswordHash(password_hash($newPassword, PASSWORD_DEFAULT));
         $user->save();
     }
+    public static function checkPassword($user, $password) {
+        return password_verify($password, $user->getPasswordHash());
+    }
+    public static function setEmail($user, $email) {
+        $user->setEmail($email);
+        $user->save();
+    }
     private static function query() {
         return \UserQuery::create();
     }

@@ -106,6 +106,19 @@ class UserTest extends TestCase {
         $hash = $user->getPasswordHash();
         $this->assertTrue(password_verify($newPw, $hash));
     }
+    public function testCheckPassword() {
+        $data = $this->getData();
+        $user = User::create($data);
+        $this->assertTrue(User::checkPassword($user, $data['password']));
+        $this->assertFalse(User::checkPassword($user, 'wrongPw'));
+    }
+    public function testSetEmail() {
+        $newEmail = 'newEmail@newEmail.com';
+        $data = $this->getData();
+        $user = User::create($data);
+        User::setEmail($user, $newEmail);
+        $this->assertEquals($newEmail, $user->getEmail());
+    }
     private function getData() {
         return [
             'email'=>'example@example.com',
