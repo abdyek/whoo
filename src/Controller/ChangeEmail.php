@@ -9,15 +9,14 @@ use Whoo\Exception\NotUniqueEmailException;
 
 class ChangeEmail extends Controller {
     protected function run() {
-        $user = User::getById($this->userId);
-        if(!User::checkPassword($user, $this->data['password'])) {
+        if(!User::checkPassword($this->user, $this->data['password'])) {
             throw new IncorrectPasswordException;
         }
         if(!User::isUniqueEmail($this->data['newEmail'])) {
             throw new NotUniqueEmailException;
         }
-        User::setEmail($user, $this->data['newEmail']);
-        User::setEmailVerified($user, false);
+        User::setEmail($this->user, $this->data['newEmail']);
+        User::setEmailVerified($this->user, false);
         new SignOut(['jwt'=>$this->data['jwt']]);
     }
 }

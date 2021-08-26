@@ -26,8 +26,7 @@ class ChangeEmailTest extends TestCase {
         $data = $this->getData();
         $config = $this->changeConfig([
             'USE_USERNAME'=>false,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'REAL_STATELESS'=>false
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false
         ]);
         new SignUp($data, $config);
         $signIn = new SignIn($data, $config);
@@ -45,8 +44,7 @@ class ChangeEmailTest extends TestCase {
         $data = $this->getData();
         $config = $this->changeConfig([
             'USE_USERNAME'=>false,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'REAL_STATELESS'=>false
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false
         ]);
         new SignUp($data, $config);
         $signIn = new SignIn($data, $config);
@@ -65,8 +63,7 @@ class ChangeEmailTest extends TestCase {
         ];
         $config = $this->changeConfig([
             'USE_USERNAME'=>false,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'REAL_STATELESS'=>false
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false
         ]);
         new SignUp($data, $config);
         new SignUp($data2, $config);
@@ -82,8 +79,7 @@ class ChangeEmailTest extends TestCase {
         $data = $this->getData();
         $config = $this->changeConfig([
             'USE_USERNAME'=>false,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'REAL_STATELESS'=>false
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false
         ]);
         new SignUp($data, $config);
         $signIn = new SignIn($data, $config);
@@ -95,25 +91,6 @@ class ChangeEmailTest extends TestCase {
         new FetchInfo([
             'jwt'=>$signIn->jwt
         ], $config);
-    }
-    public function testRunSignOutRealStatelessTrue() {
-        $data = $this->getData();
-        $config = $this->changeConfig([
-            'USE_USERNAME'=>false,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'REAL_STATELESS'=>true
-        ]);
-        new SignUp($data, $config);
-        $signIn = new SignIn($data, $config);
-        new ChangeEmail([
-            'jwt'=>$signIn->jwt,
-            'newEmail'=>'newEmail@newEmail.com',
-            'password'=>$data['password']
-        ], $config);
-        $fetchInfo = new FetchInfo([
-            'jwt'=>$signIn->jwt
-        ], $config);
-        $this->assertSame($signIn->user, $fetchInfo->user);
     }
     private function getData() {
         return [

@@ -10,7 +10,7 @@ use Whoo\Exception\InvalidDataException;
 use Whoo\Exception\InvalidTokenException;
 
 class Controller {
-    protected $userId = null;
+    public $user = null;
     public function __construct($data, $config=Whoo::CONFIG) {
         $this->config = $config;
         $this->data = $data;
@@ -46,13 +46,10 @@ class Controller {
             } catch (\UnexpectedValueException $e) {
                 throw new InvalidTokenException;
             }
-            if($this->config['REAL_STATELESS']===false) {
-                $user = User::getById($userInfo['userId']);
-                if($user->getSignOutCount()!==$userInfo['signOutCount']) {
-                    throw new InvalidTokenException;
-                }
-            } 
-            $this->userId = $userInfo['userId'];
+            $this->user = User::getById($userInfo['userId']);
+            if($this->user->getSignOutCount()!==$userInfo['signOutCount']) {
+                throw new InvalidTokenException;
+            }
         }
     }
     private function checkRequiredWrapper() {

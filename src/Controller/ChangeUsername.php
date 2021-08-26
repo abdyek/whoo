@@ -10,7 +10,6 @@ class ChangeUsername extends Controller {
         if(!User::isUniqueUsername($this->data['newUsername'])) {
             throw new NotUniqueUsernameException;
         }
-        $user = User::getById($this->userId);
-        User::setUsername($user, $this->data['newUsername']);
+        User::setUsername($this->user, $this->data['newUsername']);
     }
 }

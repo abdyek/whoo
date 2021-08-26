@@ -22,8 +22,7 @@ class SignOutTest extends TestCase {
         $this->expectException(InvalidTokenException::class);
         $config = $this->changeConfig([
             'USE_USERNAME'=>false,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'REAL_STATELESS'=>false
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false
         ]);
         $data = self::getData();
         $signUp = new SignUp($data, $config);
@@ -36,24 +35,6 @@ class SignOutTest extends TestCase {
         new FetchInfo([
             'jwt'=>$jwt
         ], $config);
-    }
-    public function testRunRealStatelessTrue() {
-        $config = $this->changeConfig([
-            'USE_USERNAME'=>false,
-            'REAL_STATELESS'=>true,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false
-        ]);
-        $data = self::getData();
-        $signUp = new SignUp($data, $config);
-        $signIn = new SignIn($data, $config);
-        $jwt = $signIn->jwt;
-        new SignOut([
-            'jwt'=>$jwt
-        ], $config);
-        $fetchInfo = new FetchInfo([
-            'jwt'=>$jwt
-        ], $config);
-        $this->assertNotNull($fetchInfo->user);
     }
     public function testTest() {
         $this->assertTrue(True);
