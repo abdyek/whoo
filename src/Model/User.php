@@ -53,6 +53,10 @@ class User {
         $user->setEmail($email);
         $user->save();
     }
+    public static function set2FA($user, $value) {
+        $user->setTwoFactorAuthentication($value);
+        $user->save();
+    }
     private static function query() {
         return \UserQuery::create();
     }

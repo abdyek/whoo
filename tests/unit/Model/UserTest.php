@@ -119,6 +119,12 @@ class UserTest extends TestCase {
         User::setEmail($user, $newEmail);
         $this->assertEquals($newEmail, $user->getEmail());
     }
+    public function testSet2FA() {
+        $data = $this->getData();
+        $user = User::create($data);
+        User::set2FA($user, false);
+        $this->assertFalse($user->getTwoFactorAuthentication());
+    }
     private function getData() {
         return [
             'email'=>'example@example.com',

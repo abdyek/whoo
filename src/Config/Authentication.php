@@ -8,4 +8,6 @@ class Authentication {
     const SIZE_OF_CODE_FOR_MANAGE_2FA = 6;
     const TRIAL_MAX_COUNT = 3;
     const VALIDITY_TIME = 180;
+    const TRIAL_MAX_COUNT_TO_MANAGE_2FA = 3;
+    const VALIDITY_TIME_TO_MANAGE_2FA = 180;
 }
