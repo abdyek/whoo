@@ -4,10 +4,13 @@ require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
 use Whoo\Controller\SignUp;
 use Whoo\Controller\SignInByUsername;
+use Whoo\Controller\SetUsername;
 use Whoo\Model\User as UserModel;
+use Whoo\Model\AuthenticationCode;
 use Whoo\Exception\IncorrectPasswordException;
 use Whoo\Exception\NotFoundException;
 use Whoo\Exception\NotVerifiedEmailException;
+use Whoo\Exception\TwoFactorAuthEnabledException;
 
 /**
  * @covers SignInByUsername::
@@ -62,6 +65,47 @@ class SignInByUsernameTest extends TestCase {
         $signUp = new SignUp($data);
         $user = UserModel::getByEmail($data['email']);
         UserModel::setUsername($user, self::USERNAME);
+        $signIn = new SignInByUsername([
+            'username'=>self::USERNAME,
+            'password'=>$data['password']
+        ], $config);
+    }
+    public function testRun2FA() {
+        $config = $this->changeConfig([
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
+            'USE_USERNAME'=>true,
+            'DEFAULT_2FA'=>true
+        ]);
+        $data = $this->getData();
+        $signUp = new SignUp($data, $config);
+        new SetUsername([
+            'temporaryToken'=>$signUp->temporaryToken,
+            'username'=>self::USERNAME
+        ], $config);
+        try {
+            $signIn = new SignInByUsername([
+                'username'=>self::USERNAME,
+                'password'=>$data['password']
+            ], $config);
+        } catch(TwoFactorAuthEnabledException $e) {
+            $user = UserModel::getByUsername(self::USERNAME);
+            $code = AuthenticationCode::getByUserIdType($user->getId(), '2FA-sign-in');
+            $this->assertSame($code->getCode(), $e->authenticationCode);
+        }
+    }
+    public function testRun2FAWithException() {
+        $this->expectException(TwoFactorAuthEnabledException::class);
+        $config = $this->changeConfig([
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
+            'USE_USERNAME'=>true,
+            'DEFAULT_2FA'=>true
+        ]);
+        $data = $this->getData();
+        $signUp = new SignUp($data, $config);
+        new SetUsername([
+            'temporaryToken'=>$signUp->temporaryToken,
+            'username'=>self::USERNAME
+        ], $config);
         $signIn = new SignInByUsername([
             'username'=>self::USERNAME,
             'password'=>$data['password']
