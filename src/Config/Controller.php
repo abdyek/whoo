@@ -160,6 +160,38 @@ class Controller {
                 ]
             ],
         ],
+        'SignIn2FA'=>[
+            'email'=>[
+                'type'=>'email',
+                'limits'=>[
+                    'min'=>1,
+                    'max'=>255
+                ]
+            ],
+            'code'=>[
+                'type'=>'str',
+                'limits'=>[
+                    'min'=>1,
+                    'max'=>10
+                ]
+            ]
+        ],
+        'SignInByUsername2FA'=>[
+            'username'=>[
+                'type'=>'str',
+                'limits'=>[
+                    'min'=>1,
+                    'max'=>40
+                ]
+            ],
+            'authenticationCode'=>[
+                'type'=>'str',
+                'limits'=>[
+                    'min'=>1,
+                    'max'=>10
+                ]
+            ]
+        ],
         'SetAuthCodeToResetPassword'=>[
             'email'=>[
                 'type'=>'email',
