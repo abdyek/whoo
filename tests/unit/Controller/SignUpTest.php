@@ -23,9 +23,21 @@ class SignUpTest extends TestCase {
             'USE_USERNAME'=>true
         ]);
         $signUp = new SignUp($data, $config);
+        $this->assertNotNull($signUp->user);
         $this->assertEquals(60, strlen($signUp->temporaryToken));
     }
-    // I will add tests for DEFAULT_2FA as true and false
+    /**
+     * @dataProvider trueFalse
+     */
+    public function testRunDefault2FATrue($val) {
+        $data = $this->getData();
+        $config = $this->changeConfig([
+            'USE_USERNAME'=>false,
+            'DEFAULT_2FA'=>$val
+        ]);
+        $signUp = new SignUp($data, $config);
+        $this->assertEquals($val ,$signUp->user->getTwoFactorAuthentication());
+    }
     public function testRunNotUniqueEmailException() {
         $this->expectException(NotUniqueEmailException::class);
         $user = self::createExample();
@@ -46,6 +58,12 @@ class SignUpTest extends TestCase {
             'email'=>'example@example.com',
             'username'=>'this is username',
             'password'=>'123123123121'
+        ];
+    }
+    public function trueFalse() {
+        return [
+            [true],
+            [false]
         ];
     }
 }
