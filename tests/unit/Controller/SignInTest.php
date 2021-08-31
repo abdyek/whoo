@@ -5,10 +5,13 @@ use PHPUnit\Framework\TestCase;
 use Whoo\Controller\SignUp;
 use Whoo\Controller\SignIn;
 use Whoo\Controller\SetUsername;
+use Whoo\Model\User;
+use Whoo\Model\AuthenticationCode;
 use Whoo\Exception\NotFoundException;
 use Whoo\Exception\IncorrectPasswordException;
 use Whoo\Exception\NotVerifiedEmailException;
 use Whoo\Exception\NullUsernameException;
+use Whoo\Exception\TwoFactorAuthEnabledException;
 use Firebase\JWT\JWT;
 use Whoo\Config\JWT as JWTConfig;
 
@@ -104,6 +107,33 @@ class SignInTest extends TestCase {
             'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
             'USE_USERNAME'=>true
         ]);
+        new SignIn($data, $config);
+    }
+    public function testRun2FA() {
+        $config = $this->changeConfig([
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
+            'USE_USERNAME'=>false,
+            'DEFAULT_2FA'=>true
+        ]);
+        $data = $this->getData();
+        new SignUp($data, $config);
+        try {
+            new SignIn($data, $config);
+        } catch(TwoFactorAuthEnabledException $e) {
+            $user = User::getByEmail($data['email']);
+            $code = AuthenticationCode::getByUserIdType($user->getId(), '2FA-sign-in');
+            $this->assertSame($code->getCode(), $e->authenticationCode);
+        }
+    }
+    public function testRun2FAWithException() {
+        $this->expectException(TwoFactorAuthEnabledException::class);
+        $config = $this->changeConfig([
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
+            'USE_USERNAME'=>false,
+            'DEFAULT_2FA'=>true
+        ]);
+        $data = $this->getData();
+        new SignUp($data, $config);
         new SignIn($data, $config);
     }
     private function getData() {
