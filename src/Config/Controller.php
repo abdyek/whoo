@@ -168,7 +168,7 @@ class Controller {
                     'max'=>255
                 ]
             ],
-            'code'=>[
+            'authenticationCode'=>[
                 'type'=>'str',
                 'limits'=>[
                     'min'=>1,
