@@ -10,6 +10,7 @@ use Whoo\Exception\NotFoundException;
 use Whoo\Exception\NotVerifiedEmailException;
 
 class SetAuthCodeToResetPassword extends Controller {
+    private const AUTH_TYPE = 'reset-password';
     public $code;
     protected function run() {
         $user = User::getByEmail($this->data['email']);
@@ -19,7 +20,8 @@ class SetAuthCodeToResetPassword extends Controller {
         if($this->config['DENY_IF_NOT_VERIFIED_TO_RESET_PW'] and $user->getEmailVerified()===false) {
             throw new NotVerifiedEmailException;
         }
+        AuthenticationCode::deleteByUserIdType($user->getId(), self::AUTH_TYPE);
         $this->code = Random::chars(AuthConfig::SIZE_OF_CODE_TO_RESET_PW);
-        AuthenticationCode::create($user->getId(), 'resetPassword', $this->code);
+        AuthenticationCode::create($user->getId(), self::AUTH_TYPE, $this->code);
     }
 }

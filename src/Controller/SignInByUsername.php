@@ -14,6 +14,7 @@ use Whoo\Exception\IncorrectPasswordException;
 use Whoo\Exception\TwoFactorAuthEnabledException;
 
 class SignInByUsername extends Controller {
+    private const AUTH_TYPE = '2FA-sign-in';
     public $jwt = null;
     public $code = null;
     protected function run() {
@@ -29,8 +30,9 @@ class SignInByUsername extends Controller {
             throw new NotVerifiedEmailException;
         }
         if($this->user->getTwoFactorAuthentication()) {
+            AuthenticationCode::deleteByUserIdType($this->user->getId(), self::AUTH_TYPE);
             $this->code = Random::number(AuthConfig::SIZE_OF_CODE_FOR_2FA);
-            AuthenticationCode::create($this->user->getId(), '2FA-sign-in', $this->code);
+            AuthenticationCode::create($this->user->getId(), self::AUTH_TYPE, $this->code);
             $e = new TwoFactorAuthEnabledException;
             $e->setAuthenticationCode($this->code);
             throw $e;

@@ -25,6 +25,11 @@ class AuthenticationCode {
     public static function delete($auth) {
         $auth->delete();
     }
+    public static function deleteByUserIdType($userId, $type) {
+        $auth = self::getByUserIdType($userId, $type);
+        if($auth)
+            $auth->delete();
+    }
     private static function query() {
         return \AuthenticationCodeQuery::create();
     }

@@ -56,5 +56,13 @@ class AuthenticationCodeTest extends TestCase {
         $auth = AuthenticationCode::getByUserIdType($user->getId(), '2fa');
         $this->assertNull($auth);
     }
+    public function testDeleteByUserIdType() {
+        $type = 'type';
+        $user = $this->createExample();
+        $auth = AuthenticationCode::create($user->getId(), $type, 'code');
+        AuthenticationCode::deleteByUserIdType($user->getId(), $type);
+        $auth = AuthenticationCode::getByUserIdType($user->getId(), $type);
+        $this->assertNull($auth);
+    }
 }
 
