@@ -1,6 +1,17 @@
 {
     "name":"abdyek/whoo",
-    "description": "database agnostic authentication JWT library",
+    "description": "database agnostic authentication library",
+    "keywords": [
+        "authentication",
+        "jwt"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yunus Emre Bulut",
+            "email": "yunusemrebulut123@gmail.com"
+        }
+    ],
     "require": {
         "firebase/php-jwt": "^5.4",
         "propel/propel": "~2.0@dev"
@@ -13,7 +24,11 @@
             "Whoo\\": "src"
         },
         "classmap": [
-            "propel/model",
+            "propel/model"
+        ]
+    },
+    "autoload-dev": {
+        "classmap": [
             "tests/unit/traits"
         ]
     }
