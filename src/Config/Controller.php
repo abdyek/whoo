@@ -286,12 +286,19 @@ class Controller {
                 ]
             ]
         ],
-        'SetAuthCodeForManage2FA'=>[
+        'SetAuthCodeToManage2FA'=>[
             'jwt'=>[
                 'type'=>'str',
                 'limits'=>[
                     'min'=>1,
                     'max'=>1000
+                ]
+            ],
+            'password'=>[
+                'type'=>'str',
+                'limits'=>[
+                    'min'=>8,
+                    'max'=>50
                 ]
             ]
         ],

@@ -5,7 +5,7 @@ namespace Whoo\Config;
 class Authentication {
     const SIZE_OF_CODE_FOR_EMAIL_VER = 10;
     const SIZE_OF_CODE_TO_RESET_PW = 10;
-    const SIZE_OF_CODE_FOR_MANAGE_2FA = 6;
+    const SIZE_OF_CODE_TO_MANAGE_2FA = 6;
     const SIZE_OF_CODE_FOR_2FA = 5;
     const TRIAL_MAX_COUNT = 3;
     const VALIDITY_TIME = 180;

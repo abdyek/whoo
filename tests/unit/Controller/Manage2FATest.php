@@ -31,7 +31,8 @@ class Manage2FATest extends TestCase {
         new SignUp($data, $config);
         $signIn = new SignIn($data, $config);
         $auth = new SetAuthCodeToManage2FA([
-            'jwt'=>$signIn->jwt
+            'jwt'=>$signIn->jwt,
+            'password'=>$data['password']
         ], $config);
         new Manage2FA([
             'jwt'=>$signIn->jwt,
@@ -39,6 +40,26 @@ class Manage2FATest extends TestCase {
             'open'=>true
         ], $config);
         $this->assertTrue($signIn->user->getTwoFactorAuthentication());
+    }
+    public function testRunInvalidCodeException() {
+        $this->expectException(InvalidCodeException::class);
+        $data = $this->getData();
+        $config = $this->changeConfig([
+            'USE_USERNAME'=>false,
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
+            'DEFAULT_2FA'=>false
+        ]);
+        new SignUp($data, $config);
+        $signIn = new SignIn($data, $config);
+        $auth = new setAuthCodeToManage2FA([
+            'jwt'=>$signIn->jwt,
+            'password'=>$data['password']
+        ], $config);
+        new Manage2FA([
+            'jwt'=>$signIn->jwt,
+            'code'=>'wrong-code',
+            'open'=>true
+        ], $config);
     }
     public function testRunNotFoundAuthCodeException() {
         $this->expectException(NotFoundAuthCodeException::class);
@@ -67,7 +88,8 @@ class Manage2FATest extends TestCase {
         new SignUp($data, $config);
         $signIn = new SignIn($data, $config);
         new SetAuthCodeToManage2FA([
-            'jwt'=>$signIn->jwt
+            'jwt'=>$signIn->jwt,
+            'password'=>$data['password']
         ], $config);
         for($i=0;$i<AuthConfig::TRIAL_MAX_COUNT_TO_MANAGE_2FA;$i++) {
             try {

@@ -3,6 +3,8 @@
 namespace Whoo\Controller;
 use Whoo\Core\Controller;
 use Whoo\Model\AuthenticationCode;
+use Whoo\Model\User;
+use Whoo\Exception\IncorrectPasswordException;
 use Whoo\Config\Authentication as AuthConfig;
 use Whoo\Tool\Random;
 
@@ -10,8 +12,11 @@ class SetAuthCodeToManage2FA extends Controller {
     private const AUTH_TYPE = '2FA';
     public $code;
     protected function run() {
+        if(!User::checkPassword($this->user, $this->data['password'])) {
+            throw new IncorrectPasswordException;
+        }
         AuthenticationCode::deleteByUserIdType($this->user->getId(), self::AUTH_TYPE);
-        $this->code = Random::number(AuthConfig::SIZE_OF_CODE_FOR_MANAGE_2FA);
+        $this->code = Random::number(AuthConfig::SIZE_OF_CODE_TO_MANAGE_2FA);
         AuthenticationCode::create($this->user->getId(), self::AUTH_TYPE, $this->code);
     }
 }

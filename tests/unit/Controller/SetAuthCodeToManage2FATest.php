@@ -7,6 +7,7 @@ use Whoo\Controller\SignUp;
 use Whoo\Controller\SignIn;
 use Whoo\Model\AuthenticationCode;
 use Whoo\Config\Authentication as AuthConfig;
+use Whoo\Exception\IncorrectPasswordException;
 
 /**
  * @covers SetAuthCodeToManage2FA::
@@ -23,15 +24,32 @@ class SetAuthCodeToManage2FATest extends TestCase {
         $config = $this->changeConfig([
             'USE_USERNAME'=>false,
             'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
+            'DEFAULT_2FA'=>false
         ]);
         new SignUp($data, $config);
         $signIn = new SignIn($data, $config);
         new SetAuthCodeToManage2FA([
             'jwt'=>$signIn->jwt,
+            'password'=>$data['password']
         ], $config);
         $authCode = AuthenticationCode::getByUserIdType($signIn->user->getId(), '2FA');
         $this->assertNotNull($authCode->getCode());
-        $this->assertEquals(AuthConfig::SIZE_OF_CODE_FOR_MANAGE_2FA, strlen($authCode->getCode()));
+        $this->assertEquals(AuthConfig::SIZE_OF_CODE_TO_MANAGE_2FA, strlen($authCode->getCode()));
+    }
+    public function testRunIncorrectPasswordException() {
+        $this->expectException(IncorrectPasswordException::class);
+        $data = $this->getData();
+        $config = $this->changeConfig([
+            'USE_USERNAME'=>false,
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
+            'DEFAULT_2FA'=>false
+        ]);
+        new SignUp($data, $config);
+        $signIn = new SignIn($data, $config);
+        new SetAuthCodeToManage2FA([
+            'jwt'=>$signIn->jwt,
+            'password'=>'wrong-password'
+        ], $config);
     }
     private function getData() {
         return [
