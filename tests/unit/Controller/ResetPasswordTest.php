@@ -10,7 +10,8 @@ use Whoo\Exception\InvalidCodeException;
 use Whoo\Exception\NotFoundException;
 use Whoo\Exception\NotFoundAuthCodeException;
 use Whoo\Exception\NotVerifiedEmailException;
-
+use Whoo\Exception\TrialCountOverException;
+use Whoo\Config\Authentication as AuthConfig;
 
 /**
  * @covers ResetPassword::
@@ -103,6 +104,32 @@ class ResetPasswordTest extends TestCase {
             'code'=>$setAuth->code
         ], $config);
     }
+    public function testRunTrialCountOverException() {
+        $this->expectException(TrialCountOverException::class);
+        $data = $this->getData();
+        $config = $this->changeConfig([
+            'USE_USERNAME'=>false,
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
+            'DENY_IF_NOT_VERIFIED_TO_RESET_PW'=>false
+        ]);
+        new SignUp($data, $config);
+        $setAuth = new SetAuthCodeToResetPassword([
+            'email'=>$data['email']
+        ], $config);
+        for($i=0;$i<AuthConfig::TRIAL_MAX_COUNT_TO_RESET_PW;$i++) {
+            try {
+                new ResetPassword([
+                    'email'=>$data['email'],
+                    'newPassword'=>'this_is_new_ps',
+                    'code'=>'wrong-code'
+                ], $config);
+            } catch(InvalidCodeException $e) { }
+        }
+    }
+    /*
+    public function testRunTimeOutCodeException() {
+        // I will fill it after
+    }*/
     private function getData() {
         return [
             'email'=>'thisIsEmail@email.com',
