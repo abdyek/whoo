@@ -2,9 +2,9 @@
 
 require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
-use Whoo\Controller\SignUp;
-use Whoo\Controller\Example;
-use Whoo\Exception\NotUniqueEmailException;
+use Abdyek\Whoo\Controller\SignUp;
+use Abdyek\Whoo\Controller\Example;
+use Abdyek\Whoo\Exception\NotUniqueEmailException;
 
 /**
  * @covers SignUp::

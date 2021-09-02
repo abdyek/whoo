@@ -2,15 +2,15 @@
 
 require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
-use Whoo\Controller\SignUp;
-use Whoo\Controller\SignInByUsername;
-use Whoo\Controller\SetUsername;
-use Whoo\Model\User as UserModel;
-use Whoo\Model\AuthenticationCode;
-use Whoo\Exception\IncorrectPasswordException;
-use Whoo\Exception\NotFoundException;
-use Whoo\Exception\NotVerifiedEmailException;
-use Whoo\Exception\TwoFactorAuthEnabledException;
+use Abdyek\Whoo\Controller\SignUp;
+use Abdyek\Whoo\Controller\SignInByUsername;
+use Abdyek\Whoo\Controller\SetUsername;
+use Abdyek\Whoo\Model\User as UserModel;
+use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Exception\IncorrectPasswordException;
+use Abdyek\Whoo\Exception\NotFoundException;
+use Abdyek\Whoo\Exception\NotVerifiedEmailException;
+use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
 
 /**
  * @covers SignInByUsername::

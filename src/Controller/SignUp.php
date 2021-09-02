@@ -1,10 +1,10 @@
 <?php
 
-namespace Whoo\Controller;
-use Whoo\Core\Controller;
-use Whoo\Model\User as UserModel;
-use Whoo\Exception\NotUniqueEmailException;
-use Whoo\Tool\TemporaryToken;
+namespace Abdyek\Whoo\Controller;
+use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Model\User as UserModel;
+use Abdyek\Whoo\Exception\NotUniqueEmailException;
+use Abdyek\Whoo\Tool\TemporaryToken;
 
 class SignUp extends Controller {
     public $temporaryToken;

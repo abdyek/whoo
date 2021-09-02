@@ -2,18 +2,18 @@
 
 require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
-use Whoo\Controller\SignUp;
-use Whoo\Controller\SignIn;
-use Whoo\Controller\SetUsername;
-use Whoo\Model\User;
-use Whoo\Model\AuthenticationCode;
-use Whoo\Exception\NotFoundException;
-use Whoo\Exception\IncorrectPasswordException;
-use Whoo\Exception\NotVerifiedEmailException;
-use Whoo\Exception\NullUsernameException;
-use Whoo\Exception\TwoFactorAuthEnabledException;
+use Abdyek\Whoo\Controller\SignUp;
+use Abdyek\Whoo\Controller\SignIn;
+use Abdyek\Whoo\Controller\SetUsername;
+use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Exception\NotFoundException;
+use Abdyek\Whoo\Exception\IncorrectPasswordException;
+use Abdyek\Whoo\Exception\NotVerifiedEmailException;
+use Abdyek\Whoo\Exception\NullUsernameException;
+use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
 use Firebase\JWT\JWT;
-use Whoo\Config\JWT as JWTConfig;
+use Abdyek\Whoo\Config\JWT as JWTConfig;
 
 /**
  * @covers SignIn::

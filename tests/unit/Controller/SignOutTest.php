@@ -2,11 +2,11 @@
 
 require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
-use Whoo\Controller\SignOut;
-use Whoo\Controller\SignUp;
-use Whoo\Controller\SignIn;
-use Whoo\Controller\FetchInfo;
-use Whoo\Exception\InvalidTokenException;
+use Abdyek\Whoo\Controller\SignOut;
+use Abdyek\Whoo\Controller\SignUp;
+use Abdyek\Whoo\Controller\SignIn;
+use Abdyek\Whoo\Controller\FetchInfo;
+use Abdyek\Whoo\Exception\InvalidTokenException;
 
 /**
  * @covers SignOut::

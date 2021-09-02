@@ -1,12 +1,12 @@
 <?php
 
-namespace Whoo\Controller;
-use Whoo\Core\Controller;
-use Whoo\Model\User;
-use Whoo\Model\AuthenticationCode;
-use Whoo\Tool\Random;
-use Whoo\Exception\NotFoundException;
-use Whoo\Config\Authentication as AuthConfig;
+namespace Abdyek\Whoo\Controller;
+use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Tool\Random;
+use Abdyek\Whoo\Exception\NotFoundException;
+use Abdyek\Whoo\Config\Authentication as AuthConfig;
 
 class SetAuthCodeForEmailVerification extends Controller {
     public $code;

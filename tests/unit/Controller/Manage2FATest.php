@@ -2,14 +2,14 @@
 
 require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
-use Whoo\Controller\Manage2FA;
-use Whoo\Controller\SignUp;
-use Whoo\Controller\SignIn;
-use Whoo\Controller\SetAuthCodeToManage2FA;
-use Whoo\Exception\NotFoundAuthCodeException;
-use Whoo\Exception\InvalidCodeException;;
-use Whoo\Exception\TrialCountOverException;;
-use Whoo\Config\Authentication as AuthConfig;
+use Abdyek\Whoo\Controller\Manage2FA;
+use Abdyek\Whoo\Controller\SignUp;
+use Abdyek\Whoo\Controller\SignIn;
+use Abdyek\Whoo\Controller\SetAuthCodeToManage2FA;
+use Abdyek\Whoo\Exception\NotFoundAuthCodeException;
+use Abdyek\Whoo\Exception\InvalidCodeException;;
+use Abdyek\Whoo\Exception\TrialCountOverException;;
+use Abdyek\Whoo\Config\Authentication as AuthConfig;
 
 /**
  * @covers Manage2FA::

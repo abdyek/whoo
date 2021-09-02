@@ -1,9 +1,9 @@
 <?php
 
-namespace Whoo\Controller;
-use Whoo\Core\Controller;
-use Whoo\Model\User;
-use Whoo\Exception\IncorrectPasswordException;
+namespace Abdyek\Whoo\Controller;
+use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Exception\IncorrectPasswordException;
 
 class ChangePassword extends Controller {
     protected function run() {

@@ -1,7 +1,7 @@
 <?php
 
-namespace Whoo\Model;
-use Whoo\Model\AuthenticationCode;
+namespace Abdyek\Whoo\Model;
+use Abdyek\Whoo\Model\AuthenticationCode;
 
 class User {
     public static function isUniqueEmail($email) : bool {

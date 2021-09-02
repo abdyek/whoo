@@ -2,10 +2,10 @@
 
 require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
-use Whoo\Controller\ChangePassword;
-use Whoo\Controller\SignUp;
-use Whoo\Controller\SignIn;
-use Whoo\Exception\IncorrectPasswordException;
+use Abdyek\Whoo\Controller\ChangePassword;
+use Abdyek\Whoo\Controller\SignUp;
+use Abdyek\Whoo\Controller\SignIn;
+use Abdyek\Whoo\Exception\IncorrectPasswordException;
 
 /**
  * @covers ChangePassword::

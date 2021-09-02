@@ -1,8 +1,8 @@
 <?php
 
-namespace Whoo\Controller;
-use Whoo\Core\Controller;
-use Whoo\Model\User;
+namespace Abdyek\Whoo\Controller;
+use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Model\User;
 
 class SignOut extends Controller {
     protected function run() {

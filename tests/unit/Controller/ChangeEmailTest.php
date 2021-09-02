@@ -2,14 +2,14 @@
 
 require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
-use Whoo\Controller\SignUp;
-use Whoo\Controller\SignIn;
-use Whoo\Controller\ChangeEmail;
-use Whoo\Controller\FetchInfo;
-use Whoo\Model\User;
-use Whoo\Exception\IncorrectPasswordException;
-use Whoo\Exception\NotUniqueEmailException;
-use Whoo\Exception\InvalidTokenException;
+use Abdyek\Whoo\Controller\SignUp;
+use Abdyek\Whoo\Controller\SignIn;
+use Abdyek\Whoo\Controller\ChangeEmail;
+use Abdyek\Whoo\Controller\FetchInfo;
+use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Exception\IncorrectPasswordException;
+use Abdyek\Whoo\Exception\NotUniqueEmailException;
+use Abdyek\Whoo\Exception\InvalidTokenException;
 
 /**
  * @covers ChangeEmail::

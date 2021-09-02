@@ -1,6 +1,6 @@
 <?php
 
-namespace Whoo\Exception;
+namespace Abdyek\Whoo\Exception;
 
 class InvalidTokenException extends \Exception {
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace Whoo\Controller;
+namespace Abdyek\Whoo\Controller;
 use Firebase\JWT\JWT;
-use Whoo\Core\Controller;
-use Whoo\Model\User as UserModel;
-use Whoo\Config\JWT as JWTConfig;
-use Whoo\Exception\SignUpByEmailException;
-use Whoo\Exception\NullUsernameException;
+use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Model\User as UserModel;
+use Abdyek\Whoo\Config\JWT as JWTConfig;
+use Abdyek\Whoo\Exception\SignUpByEmailException;
+use Abdyek\Whoo\Exception\NullUsernameException;
 
 class SignInByProvider extends Controller {
     public $registering = false;

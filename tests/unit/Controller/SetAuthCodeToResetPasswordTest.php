@@ -2,12 +2,12 @@
 
 require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
-use Whoo\Controller\SignUp;
-use Whoo\Controller\SetAuthCodeToResetPassword;
-use Whoo\Config\Authentication as AuthConfig;
-use Whoo\Exception\NotFoundException;
-use Whoo\Exception\NotVerifiedEmailException;
-use Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Controller\SignUp;
+use Abdyek\Whoo\Controller\SetAuthCodeToResetPassword;
+use Abdyek\Whoo\Config\Authentication as AuthConfig;
+use Abdyek\Whoo\Exception\NotFoundException;
+use Abdyek\Whoo\Exception\NotVerifiedEmailException;
+use Abdyek\Whoo\Model\AuthenticationCode;
 
 /**
  * @covers SetAuthCodeToResetPassword::

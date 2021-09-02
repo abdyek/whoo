@@ -1,6 +1,6 @@
 <?php
 
-namespace Whoo\Exception;
+namespace Abdyek\Whoo\Exception;
 
 class NotUniqueEmailException extends \Exception {
     

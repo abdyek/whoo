@@ -2,12 +2,12 @@
 
 require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
-use Whoo\Controller\SetUsername;
-use Whoo\Controller\SignUp;
-use Whoo\Model\User as UserModel;
-use Whoo\Exception\InvalidTemporaryTokenException;
-use Whoo\Exception\NotNullUsernameException;
-use Whoo\Exception\NotUniqueUsernameException;
+use Abdyek\Whoo\Controller\SetUsername;
+use Abdyek\Whoo\Controller\SignUp;
+use Abdyek\Whoo\Model\User as UserModel;
+use Abdyek\Whoo\Exception\InvalidTemporaryTokenException;
+use Abdyek\Whoo\Exception\NotNullUsernameException;
+use Abdyek\Whoo\Exception\NotUniqueUsernameException;
 
 /**
  * @covers SetUsername::

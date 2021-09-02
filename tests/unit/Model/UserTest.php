@@ -3,8 +3,8 @@
 require 'propel/config.php';
 
 use PHPUnit\Framework\TestCase;
-use Whoo\Model\User;
-use Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Model\AuthenticationCode;
 
 /**
  * @covers User::

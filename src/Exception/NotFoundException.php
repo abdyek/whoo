@@ -1,6 +1,6 @@
 <?php
 
-namespace Whoo\Exception;
+namespace Abdyek\Whoo\Exception;
 
 class NotFoundException extends \Exception {
     

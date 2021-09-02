@@ -1,19 +1,19 @@
 <?php
 
-namespace Whoo\Controller;
-use Whoo\Core\Controller;
-use Whoo\Model\User;
-use Whoo\Model\AuthenticationCode;
-use Whoo\Exception\NotFoundException;
-use Whoo\Exception\IncorrectPasswordException;
-use Whoo\Exception\NullUsernameException;
-use Whoo\Exception\NotVerifiedEmailException;
-use Whoo\Exception\TwoFactorAuthEnabledException;
+namespace Abdyek\Whoo\Controller;
+use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Exception\NotFoundException;
+use Abdyek\Whoo\Exception\IncorrectPasswordException;
+use Abdyek\Whoo\Exception\NullUsernameException;
+use Abdyek\Whoo\Exception\NotVerifiedEmailException;
+use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
 use Firebase\JWT\JWT;
-use Whoo\Config\JWT as JWTConfig;
-use Whoo\Config\Authentication as AuthConfig;
-use Whoo\Tool\TemporaryToken;
-use Whoo\Tool\Random;
+use Abdyek\Whoo\Config\JWT as JWTConfig;
+use Abdyek\Whoo\Config\Authentication as AuthConfig;
+use Abdyek\Whoo\Tool\TemporaryToken;
+use Abdyek\Whoo\Tool\Random;
 
 class SignIn extends Controller {
     private const AUTH_TYPE = '2FA-sign-in';

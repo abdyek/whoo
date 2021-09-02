@@ -1,15 +1,15 @@
 <?php
 
-namespace Whoo\Controller;
-use Whoo\Core\Controller;
-use Whoo\Model\AuthenticationCode;
-use Whoo\Model\User;
-use Whoo\Exception\NotFoundException;
-use Whoo\Exception\NotFoundAuthCodeException;
-use Whoo\Exception\TrialCountOverException;
-use Whoo\Exception\InvalidCodeException;
-use Whoo\Config\Authentication as AuthConfig;
-use Whoo\Config\JWT as JWTConfig;
+namespace Abdyek\Whoo\Controller;
+use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Exception\NotFoundException;
+use Abdyek\Whoo\Exception\NotFoundAuthCodeException;
+use Abdyek\Whoo\Exception\TrialCountOverException;
+use Abdyek\Whoo\Exception\InvalidCodeException;
+use Abdyek\Whoo\Config\Authentication as AuthConfig;
+use Abdyek\Whoo\Config\JWT as JWTConfig;
 
 class SignIn2FA extends Controller {
     public $jwt = null;

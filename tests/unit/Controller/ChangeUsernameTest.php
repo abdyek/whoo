@@ -2,11 +2,11 @@
 
 require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
-use Whoo\Controller\ChangeUsername;
-use Whoo\Controller\SignUp;
-use Whoo\Controller\SignIn;
-use Whoo\Controller\SetUsername;
-use Whoo\Exception\NotUniqueUsernameException;
+use Abdyek\Whoo\Controller\ChangeUsername;
+use Abdyek\Whoo\Controller\SignUp;
+use Abdyek\Whoo\Controller\SignIn;
+use Abdyek\Whoo\Controller\SetUsername;
+use Abdyek\Whoo\Exception\NotUniqueUsernameException;
 
 /**
  * @covers ChangeUsername::

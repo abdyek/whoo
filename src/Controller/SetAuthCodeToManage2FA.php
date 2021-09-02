@@ -1,12 +1,12 @@
 <?php
 
-namespace Whoo\Controller;
-use Whoo\Core\Controller;
-use Whoo\Model\AuthenticationCode;
-use Whoo\Model\User;
-use Whoo\Exception\IncorrectPasswordException;
-use Whoo\Config\Authentication as AuthConfig;
-use Whoo\Tool\Random;
+namespace Abdyek\Whoo\Controller;
+use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Exception\IncorrectPasswordException;
+use Abdyek\Whoo\Config\Authentication as AuthConfig;
+use Abdyek\Whoo\Tool\Random;
 
 class SetAuthCodeToManage2FA extends Controller {
     private const AUTH_TYPE = '2FA';

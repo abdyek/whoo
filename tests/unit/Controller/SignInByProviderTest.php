@@ -2,11 +2,11 @@
 
 require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
-use Whoo\Controller\SignInByProvider;
-use Whoo\Controller\SignUp;
-use Whoo\Exception\NullUsernameException;
-use Whoo\Exception\SignUpByEmailException;
-use Whoo\Model\User as UserModel;
+use Abdyek\Whoo\Controller\SignInByProvider;
+use Abdyek\Whoo\Controller\SignUp;
+use Abdyek\Whoo\Exception\NullUsernameException;
+use Abdyek\Whoo\Exception\SignUpByEmailException;
+use Abdyek\Whoo\Model\User as UserModel;
 
 /**
  * @covers SignInByProvider::

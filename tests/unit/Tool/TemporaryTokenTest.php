@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Whoo\Tool\TemporaryToken;
+use Abdyek\Whoo\Tool\TemporaryToken;
 
 /**
  * @covers TemporaryToken::

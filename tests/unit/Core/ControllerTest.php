@@ -1,9 +1,9 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Whoo\Core\Controller;
-use Whoo\Config\Controller as ControllerConfig;
-use Whoo\Exception\InvalidDataException;
+use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Config\Controller as ControllerConfig;
+use Abdyek\Whoo\Exception\InvalidDataException;
 require 'propel/config.php';
 
 class Example extends Controller {

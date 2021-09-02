@@ -3,8 +3,8 @@
 require 'propel/config.php';
 
 use PHPUnit\Framework\TestCase;
-use Whoo\Model\AuthenticationCode;
-use Whoo\Tool\Random;
+use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Tool\Random;
 
 /**
  * @covers AuthenticationCode::

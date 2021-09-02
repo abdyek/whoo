@@ -1,15 +1,15 @@
 <?php
 
-namespace Whoo\Controller;
-use Whoo\Core\Controller;
-use Whoo\Model\User;
-use Whoo\Model\AuthenticationCode;
-use Whoo\Exception\NotFoundException;
-use Whoo\Exception\NotFoundAuthCodeException;
-use Whoo\Exception\InvalidCodeException;
-use Whoo\Exception\NotVerifiedEmailException;
-use Whoo\Exception\TrialCountOverException;
-use Whoo\Config\Authentication as AuthConfig;
+namespace Abdyek\Whoo\Controller;
+use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Exception\NotFoundException;
+use Abdyek\Whoo\Exception\NotFoundAuthCodeException;
+use Abdyek\Whoo\Exception\InvalidCodeException;
+use Abdyek\Whoo\Exception\NotVerifiedEmailException;
+use Abdyek\Whoo\Exception\TrialCountOverException;
+use Abdyek\Whoo\Config\Authentication as AuthConfig;
 
 class ResetPassword extends Controller {
     protected function run() {

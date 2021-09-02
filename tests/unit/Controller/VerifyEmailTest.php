@@ -2,14 +2,14 @@
 
 require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
-use Whoo\Controller\VerifyEmail;
-use Whoo\Controller\SetAuthCodeForEmailVerification;
-use Whoo\Exception\InvalidCodeException;
-use Whoo\Exception\TrialCountOverException;
-use Whoo\Exception\NotFoundException;
-use Whoo\Exception\NotFoundAuthCodeException;
-use Whoo\Config\Authentication as AuthConfig;
-use Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Controller\VerifyEmail;
+use Abdyek\Whoo\Controller\SetAuthCodeForEmailVerification;
+use Abdyek\Whoo\Exception\InvalidCodeException;
+use Abdyek\Whoo\Exception\TrialCountOverException;
+use Abdyek\Whoo\Exception\NotFoundException;
+use Abdyek\Whoo\Exception\NotFoundAuthCodeException;
+use Abdyek\Whoo\Config\Authentication as AuthConfig;
+use Abdyek\Whoo\Model\AuthenticationCode;
 
 /**
  * @covers VerifyEmail::

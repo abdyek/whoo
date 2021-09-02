@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Whoo\Tool\Random;
+use Abdyek\Whoo\Tool\Random;
 
 /**
  * @covers Random::

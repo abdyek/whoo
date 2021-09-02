@@ -1,11 +1,11 @@
 <?php
 
-namespace Whoo\Controller;
-use Whoo\Core\Controller;
-use Whoo\Model\User;
-use Whoo\Controller\SignOut;
-use Whoo\Exception\IncorrectPasswordException;
-use Whoo\Exception\NotUniqueEmailException;
+namespace Abdyek\Whoo\Controller;
+use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Controller\SignOut;
+use Abdyek\Whoo\Exception\IncorrectPasswordException;
+use Abdyek\Whoo\Exception\NotUniqueEmailException;
 
 class ChangeEmail extends Controller {
     protected function run() {

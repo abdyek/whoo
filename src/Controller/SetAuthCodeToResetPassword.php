@@ -1,13 +1,13 @@
 <?php
 
-namespace Whoo\Controller;
-use Whoo\Core\Controller;
-use Whoo\Config\Authentication as AuthConfig;
-use Whoo\Model\User;
-use Whoo\Model\AuthenticationCode;
-use Whoo\Tool\Random;
-use Whoo\Exception\NotFoundException;
-use Whoo\Exception\NotVerifiedEmailException;
+namespace Abdyek\Whoo\Controller;
+use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Config\Authentication as AuthConfig;
+use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Tool\Random;
+use Abdyek\Whoo\Exception\NotFoundException;
+use Abdyek\Whoo\Exception\NotVerifiedEmailException;
 
 class SetAuthCodeToResetPassword extends Controller {
     private const AUTH_TYPE = 'reset-password';

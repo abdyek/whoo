@@ -1,12 +1,12 @@
 <?php
 
-namespace Whoo\Controller;
-use Whoo\Core\Controller;
-use Whoo\Tool\TemporaryToken;
-use Whoo\Exception\InvalidTemporaryTokenException;
-use Whoo\Exception\NotNullUsernameException;
-use Whoo\Exception\NotUniqueUsernameException;
-use Whoo\Model\User;
+namespace Abdyek\Whoo\Controller;
+use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Tool\TemporaryToken;
+use Abdyek\Whoo\Exception\InvalidTemporaryTokenException;
+use Abdyek\Whoo\Exception\NotNullUsernameException;
+use Abdyek\Whoo\Exception\NotUniqueUsernameException;
+use Abdyek\Whoo\Model\User;
 
 class SetUsername extends Controller {
     protected function run() {

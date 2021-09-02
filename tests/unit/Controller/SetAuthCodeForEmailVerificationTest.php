@@ -2,9 +2,9 @@
 
 require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
-use Whoo\Controller\SetAuthCodeForEmailVerification;
-use Whoo\Config\Authentication as AuthConfig;
-use Whoo\Exception\NotFoundException;
+use Abdyek\Whoo\Controller\SetAuthCodeForEmailVerification;
+use Abdyek\Whoo\Config\Authentication as AuthConfig;
+use Abdyek\Whoo\Exception\NotFoundException;
 
 /**
  * @covers SetAuthCodeForEmailVerification::

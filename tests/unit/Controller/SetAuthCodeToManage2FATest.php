@@ -2,12 +2,12 @@
 
 require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
-use Whoo\Controller\SetAuthCodeToManage2FA;
-use Whoo\Controller\SignUp;
-use Whoo\Controller\SignIn;
-use Whoo\Model\AuthenticationCode;
-use Whoo\Config\Authentication as AuthConfig;
-use Whoo\Exception\IncorrectPasswordException;
+use Abdyek\Whoo\Controller\SetAuthCodeToManage2FA;
+use Abdyek\Whoo\Controller\SignUp;
+use Abdyek\Whoo\Controller\SignIn;
+use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Config\Authentication as AuthConfig;
+use Abdyek\Whoo\Exception\IncorrectPasswordException;
 
 /**
  * @covers SetAuthCodeToManage2FA::

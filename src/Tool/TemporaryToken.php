@@ -1,7 +1,7 @@
 <?php
 
-namespace Whoo\Tool;
-use Whoo\Config\Env;
+namespace Abdyek\Whoo\Tool;
+use Abdyek\Whoo\Config\Env;
 
 class TemporaryToken {
     const SEPARATOR = 't';

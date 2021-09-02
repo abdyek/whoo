@@ -2,16 +2,16 @@
 
 require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
-use Whoo\Controller\SignInByUsername2FA;
-use Whoo\Controller\SignUp;
-use Whoo\Controller\SetUsername;
-use Whoo\Controller\SignInByUsername;
-use Whoo\Exception\TwoFactorAuthEnabledException;
-use Whoo\Exception\NotFoundException;
-use Whoo\Exception\NotFoundAuthCodeException;
-use Whoo\Exception\TrialCountOverException;
-use Whoo\Exception\InvalidCodeException;
-use Whoo\Config\Authentication as AuthConfig;
+use Abdyek\Whoo\Controller\SignInByUsername2FA;
+use Abdyek\Whoo\Controller\SignUp;
+use Abdyek\Whoo\Controller\SetUsername;
+use Abdyek\Whoo\Controller\SignInByUsername;
+use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
+use Abdyek\Whoo\Exception\NotFoundException;
+use Abdyek\Whoo\Exception\NotFoundAuthCodeException;
+use Abdyek\Whoo\Exception\TrialCountOverException;
+use Abdyek\Whoo\Exception\InvalidCodeException;
+use Abdyek\Whoo\Config\Authentication as AuthConfig;
 
 /**
  * @covers SignInByUsername2FA::

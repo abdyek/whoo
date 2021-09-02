@@ -1,6 +1,6 @@
 <?php
 
-namespace Whoo\Tool;
+namespace Abdyek\Whoo\Tool;
 
 class Random {
     private static $raw = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

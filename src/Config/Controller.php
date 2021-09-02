@@ -1,6 +1,6 @@
 <?php
 
-namespace Whoo\Config;
+namespace Abdyek\Whoo\Config;
 
 class Controller {
     const REQUIRED = [

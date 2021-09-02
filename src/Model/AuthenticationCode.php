@@ -1,6 +1,6 @@
 <?php
 
-namespace Whoo\Model;
+namespace Abdyek\Whoo\Model;
 
 class AuthenticationCode {
     public static function create($userId, $type, $code) {

@@ -1,13 +1,13 @@
 <?php
-namespace Whoo\Core;
+namespace Abdyek\Whoo\Core;
 use Firebase\JWT\JWT;
-use Whoo\Core\Response;
-use Whoo\Config\Whoo;
-use Whoo\Config\JWT as JWTConfig;
-use Whoo\Config\Controller as ControllerConfig;
-use Whoo\Model\User;
-use Whoo\Exception\InvalidDataException;
-use Whoo\Exception\InvalidTokenException;
+use Abdyek\Whoo\Core\Response;
+use Abdyek\Whoo\Config\Whoo;
+use Abdyek\Whoo\Config\JWT as JWTConfig;
+use Abdyek\Whoo\Config\Controller as ControllerConfig;
+use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Exception\InvalidDataException;
+use Abdyek\Whoo\Exception\InvalidTokenException;
 
 class Controller {
     public $user = null;

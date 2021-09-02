@@ -1,6 +1,6 @@
 <?php 
 
-namespace Whoo\Config;
+namespace Abdyek\Whoo\Config;
 
 class JWT {
     const SECRET_KEY = 'zbHh95kwAWMzWw6BHgDGaucFE7CNRd7X8fqWYpP4KzZNtTE5taRnTdrdeq3j';
