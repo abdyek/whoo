@@ -14,6 +14,7 @@ use Abdyek\Whoo\Exception\NullUsernameException;
 use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
 use Firebase\JWT\JWT;
 use Abdyek\Whoo\Config\JWT as JWTConfig;
+use Abdyek\Whoo\Config\Authentication as AuthConfig;
 
 /**
  * @covers SignIn::
@@ -121,7 +122,7 @@ class SignInTest extends TestCase {
             new SignIn($data, $config);
         } catch(TwoFactorAuthEnabledException $e) {
             $user = User::getByEmail($data['email']);
-            $code = AuthenticationCode::getByUserIdType($user->getId(), '2FA-sign-in');
+            $code = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_2FA);
             $this->assertSame($code->getCode(), $e->authenticationCode);
         }
     }

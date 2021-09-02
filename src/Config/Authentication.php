@@ -15,4 +15,8 @@ class Authentication {
     const VALIDITY_TIME_TO_MANAGE_2FA = 180;
     const TRIAL_MAX_COUNT_TO_SIGN_IN_2FA = 3;
     const VALIDITY_TIME_TO_SIGN_IN_2FA = 180;
+    const TYPE_EMAIL_VERIFICATION = 0;
+    const TYPE_MANAGE_2FA = 1;
+    const TYPE_RESET_PW = 2;
+    const TYPE_2FA = 3;
 }

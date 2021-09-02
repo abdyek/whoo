@@ -11,6 +11,7 @@ use Abdyek\Whoo\Exception\IncorrectPasswordException;
 use Abdyek\Whoo\Exception\NotFoundException;
 use Abdyek\Whoo\Exception\NotVerifiedEmailException;
 use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
+use Abdyek\Whoo\Config\Authentication as AuthConfig;
 
 /**
  * @covers SignInByUsername::
@@ -89,7 +90,7 @@ class SignInByUsernameTest extends TestCase {
             ], $config);
         } catch(TwoFactorAuthEnabledException $e) {
             $user = UserModel::getByUsername(self::USERNAME);
-            $code = AuthenticationCode::getByUserIdType($user->getId(), '2FA-sign-in');
+            $code = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_2FA);
             $this->assertSame($code->getCode(), $e->authenticationCode);
         }
     }

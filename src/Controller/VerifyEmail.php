@@ -17,7 +17,7 @@ class VerifyEmail extends Controller {
         if($user === null) {
             throw new NotFoundException;
         }
-        $auth = AuthenticationCode::getByUserIdType($user->getId(), 'emailVerification');
+        $auth = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_EMAIL_VERIFICATION);
         if($auth === null) {
             throw new NotFoundAuthCodeException;
         }

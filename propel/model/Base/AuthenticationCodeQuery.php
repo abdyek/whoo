@@ -58,7 +58,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAuthenticationCode findOneOrCreate(ConnectionInterface $con = null) Return the first ChildAuthenticationCode matching the query, or a new ChildAuthenticationCode object populated from the query conditions when no match is found
  *
  * @method     ChildAuthenticationCode|null findOneById(int $id) Return the first ChildAuthenticationCode filtered by the id column
- * @method     ChildAuthenticationCode|null findOneByType(string $type) Return the first ChildAuthenticationCode filtered by the type column
+ * @method     ChildAuthenticationCode|null findOneByType(int $type) Return the first ChildAuthenticationCode filtered by the type column
  * @method     ChildAuthenticationCode|null findOneByCode(string $code) Return the first ChildAuthenticationCode filtered by the code column
  * @method     ChildAuthenticationCode|null findOneByTrialCount(int $trial_count) Return the first ChildAuthenticationCode filtered by the trial_count column
  * @method     ChildAuthenticationCode|null findOneByDateTime(string $date_time) Return the first ChildAuthenticationCode filtered by the date_time column
@@ -68,7 +68,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildAuthenticationCode requireOne(ConnectionInterface $con = null) Return the first ChildAuthenticationCode matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildAuthenticationCode requireOneById(int $id) Return the first ChildAuthenticationCode filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAuthenticationCode requireOneByType(string $type) Return the first ChildAuthenticationCode filtered by the type column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildAuthenticationCode requireOneByType(int $type) Return the first ChildAuthenticationCode filtered by the type column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAuthenticationCode requireOneByCode(string $code) Return the first ChildAuthenticationCode filtered by the code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAuthenticationCode requireOneByTrialCount(int $trial_count) Return the first ChildAuthenticationCode filtered by the trial_count column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildAuthenticationCode requireOneByDateTime(string $date_time) Return the first ChildAuthenticationCode filtered by the date_time column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -78,8 +78,8 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method ObjectCollection&\Traversable<ChildAuthenticationCode> find(ConnectionInterface $con = null) Return ChildAuthenticationCode objects based on current ModelCriteria
  * @method     ChildAuthenticationCode[]|ObjectCollection findById(int $id) Return ChildAuthenticationCode objects filtered by the id column
  * @psalm-method ObjectCollection&\Traversable<ChildAuthenticationCode> findById(int $id) Return ChildAuthenticationCode objects filtered by the id column
- * @method     ChildAuthenticationCode[]|ObjectCollection findByType(string $type) Return ChildAuthenticationCode objects filtered by the type column
- * @psalm-method ObjectCollection&\Traversable<ChildAuthenticationCode> findByType(string $type) Return ChildAuthenticationCode objects filtered by the type column
+ * @method     ChildAuthenticationCode[]|ObjectCollection findByType(int $type) Return ChildAuthenticationCode objects filtered by the type column
+ * @psalm-method ObjectCollection&\Traversable<ChildAuthenticationCode> findByType(int $type) Return ChildAuthenticationCode objects filtered by the type column
  * @method     ChildAuthenticationCode[]|ObjectCollection findByCode(string $code) Return ChildAuthenticationCode objects filtered by the code column
  * @psalm-method ObjectCollection&\Traversable<ChildAuthenticationCode> findByCode(string $code) Return ChildAuthenticationCode objects filtered by the code column
  * @method     ChildAuthenticationCode[]|ObjectCollection findByTrialCount(int $trial_count) Return ChildAuthenticationCode objects filtered by the trial_count column
@@ -323,19 +323,35 @@ abstract class AuthenticationCodeQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByType('fooValue');   // WHERE type = 'fooValue'
-     * $query->filterByType('%fooValue%', Criteria::LIKE); // WHERE type LIKE '%fooValue%'
+     * $query->filterByType(1234); // WHERE type = 1234
+     * $query->filterByType(array(12, 34)); // WHERE type IN (12, 34)
+     * $query->filterByType(array('min' => 12)); // WHERE type > 12
      * </code>
      *
-     * @param     string $type The value to use as filter.
+     * @param     mixed $type The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildAuthenticationCodeQuery The current query, for fluid interface
      */
     public function filterByType($type = null, $comparison = null)
     {
-        if (null === $comparison) {
-            if (is_array($type)) {
+        if (is_array($type)) {
+            $useMinMax = false;
+            if (isset($type['min'])) {
+                $this->addUsingAlias(AuthenticationCodeTableMap::COL_TYPE, $type['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($type['max'])) {
+                $this->addUsingAlias(AuthenticationCodeTableMap::COL_TYPE, $type['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
         }

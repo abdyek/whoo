@@ -204,7 +204,7 @@ class AuthenticationCodeTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('type', 'Type', 'VARCHAR', true, 32, null);
+        $this->addColumn('type', 'Type', 'INTEGER', true, null, null);
         $this->addColumn('code', 'Code', 'VARCHAR', true, 64, null);
         $this->addColumn('trial_count', 'TrialCount', 'INTEGER', true, null, 0);
         $this->addColumn('date_time', 'DateTime', 'TIMESTAMP', true, null, 'CURRENT_TIMESTAMP');

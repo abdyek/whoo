@@ -16,7 +16,6 @@ use Abdyek\Whoo\Tool\TemporaryToken;
 use Abdyek\Whoo\Tool\Random;
 
 class SignIn extends Controller {
-    private const AUTH_TYPE = '2FA-sign-in';
     public $jwt = null;
     public $user = null;
     public $temporaryToken = null;
@@ -38,9 +37,9 @@ class SignIn extends Controller {
             }
         }
         if($this->user->getTwoFactorAuthentication()) {
-            AuthenticationCode::deleteByUserIdType($this->user->getId(), self::AUTH_TYPE);
+            AuthenticationCode::deleteByUserIdType($this->user->getId(), AuthConfig::TYPE_2FA);
             $this->code = Random::number(AuthConfig::SIZE_OF_CODE_FOR_2FA);
-            AuthenticationCode::create($this->user->getId(), self::AUTH_TYPE, $this->code);
+            AuthenticationCode::create($this->user->getId(), AuthConfig::TYPE_2FA, $this->code);
             $e = new TwoFactorAuthEnabledException;
             $e->setAuthenticationCode($this->code);
             throw $e;

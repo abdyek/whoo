@@ -33,7 +33,7 @@ DROP TABLE IF EXISTS `whoo_authentication_code`;
 CREATE TABLE `whoo_authentication_code`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `type` VARCHAR(32) NOT NULL,
+    `type` INTEGER NOT NULL,
     `code` VARCHAR(64) NOT NULL,
     `trial_count` INTEGER DEFAULT 0 NOT NULL,
     `date_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

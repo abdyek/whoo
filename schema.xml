@@ -14,7 +14,7 @@
     </table>
     <table name="whoo_authentication_code" phpName="AuthenticationCode">
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true"/>
-        <column name="type" type="varchar" size="32" required="true" />
+        <column name="type" type="integer" required="true" />
         <column name="code" type="varchar" size="64" required="true" />
         <column name="trial_count" type="integer" required="true" defaultValue="0" />
         <column name="date_time" type="timestamp" required="true" defaultExpr="CURRENT_TIMESTAMP"/>

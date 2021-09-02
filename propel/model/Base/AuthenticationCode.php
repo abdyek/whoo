@@ -73,7 +73,7 @@ abstract class AuthenticationCode implements ActiveRecordInterface
     /**
      * The value for the type field.
      *
-     * @var        string
+     * @var        int
      */
     protected $type;
 
@@ -370,7 +370,7 @@ abstract class AuthenticationCode implements ActiveRecordInterface
     /**
      * Get the [type] column value.
      *
-     * @return string
+     * @return int
      */
     public function getType()
     {
@@ -452,13 +452,13 @@ abstract class AuthenticationCode implements ActiveRecordInterface
     /**
      * Set the value of [type] column.
      *
-     * @param string $v New value
+     * @param int $v New value
      * @return $this|\AuthenticationCode The current object (for fluent API support)
      */
     public function setType($v)
     {
         if ($v !== null) {
-            $v = (string) $v;
+            $v = (int) $v;
         }
 
         if ($this->type !== $v) {
@@ -597,7 +597,7 @@ abstract class AuthenticationCode implements ActiveRecordInterface
             $this->id = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : AuthenticationCodeTableMap::translateFieldName('Type', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->type = (null !== $col) ? (string) $col : null;
+            $this->type = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : AuthenticationCodeTableMap::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
             $this->code = (null !== $col) ? (string) $col : null;
@@ -871,7 +871,7 @@ abstract class AuthenticationCode implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
                         break;
                     case 'type':
-                        $stmt->bindValue($identifier, $this->type, PDO::PARAM_STR);
+                        $stmt->bindValue($identifier, $this->type, PDO::PARAM_INT);
                         break;
                     case 'code':
                         $stmt->bindValue($identifier, $this->code, PDO::PARAM_STR);
