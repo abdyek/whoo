@@ -1,6 +1,7 @@
 <?php
 
 namespace Whoo\Model;
+use Whoo\Model\AuthenticationCode;
 
 class User {
     public static function isUniqueEmail($email) : bool {
@@ -56,6 +57,10 @@ class User {
     public static function set2FA($user, $value) {
         $user->setTwoFactorAuthentication($value);
         $user->save();
+    }
+    public static function deleteWithAll($user) {
+        AuthenticationCode::deleteAllByUserId($user->getId());
+        $user->delete();
     }
     private static function query() {
         return \UserQuery::create();

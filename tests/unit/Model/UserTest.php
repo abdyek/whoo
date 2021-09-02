@@ -4,6 +4,7 @@ require 'propel/config.php';
 
 use PHPUnit\Framework\TestCase;
 use Whoo\Model\User;
+use Whoo\Model\AuthenticationCode;
 
 /**
  * @covers User::
@@ -124,6 +125,14 @@ class UserTest extends TestCase {
         $user = User::create($data);
         User::set2FA($user, false);
         $this->assertFalse($user->getTwoFactorAuthentication());
+    }
+    public function testDeleteWithAll() {
+        $data = $this->getData();
+        $user = User::create($data);
+        $auth = AuthenticationCode::create($user->getId(), 'type', '123123');
+        User::deleteWithAll($user);
+        $this->assertTrue($user->isDeleted());
+        $this->assertTrue($auth->isDeleted());
     }
     private function getData() {
         return [

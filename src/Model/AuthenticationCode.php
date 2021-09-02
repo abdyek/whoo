@@ -16,6 +16,9 @@ class AuthenticationCode {
     public static function getByUserIdType($userId, $type) {
         return self::query()->filterByUserId($userId)->findOneByType($type);
     }
+    public static function getAllByUserId($userId) {
+        return self::query()->findByUserId($userId);
+    }
     public static function increaseTrialCount($auth) {
         $count = 1 + $auth->getTrialCount();
         $auth->setTrialCount($count);
@@ -29,6 +32,10 @@ class AuthenticationCode {
         $auth = self::getByUserIdType($userId, $type);
         if($auth)
             $auth->delete();
+    }
+    public static function deleteAllByUserId($userId) {
+        $auths = self::getAllByUserId($userId);
+        $auths->delete();
     }
     private static function query() {
         return \AuthenticationCodeQuery::create();

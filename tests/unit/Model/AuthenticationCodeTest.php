@@ -38,6 +38,13 @@ class AuthenticationCodeTest extends TestCase {
         $this->assertEquals($type, $auth->getType());
         $this->assertEquals($code, $auth->getCode());
     }
+    public function testGetAllByUserId() {
+        $user = $this->createExample();
+        $auth1 = AuthenticationCode::create($user->getId(), 'type-1', '123123');
+        $auth2 = AuthenticationCode::create($user->getId(), 'type-2', '123123');
+        $auths = AuthenticationCode::getAllByUserId($user->getId());
+        $this->assertCount(2, $auths);
+    }
     public function testIncreaseTrialCount() {
         $user = $this->createExample();
         $type = '2fa';
@@ -63,6 +70,14 @@ class AuthenticationCodeTest extends TestCase {
         AuthenticationCode::deleteByUserIdType($user->getId(), $type);
         $auth = AuthenticationCode::getByUserIdType($user->getId(), $type);
         $this->assertNull($auth);
+    }
+    public function testDeleteAllByUserId() {
+        $user = $this->createExample();
+        $auth1 = AuthenticationCode::create($user->getId(), 'type-1', '123123');
+        $auth2 = AuthenticationCode::create($user->getId(), 'type-2', '123123');
+        AuthenticationCode::deleteAllByUserId($user->getId());
+        $this->assertTrue($auth1->isDeleted());
+        $this->assertTrue($auth2->isDeleted());
     }
 }
 
