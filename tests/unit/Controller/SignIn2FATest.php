@@ -22,11 +22,24 @@ class SignIn2FATest extends TestCase {
     public function setUp(): void {
         self::reset();
     }
-    /*
     public function testRun() {
-
+        $data = $this->getData();
+        $config = $this->changeConfig([
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
+            'USE_USERNAME'=>false,
+            'DEFAULT_2FA'=>true
+        ]);
+        new SignUp($data, $config);
+        try {
+            $signIn = new SignIn($data, $config);
+        } catch(TwoFactorAuthEnabledException $e) {
+            $signIn2FA = new SignIn2FA([
+                'email'=>$data['email'],
+                'authenticationCode'=>$e->authenticationCode
+            ]);
+        }
+        $this->assertNotNull($signIn2FA->jwt);
     }
-     */
     public function testRunNotFoundException() {
         $this->expectException(NotFoundException::class);
         new SignIn2FA([
