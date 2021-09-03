@@ -9,8 +9,7 @@ use Abdyek\Whoo\Exception\IncorrectPasswordException;
 use Abdyek\Whoo\Exception\NullUsernameException;
 use Abdyek\Whoo\Exception\NotVerifiedEmailException;
 use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
-use Firebase\JWT\JWT;
-use Abdyek\Whoo\Config\JWT as JWTConfig;
+use Abdyek\Whoo\Tool\JWT;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
 use Abdyek\Whoo\Tool\TemporaryToken;
 use Abdyek\Whoo\Tool\Random;
@@ -44,14 +43,7 @@ class SignIn extends Controller {
             $e->setAuthenticationCode($this->code);
             throw $e;
         }
-        $this->jwt = JWT::encode([
-            'iss' => JWTConfig::ISS,
-            'aud' => JWTConfig::AUD,
-            'iat' => JWTConfig::IAT,
-            'nbf' => JWTConfig::NBF,
-            'userId' => $this->user->getId(),
-            'signOutCount'=> $this->user->getSignOutCount()
-        ], JWTConfig::SECRET_KEY);
+        $this->jwt = JWT::generateToken($this->user->getId(), $this->user->getSignOutCount());
     }
     private function validateEmailPassword() {
         $pwHash = $this->user->getPasswordHash();

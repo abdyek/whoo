@@ -12,9 +12,9 @@ use Abdyek\Whoo\Exception\IncorrectPasswordException;
 use Abdyek\Whoo\Exception\NotVerifiedEmailException;
 use Abdyek\Whoo\Exception\NullUsernameException;
 use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
-use Firebase\JWT\JWT;
 use Abdyek\Whoo\Config\JWT as JWTConfig;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
+use Abdyek\Whoo\Tool\JWT;
 
 /**
  * @covers SignIn::
@@ -35,7 +35,7 @@ class SignInTest extends TestCase {
             'USE_USERNAME'=>false
         ]);
         $signIn = new SignIn($data, $config);
-        $decoded = (array) JWT::decode($signIn->jwt, JWTConfig::SECRET_KEY, array('HS256'));
+        $decoded = (array) JWT::getPayload($signIn->jwt);
         $this->assertNotNull($decoded);
         $this->assertNotNull($signIn->user);
         $this->assertNull($signIn->temporaryToken);
@@ -55,7 +55,7 @@ class SignInTest extends TestCase {
             'username'=>self::USERNAME
         ], $config);
         $signIn = new SignIn($data, $config);
-        $decoded = (array) JWT::decode($signIn->jwt, JWTConfig::SECRET_KEY, array('HS256'));
+        $decoded = (array) JWT::getPayload($signIn->jwt);
         $this->assertNotNull($decoded);
         $this->assertNotNull($signIn->user);
         $this->assertEquals($signIn->user->getId(), $decoded['userId']);
@@ -71,7 +71,7 @@ class SignInTest extends TestCase {
         ]);
         $signUp = new SignUp($data, $config);
         $signIn = new SignIn($data, $config);
-        $decoded = (array) JWT::decode($signIn->jwt, JWTConfig::SECRET_KEY, array('HS256'));
+        $decoded = (array) JWT::getPayload($signIn->jwt);
         $this->assertNotNull($decoded);
         $this->assertNotNull($signIn->user);
         $this->assertEquals($signIn->user->getId(), $decoded['userId']);

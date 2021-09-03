@@ -10,6 +10,7 @@ use Abdyek\Whoo\Exception\TrialCountOverException;
 use Abdyek\Whoo\Exception\InvalidCodeException;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
 use Abdyek\Whoo\Config\JWT as JWTConfig;
+use Abdyek\Whoo\Tool\JWT;
 
 class SignIn2FA extends Controller {
     public $jwt = null;
@@ -34,13 +35,7 @@ class SignIn2FA extends Controller {
             AuthenticationCode::increaseTrialCount($auth);
             throw new InvalidCodeException;
         }
-        $this->jwt = JWT::encode([
-            'iss' => JWTConfig::ISS,
-            'aud' => JWTConfig::AUD,
-            'iat' => JWTConfig::IAT,
-            'nbf' => JWTConfig::NBF,
-            'userId' => $this->user->getId(),
-        ], JWTConfig::SECRET_KEY);
+        $this->jwt = JWT::generateToken($this->user->getId(), $this->user->getSignOutCount());
         AuthenticationCode::delete($auth);
     }
 }

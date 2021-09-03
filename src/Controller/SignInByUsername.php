@@ -1,7 +1,6 @@
 <?php
 
 namespace Abdyek\Whoo\Controller;
-use Firebase\JWT\JWT;
 use Abdyek\Whoo\Core\Controller;
 use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Model\AuthenticationCode;
@@ -12,6 +11,7 @@ use Abdyek\Whoo\Exception\NotFoundException;
 use Abdyek\Whoo\Exception\NotVerifiedEmailException;
 use Abdyek\Whoo\Exception\IncorrectPasswordException;
 use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
+use Abdyek\Whoo\Tool\JWT;
 
 class SignInByUsername extends Controller {
     public $jwt = null;
@@ -36,12 +36,6 @@ class SignInByUsername extends Controller {
             $e->setAuthenticationCode($this->code);
             throw $e;
         }
-        $this->jwt = JWT::encode([
-            'iss' => JWTConfig::ISS,
-            'aud' => JWTConfig::AUD,
-            'iat' => JWTConfig::IAT,
-            'nbf' => JWTConfig::NBF,
-            'userId' => $this->user->getId(),
-        ], JWTConfig::SECRET_KEY);
+        $this->jwt = JWT::generateToken($this->user->getId(), $this->user->getSignOutCount());
     }
 }

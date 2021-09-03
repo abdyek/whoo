@@ -1,6 +1,5 @@
 <?php
 namespace Abdyek\Whoo\Core;
-use Firebase\JWT\JWT;
 use Abdyek\Whoo\Core\Response;
 use Abdyek\Whoo\Config\Whoo;
 use Abdyek\Whoo\Config\JWT as JWTConfig;
@@ -8,6 +7,7 @@ use Abdyek\Whoo\Config\Controller as ControllerConfig;
 use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Exception\InvalidDataException;
 use Abdyek\Whoo\Exception\InvalidTokenException;
+use Abdyek\Whoo\Tool\JWT;
 
 class Controller {
     public $user = null;
@@ -41,11 +41,7 @@ class Controller {
     }
     private function detectUser() {
         if(isset($this->data['jwt'])) {
-            try {
-                $userInfo = (array) JWT::decode($this->data['jwt'], JWTConfig::SECRET_KEY, array('HS256'));
-            } catch (\UnexpectedValueException $e) {
-                throw new InvalidTokenException;
-            }
+            $userInfo = JWT::getPayload($this->data['jwt']);
             $this->user = User::getById($userInfo['userId']);
             if($this->user->getSignOutCount()!==$userInfo['signOutCount']) {
                 throw new InvalidTokenException;

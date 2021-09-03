@@ -1,12 +1,12 @@
 <?php
 
 namespace Abdyek\Whoo\Controller;
-use Firebase\JWT\JWT;
 use Abdyek\Whoo\Core\Controller;
 use Abdyek\Whoo\Model\User as UserModel;
 use Abdyek\Whoo\Config\JWT as JWTConfig;
 use Abdyek\Whoo\Exception\SignUpByEmailException;
 use Abdyek\Whoo\Exception\NullUsernameException;
+use Abdyek\Whoo\Tool\JWT;
 
 class SignInByProvider extends Controller {
     public $registering = false;
@@ -23,12 +23,6 @@ class SignInByProvider extends Controller {
         if($this->config['USE_USERNAME'] and $user->getUsername()===null) {
             throw new NullUsernameException;
         }
-        $this->jwt = JWT::encode([
-            'iss' => JWTConfig::ISS,
-            'aud' => JWTConfig::AUD,
-            'iat' => JWTConfig::IAT,
-            'nbf' => JWTConfig::NBF,
-            'userId' => $user->getId(),
-        ], JWTConfig::SECRET_KEY);
+        $this->jwt = JWT::generateToken($user->getId(), $user->getSignOutCount());
     }
 }
