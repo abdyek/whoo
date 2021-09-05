@@ -363,6 +363,15 @@ class Controller {
                     'max'=>40
                 ]
             ],
+        ],
+        'SignIn'=>[
+            'passwordAgain'=>[
+                'type'=>'str',
+                'limits'=>[
+                    'min'=>8,
+                    'max'=>50
+                ]
+            ]
         ]
     ];
 }

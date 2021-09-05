@@ -9,6 +9,7 @@ use Abdyek\Whoo\Exception\IncorrectPasswordException;
 use Abdyek\Whoo\Exception\NullUsernameException;
 use Abdyek\Whoo\Exception\NotVerifiedEmailException;
 use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
+use Abdyek\Whoo\Exception\UnmatchedPasswordsException;
 use Abdyek\Whoo\Tool\JWT;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
 use Abdyek\Whoo\Tool\TemporaryToken;
@@ -22,6 +23,9 @@ class SignIn extends Controller {
         $this->user = User::getByEmail($this->data['email']);
         if($this->user ===null) {
             throw new NotFoundException;
+        }
+        if($this->isThereOptional('passwordAgain') and $this->data['password']!==$this->data['passwordAgain']) {
+            throw new UnmatchedPasswordsException;
         }
         if($this->validateEmailPassword()===false) {
             throw new IncorrectPasswordException;
