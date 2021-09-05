@@ -347,4 +347,22 @@ class Controller {
             ]
         ]
     ];
+    const OPTIONAL = [
+        'SignUp'=>[
+            'passwordAgain'=>[
+                'type'=>'str',
+                'limits'=>[
+                    'min'=>8,
+                    'max'=>50
+                ]
+            ],
+            'username'=>[
+                'type'=>'str',
+                'limits'=>[
+                    'min'=>1,
+                    'max'=>40
+                ]
+            ],
+        ]
+    ];
 }

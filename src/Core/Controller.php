@@ -95,8 +95,8 @@ class Controller {
             throw new InvalidDataException;
         }
         $optional = ControllerConfig::OPTIONAL[$this->className][$name];
-        $type = $optional[$type];
-        $limits = $optional[$limits];
+        $type = $optional['type'];
+        $limits = $optional['limits'];
         $data = $this->data[$name];
         if(
             ($type ==='str' and is_string($data)) or
