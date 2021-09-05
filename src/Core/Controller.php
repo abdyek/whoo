@@ -90,7 +90,37 @@ class Controller {
         }
         return true;
     }
-    public function setConfig($configObject) {
+    protected function checkOptional($name) {
+        if(!isset(ControllerConfig::OPTIONAL[$this->className][$name])) {
+            throw new InvalidDataException;
+        }
+        $optional = ControllerConfig::OPTIONAL[$this->className][$name];
+        $type = $optional[$type];
+        $limits = $optional[$limits];
+        $data = $this->data[$name];
+        if(
+            ($type ==='str' and is_string($data)) or
+            ($type ==='num' and is_numeric($data)) or
+            ($type ==='arr' and is_array($data)) or 
+            ($type ==='email' and self::emailPatternCheck($data)) or
+            ($type ==='bool' and is_bool($data))
+        ) {
+            if(!(
+                ($type ==='str' and (strlen($data)>=$limits['min'] and strlen($data)<=$limits['max'])) or
+                (($type ==='num') and (strlen((string)$data)>=$limits['min'] and strlen((string)$data)<=$limits['max'])) or
+                ($type ==='arr' and (count($data)>=$limits['min'] and count($data)<=$limits['max'])) or
+                ($type ==='email' and (strlen($data)>=$limits['min'] and strlen($data)<=$limits['max'])) or
+                ($type ==='bool') // there aren't boolean limit
+            )) {
+                throw new InvalidDataException;
+            }
+        } else {
+            throw new InvalidDataException;
+        }
+        return true;
+    }
+    protected function isThereOptional($name) {
+        return (isset($this->data[$name]) and $this->checkOptional($name)?true:false);
     }
     private function emailPatternCheck($email) {
         return filter_var($email, FILTER_VALIDATE_EMAIL);

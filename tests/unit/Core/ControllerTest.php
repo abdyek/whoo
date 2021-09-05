@@ -27,6 +27,13 @@ class ControllerTest extends TestCase {
         $example = new Example($data);
         $this->assertSame($data, $example->data);
     }
+    /*
+     * I will fill it after. I want to test the controller class correctly but the controller class doesn't have dynamic REQUIRED config.
+     * So if I fill this test function, I had to fill unnecessary values in Config\Controller::REQUIRED. I think controller classes tests are enought for product.
+    public function testIsThereOptional() {
+
+    }
+    */
     /**
      * @dataProvider dataProvider
      */
