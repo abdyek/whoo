@@ -11,6 +11,7 @@ use Abdyek\Whoo\Exception\NotFoundException;
 use Abdyek\Whoo\Exception\NotVerifiedEmailException;
 use Abdyek\Whoo\Exception\IncorrectPasswordException;
 use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
+use Abdyek\Whoo\Exception\UnmatchedPasswordsException;
 use Abdyek\Whoo\Tool\JWT;
 
 class SignInByUsername extends Controller {
@@ -20,6 +21,9 @@ class SignInByUsername extends Controller {
         $this->user = User::getByUsername($this->data['username']);
         if($this->user===null) {
             throw new NotFoundException;
+        }
+        if($this->isThereOptional('passwordAgain') and $this->data['password']!==$this->data['passwordAgain']) {
+            throw new UnmatchedPasswordsException;
         }
         $pwHash = $this->user->getPasswordHash();
         if(password_verify($this->data['password'], $pwHash)===false) {

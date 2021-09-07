@@ -11,6 +11,7 @@ use Abdyek\Whoo\Exception\IncorrectPasswordException;
 use Abdyek\Whoo\Exception\NotFoundException;
 use Abdyek\Whoo\Exception\NotVerifiedEmailException;
 use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
+use Abdyek\Whoo\Exception\UnmatchedPasswordsException;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
 
 /**
@@ -110,6 +111,39 @@ class SignInByUsernameTest extends TestCase {
         $signIn = new SignInByUsername([
             'username'=>self::USERNAME,
             'password'=>$data['password']
+        ], $config);
+    }
+    public function testRunOptionalPasswordAgain() {
+        $config = $this->changeConfig([
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN' => false,
+            'USE_USERNAME'=>true,
+            'DEFAULT_2FA'=>false
+        ]);
+        $data = $this->getData();
+        $data['username'] = self::USERNAME;
+        new Signup($data, $config);
+        $signIn = new SignInByUsername([
+            'username'=>self::USERNAME,
+            'password'=>$data['password'],
+            'passwordAgain'=>$data['password']
+        ], $config);
+        $this->assertNotNull($signIn->jwt);
+        $this->assertEquals(self::USERNAME, $signIn->user->getUsername());
+    }
+    public function testRunUnmatchedPasswordsException() {
+        $this->expectException(UnmatchedPasswordsException::class);
+        $config = $this->changeConfig([
+            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN' => false,
+            'USE_USERNAME'=>true,
+            'DEFAULT_2FA'=>false
+        ]);
+        $data = $this->getData();
+        $data['username'] = self::USERNAME;
+        new SignUp($data, $config);
+        $signIn = new SignInByUsername([
+            'username'=>self::USERNAME,
+            'password'=>$data['password'],
+            'passwordAgain' => 'wrong-password'
         ], $config);
     }
     private function getData() {
