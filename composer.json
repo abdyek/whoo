@@ -29,5 +29,8 @@
             "tests/unit/traits",
             "propel/model"
         ]
-    }
+    },
+    "bin": [
+        "bin/whoo"
+    ]
 }
