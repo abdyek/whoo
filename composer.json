@@ -22,14 +22,12 @@
     "autoload": {
         "psr-4": {
             "Abdyek\\Whoo\\": "src"
-        },
-        "classmap": [
-            "propel/model"
-        ]
+        }
     },
     "autoload-dev": {
         "classmap": [
-            "tests/unit/traits"
+            "tests/unit/traits",
+            "propel/model"
         ]
     }
 }
