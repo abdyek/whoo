@@ -1,7 +1,7 @@
 <?php
 
-require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
+use Abdyek\Whoo\Tool\Config;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SetAuthCodeToResetPassword;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
@@ -16,6 +16,10 @@ use Abdyek\Whoo\Model\AuthenticationCode;
 class SetAuthCodeToResetPasswordTest extends TestCase {
     use Reset;
     use ChangeConfig;
+    public static function setUpBeforeClass(): void {
+        Config::setPropelConfigDir('propel/config.php');
+        Config::load(); // for reset
+    }
     public function setUp(): void {
         self::reset();
     }

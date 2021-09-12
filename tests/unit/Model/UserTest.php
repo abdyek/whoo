@@ -1,8 +1,7 @@
 <?php
 
-require 'propel/config.php';
-
 use PHPUnit\Framework\TestCase;
+use Abdyek\Whoo\Tool\Config;
 use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Model\AuthenticationCode;
 
@@ -14,6 +13,10 @@ class UserTest extends TestCase {
     const USERNAME = 'this is example username';
     use Reset;
     use UserTool;
+    public static function setUpBeforeClass(): void {
+        Config::setPropelConfigDir('propel/config.php');
+        Config::load(); // for reset
+    }
     public function setUp(): void {
         self::reset();
     }

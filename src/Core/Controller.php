@@ -8,11 +8,13 @@ use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Exception\InvalidDataException;
 use Abdyek\Whoo\Exception\InvalidTokenException;
 use Abdyek\Whoo\Tool\JWT;
+use Abdyek\Whoo\Tool\Config;
 
 class Controller {
     public $user = null;
     public function __construct($data, $config=Whoo::CONFIG) {
         $this->config = $config;
+        Config::load();
         $this->data = $data;
         $this->setClassName();
         $this->setRequired();

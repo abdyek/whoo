@@ -1,7 +1,7 @@
 <?php
 
-require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
+use Abdyek\Whoo\Tool\Config;
 use Abdyek\Whoo\Controller\ChangePassword;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SignIn;
@@ -15,6 +15,10 @@ class ChangePasswordTest extends TestCase {
     const NEW_PASSWORD = 'nEw_pAsSwOrD';
     use Reset;
     use ChangeConfig;
+    public static function setUpBeforeClass(): void {
+        Config::setPropelConfigDir('propel/config.php');
+        Config::load(); // for reset
+    }
     public function setUp(): void {
         self::reset();
     }

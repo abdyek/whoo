@@ -1,7 +1,7 @@
 <?php
 
-require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
+use Abdyek\Whoo\Tool\Config;
 use Abdyek\Whoo\Controller\SignInByUsername2FA;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SetUsername;
@@ -21,6 +21,10 @@ class SignInByUsername2FATest extends TestCase {
     use Reset;
     use ChangeConfig;
     private const USERNAME = 'this_is_username';
+    public static function setUpBeforeClass(): void {
+        Config::setPropelConfigDir('propel/config.php');
+        Config::load(); // for reset
+    }
     public function setUp(): void {
         self::reset();
     }

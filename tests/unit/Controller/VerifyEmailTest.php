@@ -1,7 +1,7 @@
 <?php
 
-require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
+use Abdyek\Whoo\Tool\Config;
 use Abdyek\Whoo\Controller\VerifyEmail;
 use Abdyek\Whoo\Controller\SetAuthCodeForEmailVerification;
 use Abdyek\Whoo\Exception\InvalidCodeException;
@@ -18,6 +18,10 @@ use Abdyek\Whoo\Model\AuthenticationCode;
 class VerifyEmailTest extends TestCase {
     use Reset;
     use UserTool;
+    public static function setUpBeforeClass(): void {
+        Config::setPropelConfigDir('propel/config.php');
+        Config::load(); // for reset
+    }
     public function setUp(): void {
         self::reset();
     }
