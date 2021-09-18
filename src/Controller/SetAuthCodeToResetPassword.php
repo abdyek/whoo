@@ -8,6 +8,7 @@ use Abdyek\Whoo\Model\AuthenticationCode;
 use Abdyek\Whoo\Tool\Random;
 use Abdyek\Whoo\Exception\NotFoundException;
 use Abdyek\Whoo\Exception\NotVerifiedEmailException;
+use Abdyek\Whoo\Config\Whoo as Config;
 
 class SetAuthCodeToResetPassword extends Controller {
     public $code;
@@ -16,7 +17,7 @@ class SetAuthCodeToResetPassword extends Controller {
         if($user===null) {
             throw new NotFoundException;
         }
-        if($this->config['DENY_IF_NOT_VERIFIED_TO_RESET_PW'] and $user->getEmailVerified()===false) {
+        if(Config::$DENY_IF_NOT_VERIFIED_TO_RESET_PW and $user->getEmailVerified()===false) {
             throw new NotVerifiedEmailException;
         }
         AuthenticationCode::deleteByUserIdType($user->getId(), AuthConfig::TYPE_RESET_PW);

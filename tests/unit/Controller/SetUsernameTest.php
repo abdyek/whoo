@@ -1,13 +1,14 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Abdyek\Whoo\Tool\Config;
 use Abdyek\Whoo\Controller\SetUsername;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Model\User as UserModel;
 use Abdyek\Whoo\Exception\InvalidTemporaryTokenException;
 use Abdyek\Whoo\Exception\NotNullUsernameException;
 use Abdyek\Whoo\Exception\NotUniqueUsernameException;
+use Abdyek\Whoo\Config\Whoo as Config;
+use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 /**
  * @covers SetUsername::
@@ -16,24 +17,20 @@ use Abdyek\Whoo\Exception\NotUniqueUsernameException;
 class SetUsernameTest extends TestCase {
     const USERNAME = 'uSeRNaMe';
     use Reset;
-    use ChangeConfig;
     public static function setUpBeforeClass(): void {
-        Config::setPropelConfigDir('propel/config.php');
-        Config::load(); // for reset
+        PropelConfig::$CONFIG_FILE = 'propel/config.php';
     }
     public function setUp(): void {
         self::reset();
     }
     public function testRun() {
         $data = $this->getData();
-        $config = $this->changeConfig([
-            'USE_USERNAME'=>true
-        ]);
-        $signUp = new SignUp($data, $config);
+        Config::$USE_USERNAME = true;
+        $signUp = new SignUp($data);
         new SetUsername([
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>self::USERNAME
-        ], $config);
+        ]);
         $user = UserModel::getByEmail($data['email']);
         $this->assertSame(self::USERNAME, $user->getUsername());
     }
@@ -48,39 +45,35 @@ class SetUsernameTest extends TestCase {
     }
     public function testRunNotNullUsernameException() {
         $this->expectException(NotNullUsernameException::class);
-        $config = $this->changeConfig([
-            'USE_USERNAME'=>true
-        ]);
+        Config::$USE_USERNAME = true;
         $data = $this->getData();
-        $signUp = new SignUp($data, $config);
+        $signUp = new SignUp($data);
         new SetUsername([
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>self::USERNAME
-        ], $config);
+        ]);
         new SetUsername([
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>self::USERNAME
-        ], $config);
+        ]);
     }
     public function testRunNotUniqueUsernameException() {
         $this->expectException(NotUniqueUsernameException::class);
-        $config = $this->changeConfig([
-            'USE_USERNAME'=>true
-        ]);
+        Config::$USE_USERNAME = true;
         $data = $this->getData();
-        $signUp = new SignUp($data, $config);
+        $signUp = new SignUp($data);
         new SetUsername([
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>self::USERNAME
-        ], $config);
+        ]);
         $otherUser = new SignUp([
             'email'=>'other@user.com',
             'password'=>'top_secret_pass'
-        ], $config);
+        ]);
         new SetUsername([
             'temporaryToken'=>$otherUser->temporaryToken,
             'username'=>self::USERNAME
-        ], $config);
+        ]);
     }
     private function getData() {
         return [

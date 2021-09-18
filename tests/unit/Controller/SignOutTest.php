@@ -1,12 +1,13 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Abdyek\Whoo\Tool\Config;
 use Abdyek\Whoo\Controller\SignOut;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SignIn;
 use Abdyek\Whoo\Controller\FetchInfo;
 use Abdyek\Whoo\Exception\InvalidTokenException;
+use Abdyek\Whoo\Config\Whoo as Config;
+use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 /**
  * @covers SignOut::
@@ -14,31 +15,27 @@ use Abdyek\Whoo\Exception\InvalidTokenException;
 
 class SignOutTest extends TestCase {
     use Reset;
-    use ChangeConfig;
     public static function setUpBeforeClass(): void {
-        Config::setPropelConfigDir('propel/config.php');
-        Config::load(); // for reset
+        PropelConfig::$CONFIG_FILE = 'propel/config.php';
     }
     public function setUp(): void {
         self::reset();
     }
     public function testRunRealStatelessFalse() {
         $this->expectException(InvalidTokenException::class);
-        $config = $this->changeConfig([
-            'USE_USERNAME'=>false,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false
-        ]);
+        Config::$USE_USERNAME = false;
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
         $data = self::getData();
-        $signUp = new SignUp($data, $config);
-        $signIn = new SignIn($data, $config);
+        $signUp = new SignUp($data);
+        $signIn = new SignIn($data);
         $jwt = $signIn->jwt;
         new SignOut([
             'jwt'=>$jwt
-        ], $config);
+        ]);
         // Signed out. So FetchInfo throws exception
         new FetchInfo([
             'jwt'=>$jwt
-        ], $config);
+        ]);
     }
     public function testTest() {
         $this->assertTrue(True);

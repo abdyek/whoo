@@ -1,7 +1,6 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Abdyek\Whoo\Tool\Config;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SignIn;
 use Abdyek\Whoo\Controller\ChangeEmail;
@@ -10,6 +9,8 @@ use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Exception\IncorrectPasswordException;
 use Abdyek\Whoo\Exception\NotUniqueEmailException;
 use Abdyek\Whoo\Exception\InvalidTokenException;
+use Abdyek\Whoo\Config\Whoo as Config;
+use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 /**
  * @covers ChangeEmail::
@@ -17,10 +18,8 @@ use Abdyek\Whoo\Exception\InvalidTokenException;
 
 class ChangeEmailTest extends TestCase {
     use Reset;
-    use ChangeConfig;
     public static function setUpBeforeClass(): void {
-        Config::setPropelConfigDir('propel/config.php');
-        Config::load(); // for reset
+        PropelConfig::$CONFIG_FILE = 'propel/config.php';
     }
     public function setUp(): void {
         self::reset();
@@ -28,35 +27,31 @@ class ChangeEmailTest extends TestCase {
     public function testRun() {
         $newEmail = 'new@new.com';
         $data = $this->getData();
-        $config = $this->changeConfig([
-            'USE_USERNAME'=>false,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false
-        ]);
-        new SignUp($data, $config);
-        $signIn = new SignIn($data, $config);
+        Config::$USE_USERNAME = false;
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        new SignUp($data);
+        $signIn = new SignIn($data);
         new ChangeEmail([
             'jwt'=>$signIn->jwt,
             'newEmail'=>$newEmail,
             'password'=>$data['password']
-        ], $config);
+        ]);
         $data['email'] = $newEmail;
-        $signIn = new SignIn($data, $config);
+        $signIn = new SignIn($data);
         $this->assertNotNull($signIn->jwt);
     }
     public function testRunIncorrectPasswordException() {
         $this->expectException(IncorrectPasswordException::class);
         $data = $this->getData();
-        $config = $this->changeConfig([
-            'USE_USERNAME'=>false,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false
-        ]);
-        new SignUp($data, $config);
-        $signIn = new SignIn($data, $config);
+        Config::$USE_USERNAME = false;
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        new SignUp($data);
+        $signIn = new SignIn($data);
         new ChangeEmail([
             'jwt'=>$signIn->jwt,
             'newEmail'=>'newEmail@email.com',
             'password'=>'wrong_password'
-        ], $config);
+        ]);
     }
     public function testRunNotUniqueEmailException() {
         $this->expectException(NotUniqueEmailException::class);
@@ -65,13 +60,11 @@ class ChangeEmailTest extends TestCase {
             'email'=>'email2@email.com',
             'password'=>'this_is_password2'
         ];
-        $config = $this->changeConfig([
-            'USE_USERNAME'=>false,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false
-        ]);
-        new SignUp($data, $config);
-        new SignUp($data2, $config);
-        $signIn = new SignIn($data, $config);
+        Config::$USE_USERNAME = false;
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        new SignUp($data);
+        new SignUp($data2);
+        $signIn = new SignIn($data);
         new ChangeEmail([
             'jwt'=>$signIn->jwt,
             'newEmail'=>$data2['email'],
@@ -81,20 +74,18 @@ class ChangeEmailTest extends TestCase {
     public function testRunSignOut() {
         $this->expectException(InvalidTokenException::class);
         $data = $this->getData();
-        $config = $this->changeConfig([
-            'USE_USERNAME'=>false,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false
-        ]);
-        new SignUp($data, $config);
-        $signIn = new SignIn($data, $config);
+        Config::$USE_USERNAME = false;
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        new SignUp($data);
+        $signIn = new SignIn($data);
         new ChangeEmail([
             'jwt'=>$signIn->jwt,
             'newEmail'=>'newEmail@newEmail.com',
             'password'=>$data['password']
-        ], $config);
+        ]);
         new FetchInfo([
             'jwt'=>$signIn->jwt
-        ], $config);
+        ]);
     }
     private function getData() {
         return [

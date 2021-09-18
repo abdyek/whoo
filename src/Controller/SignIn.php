@@ -14,6 +14,7 @@ use Abdyek\Whoo\Tool\JWT;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
 use Abdyek\Whoo\Tool\TemporaryToken;
 use Abdyek\Whoo\Tool\Random;
+use Abdyek\Whoo\Config\Whoo as Config;
 
 class SignIn extends Controller {
     public $jwt = null;
@@ -30,12 +31,12 @@ class SignIn extends Controller {
         if($this->validateEmailPassword()===false) {
             throw new IncorrectPasswordException;
         }
-        if($this->config['DENY_IF_NOT_VERIFIED_TO_SIGN_IN'] and $this->user->getEmailVerified()===false) {
+        if(Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN and $this->user->getEmailVerified()===false) {
             throw new NotVerifiedEmailException;
         }
-        if($this->config['USE_USERNAME'] and $this->user->getUsername()===null) {
+        if(Config::$USE_USERNAME and $this->user->getUsername()===null) {
             $this->temporaryToken = TemporaryToken::generate($this->user->getId());
-            if($this->config['DENY_IF_NOT_SET_USERNAME']) {
+            if(Config::$DENY_IF_NOT_SET_USERNAME) {
                 throw new NullUsernameException;
             }
         }

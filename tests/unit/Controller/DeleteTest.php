@@ -1,11 +1,12 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Abdyek\Whoo\Tool\Config;
 use Abdyek\Whoo\Controller\Delete;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SignIn;
 use Abdyek\Whoo\Exception\IncorrectPasswordException;
+use Abdyek\Whoo\Config\Whoo as Config;
+use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 /**
  * @covers Delete::
@@ -13,23 +14,19 @@ use Abdyek\Whoo\Exception\IncorrectPasswordException;
 
 class DeleteTest extends TestCase {
     use Reset;
-    use ChangeConfig;
     public static function setUpBeforeClass(): void {
-        Config::setPropelConfigDir('propel/config.php');
-        Config::load(); // for reset
+        PropelConfig::$CONFIG_FILE = 'propel/config.php';
     }
     public function setUp(): void {
         self::reset();
     }
     public function testRun() {
-        $config = $this->changeConfig([
-            'USE_USERNAME'=>false,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'DEFAULT_2FA'=>false
-        ]);
+        Config::$USE_USERNAME = false;
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        Config::$DEFAULT_2FA = false;
         $data = $this->getData();
-        new SignUp($data, $config);
-        $signIn = new SignIn($data, $config);
+        new SignUp($data);
+        $signIn = new SignIn($data);
         new Delete([
             'jwt'=>$signIn->jwt,
             'password'=>$data['password']
@@ -38,18 +35,16 @@ class DeleteTest extends TestCase {
     }
     public function testRunIncorrectPasswordException() {
         $this->expectException(IncorrectPasswordException::class);
-        $config = $this->changeConfig([
-            'USE_USERNAME'=>false,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'DEFAULT_2FA'=>false
-        ]);
+        Config::$USE_USERNAME = false;
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        Config::$DEFAULT_2FA = false;
         $data = $this->getData();
-        new SignUp($data, $config);
-        $signIn = new SignIn($data, $config);
+        new SignUp($data);
+        $signIn = new SignIn($data);
         new Delete([
             'jwt'=>$signIn->jwt,
             'password'=>'wrong-password'
-        ], $config);
+        ]);
     }
     private function getData() {
         return [

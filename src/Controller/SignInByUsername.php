@@ -13,6 +13,7 @@ use Abdyek\Whoo\Exception\IncorrectPasswordException;
 use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
 use Abdyek\Whoo\Exception\UnmatchedPasswordsException;
 use Abdyek\Whoo\Tool\JWT;
+use Abdyek\Whoo\Config\Whoo as Config;
 
 class SignInByUsername extends Controller {
     public $jwt = null;
@@ -29,7 +30,7 @@ class SignInByUsername extends Controller {
         if(password_verify($this->data['password'], $pwHash)===false) {
             throw new IncorrectPasswordException;
         }
-        if($this->config['DENY_IF_NOT_VERIFIED_TO_SIGN_IN'] and $this->user->getEmailVerified()===false) {
+        if(Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN and $this->user->getEmailVerified()===false) {
             throw new NotVerifiedEmailException;
         }
         if($this->user->getTwoFactorAuthentication()) {

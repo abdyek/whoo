@@ -4,27 +4,21 @@ use Abdyek\Whoo\Core\Response;
 use Abdyek\Whoo\Config\Whoo;
 use Abdyek\Whoo\Config\JWT as JWTConfig;
 use Abdyek\Whoo\Config\Controller as ControllerConfig;
+use Abdyek\Whoo\Config\Propel as PropelConfig;
 use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Exception\InvalidDataException;
 use Abdyek\Whoo\Exception\InvalidTokenException;
 use Abdyek\Whoo\Tool\JWT;
-use Abdyek\Whoo\Tool\Config;
 
 class Controller {
     public $user = null;
-    public function __construct($data, $config=Whoo::CONFIG) {
-        $this->config = $config;
-        Config::load();
+    public function __construct($data) {
+        require PropelConfig::$CONFIG_FILE;
         $this->data = $data;
         $this->setClassName();
         $this->setRequired();
         $this->detectUser();
         $this->checkRequiredWrapper();
-        /*
-            ^^^^^^^^^^^^^^^^^
-            I had to add config attribute to test other states of Whoo configs by phpunit.
-            I searched solution of the issue before. https://stackoverflow.com/questions/68628154/is-there-any-way-to-manipulate-config-file-of-my-project-in-phpunit
-        */
         $this->run();
     }
     private function setClassName() {

@@ -7,6 +7,7 @@ use Abdyek\Whoo\Config\JWT as JWTConfig;
 use Abdyek\Whoo\Exception\SignUpByEmailException;
 use Abdyek\Whoo\Exception\NullUsernameException;
 use Abdyek\Whoo\Tool\JWT;
+use Abdyek\Whoo\Config\Whoo as Config;
 
 class SignInByProvider extends Controller {
     public $registering = false;
@@ -16,11 +17,11 @@ class SignInByProvider extends Controller {
         if($user===null) {
             $user = UserModel::create($this->data);
             $this->registering = true;
-        } else if($this->config['DENY_IF_SIGN_UP_BEFORE_BY_EMAIL'] and $user->getProvider()===null) {
+        } else if(Config::$DENY_IF_SIGN_UP_BEFORE_BY_EMAIL and $user->getProvider()===null) {
             throw new SignUpByEmailException;
         }
         $user = UserModel::getByEmail($this->data['email']);
-        if($this->config['USE_USERNAME'] and $user->getUsername()===null) {
+        if(Config::$USE_USERNAME and $user->getUsername()===null) {
             throw new NullUsernameException;
         }
         $this->jwt = JWT::generateToken($user->getId(), $user->getSignOutCount());

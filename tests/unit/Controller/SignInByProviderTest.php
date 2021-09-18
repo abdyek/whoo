@@ -1,12 +1,13 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Abdyek\Whoo\Tool\Config;
 use Abdyek\Whoo\Controller\SignInByProvider;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Exception\NullUsernameException;
 use Abdyek\Whoo\Exception\SignUpByEmailException;
 use Abdyek\Whoo\Model\User as UserModel;
+use Abdyek\Whoo\Config\Whoo as Config;
+use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 /**
  * @covers SignInByProvider::
@@ -14,61 +15,53 @@ use Abdyek\Whoo\Model\User as UserModel;
 
 class SignInByProviderTest extends TestCase {
     use Reset;
-    use ChangeConfig;
     public static function setUpBeforeClass(): void {
-        Config::setPropelConfigDir('propel/config.php');
-        Config::load(); // for reset
+        PropelConfig::$CONFIG_FILE = 'propel/config.php';
     }
     public function setUp(): void {
         self::reset();
     }
     public function testSignUpUseUsernameTrueException() {
         $this->expectException(NullUsernameException::class);
-        $newConfig = $this->changeConfig(['USE_USERNAME'=>true]);
         $dataForProvider = self::getDataForProvider();
-        $signUp = new SignInByProvider($dataForProvider, $newConfig);
+        Config::$USE_USERNAME = true;
+        $signUp = new SignInByProvider($dataForProvider);
         $user = UserModel::getByEmail($dataForProvider['email']);
         $this->assertTrue($signUp->registering);
         $this->assertNotNull($user->getId());
         $this->assertNull($signUp->jwt);
     }
     public function testSignUpUseUsernameFalseOK() {
-        $newConfig = $this->changeConfig(['USE_USERNAME'=>false]);
+        Config::$USE_USERNAME = false;
         $dataForProvider = self::getDataForProvider();
-        $signUp = new SignInByProvider($dataForProvider, $newConfig);
+        $signUp = new SignInByProvider($dataForProvider);
         $this->assertTrue($signUp->registering);
         $this->assertNotNull($signUp->jwt);
     }
     public function testSignInBlockIfSignUpBeforeByEmailTrueOK() {
-        $newConfig = $this->changeConfig([
-            'USE_USERNAME'=>false,
-            'DENY_IF_SIGN_UP_BEFORE_BY_EMAIL'=>true
-        ]);
+        Config::$USE_USERNAME = false;
+        Config::$DENY_IF_SIGN_UP_BEFORE_BY_EMAIL = true;
         $dataForProvider = self::getDataForProvider();
-        $signUpIn= new SignInByProvider($dataForProvider, $newConfig);
+        $signUpIn= new SignInByProvider($dataForProvider);
         $this->assertTrue($signUpIn->registering);
         $this->assertNotNull($signUpIn->jwt);
     }
     public function testSignInBlockIfSignUpBeforeByEmailTrueException() {
         $this->expectException(SignUpByEmailException::class);
         $data = $this->getData();
-        $newConfig = $this->changeConfig([
-            'USE_USERNAME'=>false,
-            'DENY_IF_SIGN_UP_BEFORE_BY_EMAIL'=>true
-        ]);
-        $signUpNormally = new SignUp($data, $newConfig);
+        Config::$USE_USERNAME = false;
+        Config::$DENY_IF_SIGN_UP_BEFORE_BY_EMAIL = true;
+        $signUpNormally = new SignUp($data);
         $dataForProvider = $this->getDataForProvider();
-        $signIn = new SignInByProvider($dataForProvider, $newConfig);
+        $signIn = new SignInByProvider($dataForProvider);
     }
     public function testSignInBlockIfSignUpBeforeByEmailFalse() {
-        $newConfig = $this->changeConfig([
-            'USE_USERNAME'=>false,
-            'DENY_IF_SIGN_UP_BEFORE_BY_EMAIL'=>false
-        ]);
+        Config::$USE_USERNAME = false;
+        Config::$DENY_IF_SIGN_UP_BEFORE_BY_EMAIL = false;
         $data = self::getData();
-        $signUp = new SignUp($data, $newConfig);
+        $signUp = new SignUp($data);
         $dataForProvider = self::getDataForProvider();
-        $signIn = new SignInByProvider($dataForProvider, $newConfig);
+        $signIn = new SignInByProvider($dataForProvider);
         $this->assertNotNull($signIn->jwt);
     }
     private function getData() {

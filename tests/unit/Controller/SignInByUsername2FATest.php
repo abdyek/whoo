@@ -1,7 +1,6 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Abdyek\Whoo\Tool\Config;
 use Abdyek\Whoo\Controller\SignInByUsername2FA;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SetUsername;
@@ -12,6 +11,8 @@ use Abdyek\Whoo\Exception\NotFoundAuthCodeException;
 use Abdyek\Whoo\Exception\TrialCountOverException;
 use Abdyek\Whoo\Exception\InvalidCodeException;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
+use Abdyek\Whoo\Config\Whoo as Config;
+use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 /**
  * @covers SignInByUsername2FA::
@@ -19,50 +20,44 @@ use Abdyek\Whoo\Config\Authentication as AuthConfig;
 
 class SignInByUsername2FATest extends TestCase {
     use Reset;
-    use ChangeConfig;
     private const USERNAME = 'this_is_username';
     public static function setUpBeforeClass(): void {
-        Config::setPropelConfigDir('propel/config.php');
-        Config::load(); // for reset
+        PropelConfig::$CONFIG_FILE = 'propel/config.php';
     }
     public function setUp(): void {
         self::reset();
     }
     public function testRun() {
         $this->assertTrue(true);
-        $config = $this->changeConfig([
-            'USE_USERNAME'=>true,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'DEFAULT_2FA'=>true
-        ]);
+        Config::$USE_USERNAME = true;
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        Config::$DEFAULT_2FA = true;
         $data = $this->getData();
-        $signUp = new SignUp($data, $config);
+        $signUp = new SignUp($data);
         new SetUsername([
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>self::USERNAME
-        ], $config);
+        ]);
         try {
             $signIn = new SignInByUsername([
                 'username'=>self::USERNAME,
                 'password'=>$data['password']
-            ], $config);
+            ]);
         } catch(TwoFactorAuthEnabledException $e) {
             $signIn2FA = new SignInByUsername2FA([
                 'username'=>self::USERNAME,
                 'authenticationCode'=>$e->authenticationCode
-            ], $config);
+            ]);
         }
         $this->assertNotNull($signIn2FA->jwt);
     }
     public function testRunInvalidCodeException() {
         $this->expectException(InvalidCodeException::class);
-        $config = $this->changeConfig([
-            'USE_USERNAME'=>true,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'DEFAULT_2FA'=>true
-        ]);
+        Config::$USE_USERNAME = true;
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        Config::$DEFAULT_2FA = true;
         $data = $this->getData();
-        $signUp = new SignUp($data, $config);
+        $signUp = new SignUp($data);
         new SetUsername([
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>self::USERNAME
@@ -71,12 +66,12 @@ class SignInByUsername2FATest extends TestCase {
             $signIn = new SignInByUsername([
                 'username'=>self::USERNAME,
                 'password'=>$data['password']
-            ], $config);
+            ]);
         } catch(TwoFactorAuthEnabledException $e) {}
         $signIn2FA = new SignInByUsername2FA([
             'username'=>self::USERNAME,
             'authenticationCode'=>'wrong-code'
-        ], $config);
+        ]);
     }
     public function testRunNotFoundException() {
         $this->expectException(NotFoundException::class);
@@ -87,13 +82,11 @@ class SignInByUsername2FATest extends TestCase {
     }
     public function testRunNotFoundAuthCodeException() {
         $this->expectException(NotFoundAuthCodeException::class);
-        $config = $this->changeConfig([
-            'USE_USERNAME'=>true,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'DEFAULT_2FA'=>true
-        ]);
+        Config::$USE_USERNAME = true;
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        Config::$DEFAULT_2FA = true;
         $data = $this->getData();
-        $signUp = new SignUp($data, $config);
+        $signUp = new SignUp($data);
         new SetUsername([
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>self::USERNAME
@@ -101,17 +94,15 @@ class SignInByUsername2FATest extends TestCase {
         $signIn2FA = new SignInByUsername2FA([
             'username'=>self::USERNAME,
             'authenticationCode'=>'123123123'
-        ], $config);
+        ]);
     }
     public function testRunTrialCountOverException() {
         $this->expectException(TrialCountOverException::class);
-        $config = $this->changeConfig([
-            'USE_USERNAME'=>true,
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'DEFAULT_2FA'=>true
-        ]);
+        Config::$USE_USERNAME = true;
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        Config::$DEFAULT_2FA = true;
         $data = $this->getData();
-        $signUp = new SignUp($data, $config);
+        $signUp = new SignUp($data);
         new SetUsername([
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>self::USERNAME
@@ -120,7 +111,7 @@ class SignInByUsername2FATest extends TestCase {
             $signIn = new SignInByUsername([
                 'username'=>self::USERNAME,
                 'password'=>$data['password']
-            ], $config);
+            ]);
         } catch(TwoFactorAuthEnabledException $e) {}
         for($i=0;$i<AuthConfig::TRIAL_MAX_COUNT_TO_SIGN_IN_2FA;$i++) {
             try {

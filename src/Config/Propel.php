@@ -3,5 +3,5 @@
 namespace Abdyek\Whoo\Config;
 
 class Propel {
-    const CONFIG_DIR = 'whoo/propel/config.php';
+    public static $CONFIG_FILE = 'whoo/propel/config.php';
 }

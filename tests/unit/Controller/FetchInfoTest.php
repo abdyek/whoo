@@ -1,13 +1,14 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Abdyek\Whoo\Tool\Config;
 use Abdyek\Whoo\Controller\FetchInfo;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SignIn;
 use Abdyek\Whoo\Controller\SetUsername;
 use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Exception\InvalidTokenException;
+use Abdyek\Whoo\Config\Whoo as Config;
+use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 /**
  * @covers FetchInfo::
@@ -15,31 +16,27 @@ use Abdyek\Whoo\Exception\InvalidTokenException;
 
 class FetchInfoTest extends TestCase {
     use Reset;
-    use ChangeConfig;
     public static function setUpBeforeClass(): void {
-        Config::setPropelConfigDir('propel/config.php');
-        Config::load(); // for reset
+        PropelConfig::$CONFIG_FILE = 'propel/config.php';
     }
     public function setUp(): void {
         self::reset();
     }
     public function testRun() {
-        $config = $this->changeConfig([
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'USE_USERNAME'=>true
-        ]);
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        Config::$USE_USERNAME = true;
         $data = $this->getData();
         unset($data['username']);
         $username  = $this->getData()['username'];
-        $signUp = new SignUp($data, $config);
+        $signUp = new SignUp($data);
         new SetUsername([
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>$username
         ]);
-        $signIn = new SignIn($data, $config);
+        $signIn = new SignIn($data);
         $fetchInfo = new FetchInfo([
             'jwt'=>$signIn->jwt
-        ], $config);
+        ]);
         $user = User::getByUsername($username);
         $this->assertSame($user, $fetchInfo->user);
     }

@@ -1,11 +1,12 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Abdyek\Whoo\Tool\Config;
 use Abdyek\Whoo\Controller\ChangePassword;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SignIn;
 use Abdyek\Whoo\Exception\IncorrectPasswordException;
+use Abdyek\Whoo\Config\Whoo as Config;
+use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 /**
  * @covers ChangePassword::
@@ -14,40 +15,35 @@ use Abdyek\Whoo\Exception\IncorrectPasswordException;
 class ChangePasswordTest extends TestCase {
     const NEW_PASSWORD = 'nEw_pAsSwOrD';
     use Reset;
-    use ChangeConfig;
     public static function setUpBeforeClass(): void {
-        Config::setPropelConfigDir('propel/config.php');
-        Config::load(); // for reset
+        PropelConfig::$CONFIG_FILE = 'propel/config.php';
     }
     public function setUp(): void {
         self::reset();
     }
     public function testRun() {
         $data = $this->getData();
-        $config = $this->changeConfig([
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'USE_USERNAME'=>false
-        ]);
-        new SignUp($data, $config);
-        $signIn = new SignIn($data, $config);
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        Config::$USE_USERNAME = false;
+        Config::$DEFAULT_2FA = false;
+        new SignUp($data);
+        $signIn = new SignIn($data);
         new ChangePassword([
             'jwt'=>$signIn->jwt,
             'password'=>$data['password'],
             'newPassword'=>self::NEW_PASSWORD
         ]);
         $data['password'] = self::NEW_PASSWORD;
-        $signIn = new SignIn($data, $config);
+        $signIn = new SignIn($data);
         $this->assertNotNull($signIn);
     }
     public function testRunIncorrectPasswordException() {
         $this->expectException(IncorrectPasswordException::class);
         $data = $this->getData();
-        $config = $this->changeConfig([
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'USE_USERNAME'=>false
-        ]);
-        new SignUp($data, $config);
-        $signIn = new SignIn($data, $config);
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        Config::$USE_USERNAME = false;
+        new SignUp($data);
+        $signIn = new SignIn($data);
         new ChangePassword([
             'jwt'=>$signIn->jwt,
             'password'=>'wrongPassword :( ',

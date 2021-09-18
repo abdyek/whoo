@@ -10,6 +10,7 @@ use Abdyek\Whoo\Exception\InvalidCodeException;
 use Abdyek\Whoo\Exception\NotVerifiedEmailException;
 use Abdyek\Whoo\Exception\TrialCountOverException;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
+use Abdyek\Whoo\Config\Whoo as Config;
 
 class ResetPassword extends Controller {
     protected function run() {
@@ -17,7 +18,7 @@ class ResetPassword extends Controller {
         if(!$user) {
             throw new NotFoundException;
         }
-        if($this->config['DENY_IF_NOT_VERIFIED_TO_RESET_PW'] and !$user->getEmailVerified()) {
+        if(Config::$DENY_IF_NOT_VERIFIED_TO_RESET_PW and !$user->getEmailVerified()) {
             throw new NotVerifiedEmailException;
         }
         $auth = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_RESET_PW);

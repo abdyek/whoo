@@ -1,10 +1,10 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Abdyek\Whoo\Tool\Config;
 use Abdyek\Whoo\Controller\SetAuthCodeForEmailVerification;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
 use Abdyek\Whoo\Exception\NotFoundException;
+use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 /**
  * @covers SetAuthCodeForEmailVerification::
@@ -14,8 +14,7 @@ class SetAuthCodeForEmailVerificationTest extends TestCase {
     use Reset;
     use UserTool;
     public static function setUpBeforeClass(): void {
-        Config::setPropelConfigDir('propel/config.php');
-        Config::load(); // for reset
+        PropelConfig::$CONFIG_FILE = 'propel/config.php';
     }
     public function setUp(): void {
         self::reset();

@@ -3,8 +3,8 @@
 use PHPUnit\Framework\TestCase;
 use Abdyek\Whoo\Core\Controller;
 use Abdyek\Whoo\Config\Controller as ControllerConfig;
-use Abdyek\Whoo\Tool\Config;
 use Abdyek\Whoo\Exception\InvalidDataException;
+use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 class Example extends Controller {
     protected function run() {
@@ -17,7 +17,7 @@ class Example extends Controller {
 
 class ControllerTest extends TestCase {
     public static function setUpBeforeClass(): void {
-        Config::setPropelConfigDir('propel/config.php');
+        PropelConfig::$CONFIG_FILE = 'propel/config.php';
     }
     public function testConstructSuccess() {
         $data = [

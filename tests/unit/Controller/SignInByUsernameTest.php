@@ -1,7 +1,6 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Abdyek\Whoo\Tool\Config;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SignInByUsername;
 use Abdyek\Whoo\Controller\SetUsername;
@@ -13,6 +12,8 @@ use Abdyek\Whoo\Exception\NotVerifiedEmailException;
 use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
 use Abdyek\Whoo\Exception\UnmatchedPasswordsException;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
+use Abdyek\Whoo\Config\Whoo as Config;
+use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 /**
  * @covers SignInByUsername::
@@ -21,15 +22,14 @@ use Abdyek\Whoo\Config\Authentication as AuthConfig;
 class SignInByUsernameTest extends TestCase {
     const USERNAME = 'uS3rN@mE';
     use Reset;
-    use ChangeConfig;
     public static function setUpBeforeClass(): void {
-        Config::setPropelConfigDir('propel/config.php');
-        Config::load(); // for reset
+        PropelConfig::$CONFIG_FILE = 'propel/config.php';
     }
     public function setUp(): void {
         self::reset();
     }
     public function testRun() {
+        Config::$DEFAULT_2FA = false;
         $data = $this->getData();
         $signUp = new SignUp($data);
         $user= UserModel::getByEmail($data['email']);
@@ -64,9 +64,7 @@ class SignInByUsernameTest extends TestCase {
     }
     public function testRunNotVerifiedEmailException() {
         $this->expectException(NotVerifiedEmailException::class);
-        $config = $this->changeConfig([
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>true
-        ]);
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = true;
         $data = $this->getData();
         $signUp = new SignUp($data);
         $user = UserModel::getByEmail($data['email']);
@@ -74,25 +72,23 @@ class SignInByUsernameTest extends TestCase {
         $signIn = new SignInByUsername([
             'username'=>self::USERNAME,
             'password'=>$data['password']
-        ], $config);
+        ]);
     }
     public function testRun2FA() {
-        $config = $this->changeConfig([
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'USE_USERNAME'=>true,
-            'DEFAULT_2FA'=>true
-        ]);
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        Config::$USE_USERNAME = true;
+        Config::$DEFAULT_2FA = true;
         $data = $this->getData();
-        $signUp = new SignUp($data, $config);
+        $signUp = new SignUp($data);
         new SetUsername([
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>self::USERNAME
-        ], $config);
+        ]);
         try {
             $signIn = new SignInByUsername([
                 'username'=>self::USERNAME,
                 'password'=>$data['password']
-            ], $config);
+            ]);
         } catch(TwoFactorAuthEnabledException $e) {
             $user = UserModel::getByUsername(self::USERNAME);
             $code = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_2FA);
@@ -101,54 +97,48 @@ class SignInByUsernameTest extends TestCase {
     }
     public function testRun2FAWithException() {
         $this->expectException(TwoFactorAuthEnabledException::class);
-        $config = $this->changeConfig([
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN'=>false,
-            'USE_USERNAME'=>true,
-            'DEFAULT_2FA'=>true
-        ]);
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        Config::$USE_USERNAME = true;
+        Config::$DEFAULT_2FA = true;
         $data = $this->getData();
-        $signUp = new SignUp($data, $config);
+        $signUp = new SignUp($data);
         new SetUsername([
             'temporaryToken'=>$signUp->temporaryToken,
             'username'=>self::USERNAME
-        ], $config);
+        ]);
         $signIn = new SignInByUsername([
             'username'=>self::USERNAME,
             'password'=>$data['password']
-        ], $config);
+        ]);
     }
     public function testRunOptionalPasswordAgain() {
-        $config = $this->changeConfig([
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN' => false,
-            'USE_USERNAME'=>true,
-            'DEFAULT_2FA'=>false
-        ]);
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        Config::$USE_USERNAME = true;
+        Config::$DEFAULT_2FA = false;
         $data = $this->getData();
         $data['username'] = self::USERNAME;
-        new Signup($data, $config);
+        new Signup($data);
         $signIn = new SignInByUsername([
             'username'=>self::USERNAME,
             'password'=>$data['password'],
             'passwordAgain'=>$data['password']
-        ], $config);
+        ]);
         $this->assertNotNull($signIn->jwt);
         $this->assertEquals(self::USERNAME, $signIn->user->getUsername());
     }
     public function testRunUnmatchedPasswordsException() {
         $this->expectException(UnmatchedPasswordsException::class);
-        $config = $this->changeConfig([
-            'DENY_IF_NOT_VERIFIED_TO_SIGN_IN' => false,
-            'USE_USERNAME'=>true,
-            'DEFAULT_2FA'=>false
-        ]);
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN   > false;
+        Config::$USE_USERNAME = true;
+        Config::$DEFAULT_2FA = false;
         $data = $this->getData();
         $data['username'] = self::USERNAME;
-        new SignUp($data, $config);
+        new SignUp($data);
         $signIn = new SignInByUsername([
             'username'=>self::USERNAME,
             'password'=>$data['password'],
             'passwordAgain' => 'wrong-password'
-        ], $config);
+        ]);
     }
     private function getData() {
         return [
