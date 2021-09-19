@@ -14,8 +14,7 @@
     ],
     "require": {
         "firebase/php-jwt": "^5.4",
-        "propel/propel": "~2.0@dev",
-        "nategood/commando": "*"
+        "propel/propel": "~2.0@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"

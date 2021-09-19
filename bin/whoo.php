@@ -3,9 +3,6 @@
 require 'vendor/autoload.php';
 use Abdyek\Whoo\Tool\CLI;
 
-$cli = new \Commando\Command();
-$cli->option('i')->aka('init')->boolean();
-
-if($cli['init']) {
+if(in_array('init', $_SERVER['argv'])) {
     CLI::init();
 }
