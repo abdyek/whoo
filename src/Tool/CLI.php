@@ -19,7 +19,7 @@ class CLI {
         if(!file_exists(self::$outputDir . '/propel')) {
             mkdir(self::$outputDir. '/propel');
         }
-        copy('vendor/abdyek/whoo/propel/schema.xml', self::$outputDir . '/propel/schema.xml');
+        copy('vendor/abdyek/whoo/schema.xml', self::$outputDir . '/propel/schema.xml');
         
         self::setPropelConfigFromCustomConfig();
         self::generatePropelConfig();
