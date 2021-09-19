@@ -34,7 +34,7 @@ class CLI {
     }
     private static function setPropelConfigFromCustomConfig() {
         if(file_exists(self::$config)) {
-            $config = json_decode(file_get_contents($self::$config),TRUE);
+            $config = json_decode(file_get_contents(self::$config),TRUE);
             PropelTool::setConfig($config);
         }
     }
