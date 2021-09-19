@@ -25,6 +25,9 @@ class Propel {
             if(isset($database['password'])) {
                 PropelConfig::$PASSWORD = $database['password'];
             }
+            if(isset($database['utf-8'])) {
+                PropelConfig::$UTF8 = $database['utf-8'];
+            }
         }
     }
 }

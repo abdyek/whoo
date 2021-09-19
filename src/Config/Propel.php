@@ -10,4 +10,5 @@ class Propel {
     public static $DBNAME = '127.0.0.1';
     public static $USER = 'root';
     public static $PASSWORD = '';
+    public static $UTF8 = true;
 }

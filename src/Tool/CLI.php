@@ -43,7 +43,7 @@ class CLI {
             'propel' => [
                 'database' => [
                     'connections' => [
-                        'bookstore' => [
+                        PropelConfig::$DBNAME => [
                             'adapter'    => PropelConfig::$ADAPTER,
                             'classname'  => 'Propel\Runtime\Connection\ConnectionWrapper',
                             'dsn'        => PropelConfig::$DSN,
@@ -54,15 +54,46 @@ class CLI {
                     ]
                 ],
                 'runtime' => [
-                    'defaultConnection' => 'bookstore',
-                    'connections' => ['bookstore']
+                    'defaultConnection' => PropelConfig::$DBNAME,
+                    'connections' => [PropelConfig::$DBNAME]
                 ],
                 'generator' => [
-                    'defaultConnection' => 'bookstore',
-                    'connections' => ['bookstore']
+                    'defaultConnection' => PropelConfig::$DBNAME,
+                    'connections' => [PropelConfig::$DBNAME]
                 ]
             ]
         ];
+        $ADAPTER = PropelConfig::$ADAPTER;
+        if(PropelConfig::$UTF8===true) {
+            if($ADAPTER==='mysql') {
+                $settins = [
+                    'charset'=> 'utf8mb4',
+                    'queries'=> [
+                        'utf8' => 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci, COLLATION_CONNECTION = utf8mb4_unicode_ci, COLLATION_DATABASE = utf8mb4_unicode_ci, COLLATION_SERVER = utf8mb4_unicode_ci'
+                    ]
+                ];
+            } elseif($ADAPTER==='pgsql') {
+                $settings = [
+                    'charset'=>'utf8',
+                    'queries'=> [
+                        'utf8'=> "SET NAMES 'UTF8'"
+                    ]
+                ];
+            } elseif($ADAPTER==='sqlite') {
+                $settings = [
+                    'charset'=>'utf8'
+                ];
+            } elseif($ADAPTER==='mssql') {
+                $settings = [
+                    'charset'=>'UTF-8'
+                ];
+            } elseif($ADAPTER==='oracle') {
+                $settings = [
+                    'charset'=>'UTF8'
+                ];
+            };
+            $content['propel']['database'][PropelConfig::$DBNAME]['settings'] = $settings;
+        }
         file_put_contents(self::$outputDir.'/propel.json', json_encode($content));
     }
 }
