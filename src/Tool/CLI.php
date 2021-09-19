@@ -1,7 +1,8 @@
 <?php
 
 namespace Abdyek\Whoo\Tool;
-use Abdyek\Whoo\Tool\Config;
+use Abdyek\Whoo\Tool\Propel as PropelTool;
+use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 class CLI {
     private static $config;
@@ -20,12 +21,48 @@ class CLI {
         }
         copy('vendor/abdyek/whoo/propel/schema.xml', self::$outputDir . '/propel/schema.xml');
         
+        self::setPropelConfigFromCustomConfig();
+        self::generatePropelConfig();
+        
         // sql build
-        shell_exec('vendor/bin/propel sql:build --config-dir="vendor/abdyek/whoo/propel.php" --schema-dir="'.self::$outputDir.'/propel'.'" --output-dir="'.self::$outputDir.'/propel"');
+        shell_exec('vendor/bin/propel sql:build --config-dir="'.self::$outputDir.'/propel.json" --schema-dir="'.self::$outputDir.'/propel'.'" --output-dir="'.self::$outputDir.'/propel"');
         // model build
-        shell_exec('vendor/bin/propel model:build --config-dir="vendor/abdyek/whoo/propel.php" --schema-dir="'.self::$outputDir.'/propel'. '" --output-dir="'.self::$outputDir.'/propel/model"');
+        shell_exec('vendor/bin/propel model:build --config-dir="'.self::$outputDir.'/propel.json" --schema-dir="'.self::$outputDir.'/propel'. '" --output-dir="'.self::$outputDir.'/propel/model"');
         // config convert
-        shell_exec('vendor/bin/propel config:convert --config-dir="vendor/abdyek/whoo/propel.php" --output-dir="'.self::$outputDir.'/propel"');
+        shell_exec('vendor/bin/propel config:convert --config-dir="'.self::$outputDir.'/propel.json" --output-dir="'.self::$outputDir.'/propel"');
 
+    }
+    private static function setPropelConfigFromCustomConfig() {
+        if(file_exists(self::$config)) {
+            $config = json_decode(file_get_contents($self::$config),TRUE);
+            PropelTool::setConfig($config);
+        }
+    }
+    private static function generatePropelConfig() {
+        $content = [
+            'propel' => [
+                'database' => [
+                    'connections' => [
+                        'bookstore' => [
+                            'adapter'    => PropelConfig::$ADAPTER,
+                            'classname'  => 'Propel\Runtime\Connection\ConnectionWrapper',
+                            'dsn'        => PropelConfig::$DSN,
+                            'user'       => PropelConfig::$USER,
+                            'password'   => PropelConfig::$PASSWORD,
+                            'attributes' => []
+                        ]
+                    ]
+                ],
+                'runtime' => [
+                    'defaultConnection' => 'bookstore',
+                    'connections' => ['bookstore']
+                ],
+                'generator' => [
+                    'defaultConnection' => 'bookstore',
+                    'connections' => ['bookstore']
+                ]
+            ]
+        ];
+        file_put_contents(self::$outputDir.'/propel.json', json_encode($content));
     }
 }

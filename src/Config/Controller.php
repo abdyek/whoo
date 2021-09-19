@@ -133,7 +133,7 @@ class Controller {
                 'type'=>'str',
                 'limits'=>[
                     'min'=>1,
-                    'max'=>1000
+                    'max'=>5000
                 ]
             ]
         ],
@@ -229,7 +229,7 @@ class Controller {
                 'type'=>'str',
                 'limits'=>[
                     'min'=>1,
-                    'max'=>1000
+                    'max'=>5000
                 ]
             ],
             'newEmail'=>[
@@ -252,7 +252,7 @@ class Controller {
                 'type'=>'str',
                 'limits'=>[
                     'min'=>1,
-                    'max'=>1000
+                    'max'=>5000
                 ]
             ],
             'newUsername'=>[
@@ -268,7 +268,7 @@ class Controller {
                 'type'=>'str',
                 'limits'=>[
                     'min'=>1,
-                    'max'=>1000
+                    'max'=>5000
                 ]
             ],
             'password'=>[
@@ -291,7 +291,7 @@ class Controller {
                 'type'=>'str',
                 'limits'=>[
                     'min'=>1,
-                    'max'=>1000
+                    'max'=>5000
                 ]
             ],
             'password'=>[
@@ -307,7 +307,7 @@ class Controller {
                 'type'=>'str',
                 'limits'=>[
                     'min'=>1,
-                    'max'=>1000
+                    'max'=5000
                 ]
             ],
             'code'=>[
@@ -326,7 +326,7 @@ class Controller {
                 'type'=>'str',
                 'limits'=>[
                     'min'=>1,
-                    'max'=>1000
+                    'max'=>5000
                 ]
             ],
             'password'=>[
@@ -342,7 +342,7 @@ class Controller {
                 'type'=>'str',
                 'limits'=>[
                     'min'=>1,
-                    'max'=>1000
+                    'max'=>5000
                 ]
             ]
         ]
