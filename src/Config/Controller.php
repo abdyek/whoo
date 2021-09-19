@@ -307,7 +307,7 @@ class Controller {
                 'type'=>'str',
                 'limits'=>[
                     'min'=>1,
-                    'max'=5000
+                    'max'=>5000
                 ]
             ],
             'code'=>[

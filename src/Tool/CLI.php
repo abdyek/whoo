@@ -65,8 +65,9 @@ class CLI {
         ];
         $ADAPTER = PropelConfig::$ADAPTER;
         if(PropelConfig::$UTF8===true) {
+            $settings = [];
             if($ADAPTER==='mysql') {
-                $settins = [
+                $settings = [
                     'charset'=> 'utf8mb4',
                     'queries'=> [
                         'utf8' => 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci, COLLATION_CONNECTION = utf8mb4_unicode_ci, COLLATION_DATABASE = utf8mb4_unicode_ci, COLLATION_SERVER = utf8mb4_unicode_ci'
@@ -92,7 +93,7 @@ class CLI {
                     'charset'=>'UTF8'
                 ];
             };
-            $content['propel']['database'][PropelConfig::$DBNAME]['settings'] = $settings;
+            $content['propel']['database']['connections'][PropelConfig::$DBNAME]['settings'] = $settings;
         }
         file_put_contents(self::$outputDir.'/propel.json', json_encode($content));
     }
