@@ -17,16 +17,16 @@ class VerifyEmail extends Controller {
         if($user === null) {
             throw new NotFoundException;
         }
-        $auth = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_EMAIL_VERIFICATION);
+        $auth = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::$TYPE_EMAIL_VERIFICATION);
         if($auth === null) {
             throw new NotFoundAuthCodeException;
         }
-        if($auth->getTrialCount()+1>=AuthConfig::TRIAL_MAX_COUNT) {
+        if($auth->getTrialCount()+1>=AuthConfig::$TRIAL_MAX_COUNT) {
             throw new TrialCountOverException;
         }
         $dateTime = $auth->getDateTime();
         $timestamp = $dateTime->getTimestamp();
-        if((time()-$timestamp)>AuthConfig::VALIDITY_TIME) {
+        if((time()-$timestamp)>AuthConfig::$VALIDITY_TIME) {
             throw new TimeOutCodeException;
         }
         if($auth->getCode()!==$this->data['code']) {

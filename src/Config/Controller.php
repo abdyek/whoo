@@ -3,7 +3,7 @@
 namespace Abdyek\Whoo\Config;
 
 class Controller {
-    const REQUIRED = [
+    static $REQUIRED = [
         // this is example to test
         'Example'=>[
             'strValue'=>[
@@ -347,7 +347,7 @@ class Controller {
             ]
         ]
     ];
-    const OPTIONAL = [
+    static $OPTIONAL = [
         'SignUp'=>[
             'passwordAgain'=>[
                 'type'=>'str',

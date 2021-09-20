@@ -86,7 +86,7 @@ class Manage2FATest extends TestCase {
             'jwt'=>$signIn->jwt,
             'password'=>$data['password']
         ]);
-        for($i=0;$i<AuthConfig::TRIAL_MAX_COUNT_TO_MANAGE_2FA;$i++) {
+        for($i=0;$i<AuthConfig::$TRIAL_MAX_COUNT_TO_MANAGE_2FA;$i++) {
             try {
                 new Manage2FA([
                     'jwt'=>$signIn->jwt,

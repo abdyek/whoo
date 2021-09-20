@@ -113,7 +113,7 @@ class SignInByUsername2FATest extends TestCase {
                 'password'=>$data['password']
             ]);
         } catch(TwoFactorAuthEnabledException $e) {}
-        for($i=0;$i<AuthConfig::TRIAL_MAX_COUNT_TO_SIGN_IN_2FA;$i++) {
+        for($i=0;$i<AuthConfig::$TRIAL_MAX_COUNT_TO_SIGN_IN_2FA;$i++) {
             try {
                 new SignInByUsername2FA([
                     'username'=>self::USERNAME,

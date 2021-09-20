@@ -21,16 +21,16 @@ class ResetPassword extends Controller {
         if(Config::$DENY_IF_NOT_VERIFIED_TO_RESET_PW and !$user->getEmailVerified()) {
             throw new NotVerifiedEmailException;
         }
-        $auth = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_RESET_PW);
+        $auth = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::$TYPE_RESET_PW);
         if(!$auth) {
             throw new NotFoundAuthCodeException;
         }
-        if($auth->getTrialCount()+1>=AuthConfig::TRIAL_MAX_COUNT_TO_RESET_PW) {
+        if($auth->getTrialCount()+1>=AuthConfig::$TRIAL_MAX_COUNT_TO_RESET_PW) {
             throw new TrialCountOverException;
         }
         $dateTime = $auth->getDateTime();
         $timestamp = $dateTime->getTimestamp();
-        if((time()-$timestamp)>AuthConfig::VALIDITY_TIME_TO_RESET_PW) {
+        if((time()-$timestamp)>AuthConfig::$VALIDITY_TIME_TO_RESET_PW) {
             throw new TimeOutCodeException;
         }
         $code = $auth->getCode();

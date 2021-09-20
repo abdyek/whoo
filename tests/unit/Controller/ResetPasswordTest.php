@@ -109,7 +109,7 @@ class ResetPasswordTest extends TestCase {
         $setAuth = new SetAuthCodeToResetPassword([
             'email'=>$data['email']
         ]);
-        for($i=0;$i<AuthConfig::TRIAL_MAX_COUNT_TO_RESET_PW;$i++) {
+        for($i=0;$i<AuthConfig::$TRIAL_MAX_COUNT_TO_RESET_PW;$i++) {
             try {
                 new ResetPassword([
                     'email'=>$data['email'],

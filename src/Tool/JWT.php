@@ -9,10 +9,10 @@ class JWT {
     private static $secretKey = 's3cr3t';
     public static function generateToken($userId, $signOutCount) {
         return FirebaseJWT::encode([
-            'iss' => JWTConfig::ISS,
-            'aud' => JWTConfig::AUD,
-            'iat' => JWTConfig::IAT,
-            'nbf' => JWTConfig::NBF,
+            'iss' => JWTConfig::$ISS,
+            'aud' => JWTConfig::$AUD,
+            'iat' => JWTConfig::$IAT,
+            'nbf' => JWTConfig::$NBF,
             'userId' => $userId,
             'signOutCount'=> $signOutCount
         ], self::$secretKey);

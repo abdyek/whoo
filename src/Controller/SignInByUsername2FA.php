@@ -19,16 +19,16 @@ class SignInByUsername2FA extends Controller {
         if(!$this->user) {
             throw new NotFoundException;
         }
-        $auth = AuthenticationCode::getByUserIdType($this->user->getId(), AuthConfig::TYPE_2FA);
+        $auth = AuthenticationCode::getByUserIdType($this->user->getId(), AuthConfig::$TYPE_2FA);
         if(!$auth) {
             throw new NotFoundAuthCodeException;
         }
-        if($auth->getTrialCount()+1>=AuthConfig::TRIAL_MAX_COUNT_TO_SIGN_IN_2FA) {
+        if($auth->getTrialCount()+1>=AuthConfig::$TRIAL_MAX_COUNT_TO_SIGN_IN_2FA) {
             throw new TrialCountOverException;
         }
         $dateTime = $auth->getDateTime();
         $timestamp = $dateTime->getTimestamp();
-        if((time()-$timestamp)>AuthConfig::VALIDITY_TIME_TO_SIGN_IN_2FA) {
+        if((time()-$timestamp)>AuthConfig::$VALIDITY_TIME_TO_SIGN_IN_2FA) {
             throw new TimeOutCodeException;
         }
         if($auth->getCode()!==$this->data['authenticationCode']) {

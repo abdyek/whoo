@@ -119,7 +119,7 @@ class SignInTest extends TestCase {
             new SignIn($data);
         } catch(TwoFactorAuthEnabledException $e) {
             $user = User::getByEmail($data['email']);
-            $code = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_2FA);
+            $code = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::$TYPE_2FA);
             $this->assertSame($code->getCode(), $e->authenticationCode);
         }
     }

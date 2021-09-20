@@ -27,12 +27,12 @@ class Controller {
         $this->className = end($parts);
     }
     private function setRequired() {
-        if(!isset(ControllerConfig::REQUIRED[$this->className])) {
+        if(!isset(ControllerConfig::$REQUIRED[$this->className])) {
             $this->requiredFree = true;
             $this->required = null;
         } else {
             $this->requiredFree = false;
-            $this->required = ControllerConfig::REQUIRED[$this->className];
+            $this->required = ControllerConfig::$REQUIRED[$this->className];
         }
     }
     private function detectUser() {
@@ -87,10 +87,10 @@ class Controller {
         return true;
     }
     protected function checkOptional($name) {
-        if(!isset(ControllerConfig::OPTIONAL[$this->className][$name])) {
+        if(!isset(ControllerConfig::$OPTIONAL[$this->className][$name])) {
             throw new InvalidDataException;
         }
-        $optional = ControllerConfig::OPTIONAL[$this->className][$name];
+        $optional = ControllerConfig::$OPTIONAL[$this->className][$name];
         $type = $optional['type'];
         $limits = $optional['limits'];
         $data = $this->data[$name];

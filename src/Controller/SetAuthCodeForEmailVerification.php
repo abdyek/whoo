@@ -15,8 +15,8 @@ class SetAuthCodeForEmailVerification extends Controller {
         if($user===null) {
             throw new NotFoundException;
         }
-        AuthenticationCode::deleteByUserIdType($user->getId(), AuthConfig::TYPE_EMAIL_VERIFICATION);
-        $this->code = Random::chars(AuthConfig::SIZE_OF_CODE_FOR_EMAIL_VER);
-        AuthenticationCode::create($user->getId(), AuthConfig::TYPE_EMAIL_VERIFICATION, $this->code);
+        AuthenticationCode::deleteByUserIdType($user->getId(), AuthConfig::$TYPE_EMAIL_VERIFICATION);
+        $this->code = Random::chars(AuthConfig::$SIZE_OF_CODE_FOR_EMAIL_VER);
+        AuthenticationCode::create($user->getId(), AuthConfig::$TYPE_EMAIL_VERIFICATION, $this->code);
     }
 }

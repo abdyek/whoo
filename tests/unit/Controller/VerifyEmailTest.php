@@ -56,7 +56,7 @@ class VerifyEmailTest extends TestCase {
         new SetAuthCodeForEmailVerification([
             'email'=>self::$traitEmail
         ]);
-        for($i=0;$i<AuthConfig::TRIAL_MAX_COUNT;$i++) {
+        for($i=0;$i<AuthConfig::$TRIAL_MAX_COUNT;$i++) {
             try {
                 new VerifyEmail([
                     'email'=>self::$traitEmail,
