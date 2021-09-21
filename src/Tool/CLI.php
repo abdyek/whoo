@@ -4,7 +4,6 @@ namespace Abdyek\Whoo\Tool;
 use Abdyek\Whoo\Tool\Propel as PropelTool;
 use Abdyek\Whoo\Tool\Config as ConfigTool;
 use Abdyek\Whoo\Config\Propel as PropelConfig;
-use Abdyek\Whoo\Config\Whooa as WhooConfig;
 
 class CLI {
     private static $config;
@@ -13,6 +12,7 @@ class CLI {
         self::$config = ($config!==null?$config:'whoo.json');
         self::$outputDir = ($outputDir!==null?$outputDir:'whoo');
         self::generateConfig();
+        self::generateWhooConfig();
     }
     private static function generateConfig() {
         if(!file_exists(self::$outputDir)) {
@@ -103,7 +103,7 @@ class CLI {
     private static function generateWhooConfig() {
         $config = json_decode(file_get_contents(self::$config),TRUE);
         $string = ConfigTool::generateWhooConfigString($config);
-        $configFile = fopen(WhooConfig::$CONFIG_FILE, "w");
+        $configFile = fopen(self::$outputDir . '/config.php', "w");
         fwrite($configFile, $string);
         fclose($configFile);
     }
