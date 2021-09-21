@@ -4,7 +4,6 @@ use Abdyek\Whoo\Core\Response;
 use Abdyek\Whoo\Config\Whoo;
 use Abdyek\Whoo\Config\JWT as JWTConfig;
 use Abdyek\Whoo\Config\Controller as ControllerConfig;
-use Abdyek\Whoo\Config\Propel as PropelConfig;
 use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Exception\InvalidDataException;
 use Abdyek\Whoo\Exception\InvalidTokenException;
@@ -13,7 +12,6 @@ use Abdyek\Whoo\Tool\JWT;
 class Controller {
     public $user = null;
     public function __construct($data) {
-        require PropelConfig::$CONFIG_FILE;
         $this->data = $data;
         $this->setClassName();
         $this->setRequired();

@@ -3,6 +3,7 @@
 namespace Abdyek\Whoo\Config;
 
 class Whoo {
+    static $CONFIG_FILE = 'whoo/config.php';
     static $DENY_IF_NOT_VERIFIED_TO_SIGN_IN = true;
     static $DENY_IF_NOT_VERIFIED_TO_RESET_PW = true;
     static $USE_USERNAME = true;

@@ -2,7 +2,9 @@
 
 namespace Abdyek\Whoo\Tool;
 use Abdyek\Whoo\Tool\Propel as PropelTool;
+use Abdyek\Whoo\Tool\Config as ConfigTool;
 use Abdyek\Whoo\Config\Propel as PropelConfig;
+use Abdyek\Whoo\Config\Whooa as WhooConfig;
 
 class CLI {
     private static $config;
@@ -23,6 +25,7 @@ class CLI {
         
         self::setPropelConfigFromCustomConfig();
         self::generatePropelConfig();
+        self::generateWhooConfig();
         
         // sql build
         shell_exec('vendor/bin/propel sql:build --config-dir="'.self::$outputDir.'/propel.json" --schema-dir="'.self::$outputDir.'/propel'.'" --output-dir="'.self::$outputDir.'/propel"');
@@ -96,5 +99,12 @@ class CLI {
             $content['propel']['database']['connections'][PropelConfig::$DBNAME]['settings'] = $settings;
         }
         file_put_contents(self::$outputDir.'/propel.json', json_encode($content));
+    }
+    private static function generateWhooConfig() {
+        $config = json_decode(file_get_contents(self::$config),TRUE);
+        $string = ConfigTool::generateWhooConfigString($config);
+        $configFile = fopen(WhooConfig::$CONFIG_FILE, "w");
+        fwrite($configFile, $string);
+        fclose($configFile);
     }
 }
