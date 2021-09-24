@@ -4,6 +4,7 @@ namespace Abdyek\Whoo\Tool;
 use Firebase\JWT\JWT as FirebaseJWT;
 use Abdyek\Whoo\Config\JWT as JWTConfig;
 use Abdyek\Whoo\Exception\InvalidTokenException;
+use Abdyek\Whoo\Model\User;
 
 class JWT {
     private static $secretKey = 's3cr3t';
@@ -19,7 +20,12 @@ class JWT {
     }
     public static function getPayload($jwt) {
         try {
-            return (array) FirebaseJWT::decode($jwt, JWT::getSecretKey(), array('HS256'));
+            $payload = (array) FirebaseJWT::decode($jwt, JWT::getSecretKey(), array('HS256'));
+            $user = User::getById($payload['userId']);
+            if($payload['signOutCount']!=$user->getSignOutCount()) {
+                throw new InvalidTokenException;
+            }
+            return $payload;
         } catch (\UnexpectedValueException $e) {
             throw new InvalidTokenException;
         }

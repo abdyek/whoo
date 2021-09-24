@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 use Abdyek\Whoo\Controller\SignOut;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SignIn;
-use Abdyek\Whoo\Controller\FetchInfo;
+use Abdyek\Whoo\Tool\JWT;
 use Abdyek\Whoo\Exception\InvalidTokenException;
 use Abdyek\Whoo\Config\Whoo as Config;
 use Abdyek\Whoo\Config\Propel as PropelConfig;
@@ -32,10 +32,7 @@ class SignOutTest extends TestCase {
         new SignOut([
             'jwt'=>$jwt
         ]);
-        // Signed out. So FetchInfo throws exception
-        new FetchInfo([
-            'jwt'=>$jwt
-        ]);
+        print_r(JWT::getPayload($signIn->jwt));
     }
     public function testTest() {
         $this->assertTrue(True);

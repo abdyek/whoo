@@ -37,9 +37,6 @@ class Controller {
         if(isset($this->data['jwt'])) {
             $userInfo = JWT::getPayload($this->data['jwt']);
             $this->user = User::getById($userInfo['userId']);
-            if($this->user->getSignOutCount()!==$userInfo['signOutCount']) {
-                throw new InvalidTokenException;
-            }
         }
     }
     private function checkRequiredWrapper() {

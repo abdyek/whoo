@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SignIn;
 use Abdyek\Whoo\Controller\ChangeEmail;
-use Abdyek\Whoo\Controller\FetchInfo;
+use Abdyek\Whoo\Tool\JWT;
 use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Exception\IncorrectPasswordException;
 use Abdyek\Whoo\Exception\NotUniqueEmailException;
@@ -45,6 +45,7 @@ class ChangeEmailTest extends TestCase {
         $data = $this->getData();
         Config::$USE_USERNAME = false;
         Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        Config::$DEFAULT_2FA = false;
         new SignUp($data);
         $signIn = new SignIn($data);
         new ChangeEmail([
@@ -83,9 +84,7 @@ class ChangeEmailTest extends TestCase {
             'newEmail'=>'newEmail@newEmail.com',
             'password'=>$data['password']
         ]);
-        new FetchInfo([
-            'jwt'=>$signIn->jwt
-        ]);
+        JWT::getPayload($signIn->jwt);
     }
     private function getData() {
         return [
