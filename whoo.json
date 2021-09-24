@@ -8,7 +8,36 @@
         "password": "",
         "utf-8": true
     },
+    "jwt": {
+        "iss" : "http://example.org",
+        "aud" : "http://example.com",
+        "iat" : 1356999524,
+        "nbf" : 1357000000
+    },
     "authentication": {
-        ":wq"
+        "size_of_code_for_email_ver": 10,
+        "size_of_code_to_reset_pw": 10,
+        "size_of_code_to_manage_2fa": 6,
+        "size_of_code_for_2fa": 5,
+        "trial_max_count": 3,
+        "validity_time": 180,
+        "trial_max_count_to_reset_pw": 3,
+        "validity_time_to_reset_pw": 180,
+        "trial_max_count_to_manage_2fa": 3,
+        "validity_time_to_manage_2fa": 180,
+        "trial_max_count_to_sign_in_2fa": 3,
+        "validity_time_to_sign_in_2fa": 180,
+        "type_email_verification": 0,
+        "type_manage_2fa": 1,
+        "type_reset_pw": 2,
+        "type_2fa": 3
+    },
+    "whoo": {
+        "deny_if_not_verified_to_sign_in" : true,
+        "deny_if_not_verified_to_reset_pw" : true,
+        "use_username" : true,
+        "deny_if_not_set_username" : true,
+        "deny_if_sign_up_before_by_email" : false,
+        "default_2fa" : false
     }
 }
