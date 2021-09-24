@@ -20,6 +20,8 @@ class Config {
                 $type = strtoupper($key);
             } elseif(in_array($key, $types)) {
                 $type = ucfirst($key);
+            } else {
+                continue;
             }
             $name = 'Abdyek\\Whoo\\Config\\' . $type;
             foreach($attributes as $con=>$val) {
