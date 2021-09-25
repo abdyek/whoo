@@ -12,7 +12,6 @@ class CLI {
         self::$config = ($config!==null?$config:'whoo.json');
         self::$outputDir = ($outputDir!==null?$outputDir:'whoo');
         self::generateConfig();
-        self::generateWhooConfig();
     }
     private static function generateConfig() {
         if(!file_exists(self::$outputDir)) {
@@ -101,6 +100,9 @@ class CLI {
         file_put_contents(self::$outputDir.'/propel.json', json_encode($content));
     }
     private static function generateWhooConfig() {
+        if(!file_exists(self::$config)) {
+            return;
+        }
         $config = json_decode(file_get_contents(self::$config),TRUE);
         $string = ConfigTool::generateWhooConfigString($config);
         $configFile = fopen(self::$outputDir . '/config.php', "w");

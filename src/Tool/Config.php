@@ -10,7 +10,9 @@ class Config {
             WhooConfig::$CONFIG_FILE = $configFile;
         }
         require PropelConfig::$CONFIG_FILE;
-        require WhooConfig::$CONFIG_FILE;
+        if(file_exists(WhooConfig::$CONFIG_FILE)) {
+            require WhooConfig::$CONFIG_FILE;
+        }
     }
     public static function generateWhooConfigString($config) {
         $content = '<?php' . PHP_EOL . PHP_EOL;
