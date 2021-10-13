@@ -19,12 +19,14 @@ use Abdyek\Whoo\Config\Propel as PropelConfig;
  */
 
 class ResetPasswordTest extends TestCase {
+    use DefaultConfig;
     use Reset;
     const NEW_PASSWORD = 'n e w PW';
     public static function setUpBeforeClass(): void {
         PropelConfig::$CONFIG_FILE = 'propel/config.php';
     }
     public function setUp(): void {
+        self::setDefaultConfig();
         self::reset();
     }
     public function testRun() {

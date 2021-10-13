@@ -8,10 +8,12 @@ use Abdyek\Whoo\Tool\Config;
  */
 
 class ConfigTest extends TestCase {
+    use DefaultConfig;
     /**
      * @dataProvider configProvider
      */
     public function testGenerateWhooConfigString($config, $val) {
+        $this->setDefaultConfig();
         $configString = Config::generateWhooConfigString($config);
         $this->assertSame($val, $configString);
     }

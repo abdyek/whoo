@@ -13,11 +13,13 @@ use Abdyek\Whoo\Config\Propel as PropelConfig;
  */
 
 class DeleteTest extends TestCase {
+    use DefaultConfig;
     use Reset;
     public static function setUpBeforeClass(): void {
         PropelConfig::$CONFIG_FILE = 'propel/config.php';
     }
     public function setUp(): void {
+        self::setDefaultConfig();
         self::reset();
     }
     public function testRun() {

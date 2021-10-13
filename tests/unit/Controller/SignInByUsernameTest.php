@@ -21,11 +21,13 @@ use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 class SignInByUsernameTest extends TestCase {
     const USERNAME = 'uS3rN@mE';
+    use DefaultConfig;
     use Reset;
     public static function setUpBeforeClass(): void {
         PropelConfig::$CONFIG_FILE = 'propel/config.php';
     }
     public function setUp(): void {
+        self::setDefaultConfig();
         self::reset();
     }
     public function testRun() {
