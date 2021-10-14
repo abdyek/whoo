@@ -27,4 +27,13 @@ class JWTTest extends TestCase {
         JWT::setSecretKey($newSecret);
         $this->assertEquals($newSecret, JWT::getSecretKey());
     }
+    public function testSetAdditionalClaims() {
+        JWT::setAdditionalClaims([
+            'role'=>'admin'
+        ]);
+        $user = $this->createExample();
+        $jwt = JWT::generateToken($user->getId(), $user->getSignOutCount());
+        $payload = JWT::getPayloadWithUser($jwt)['payload'];
+        $this->assertEquals('admin', $payload['role']);
+    }
 }

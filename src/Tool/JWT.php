@@ -7,33 +7,29 @@ use Abdyek\Whoo\Exception\InvalidTokenException;
 use Abdyek\Whoo\Model\User;
 
 class JWT {
-    //const REGISTERED_CLAIM = ['iss', 'sub', 'aud', 'exp', 'nbf', 'iat', 'jti'];
+    const REGISTERED_CLAIM = ['iss', 'sub', 'aud', 'exp', 'nbf', 'iat', 'jti'];
+    private static $additionalClaims = [];
     private static $secretKey = 's3cr3t';
     public static function generateToken($userId, $signOutCount) {
-        /*
+        $data = [];
         foreach(self::REGISTERED_CLAIM as $claim) {
-
+            $val = JWTConfig::$$claim;
+            if($val !== null) {
+                $data[$claim] = $val;
+            }
         }
-         */
-        return FirebaseJWT::encode([
-            'iss' => JWTConfig::$iss,
-            'sub' => JWTConfig::$sub,
-            'aud' => JWTConfig::$aud,
-            'exp' => JWTConfig::$exp,
-            'nbf' => JWTConfig::$nbf,
-            'iat' => JWTConfig::$iat,
-            'jti' => JWTConfig::$jti,
-            'whoo' => [
-                'userId' => $userId,
-            ],
+        $data['whoo'] = [
+            'userId' => $userId,
             'signOutCount'=> $signOutCount
-        ], self::$secretKey);
+        ];
+        $data = array_merge($data, self::$additionalClaims);
+        return FirebaseJWT::encode($data, self::$secretKey);
     }
     public static function getPayloadWithUser($jwt) {
         try {
             $payload = (array) FirebaseJWT::decode($jwt, JWT::getSecretKey(), array('HS256'));
             $user = User::getById($payload['whoo']->userId);
-            if($payload['signOutCount']!=$user->getSignOutCount()) {
+            if($payload['whoo']->signOutCount!=$user->getSignOutCount()) {
                 throw new InvalidTokenException;
             }
             return [
@@ -49,5 +45,8 @@ class JWT {
     }
     public static function getSecretKey() {
         return self::$secretKey;
+    }
+    public static function setAdditionalClaims($additionalClaims) {
+        self::$additionalClaims = $additionalClaims;
     }
 }
