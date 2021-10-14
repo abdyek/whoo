@@ -3,8 +3,11 @@
 namespace Abdyek\Whoo\Config;
 
 class JWT {
-    static $ISS = 'http://example.org';
-    static $AUD = 'http://example.com';
-    static $IAT = 1356999524;
-    static $NBF = 1357000000;
+    static $iss = null;
+    static $sub = null;
+    static $aud = null;
+    static $exp = null;
+    static $nbf = null;
+    static $iat = null;
+    static $jti = null;
 }

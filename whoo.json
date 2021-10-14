@@ -9,10 +9,7 @@
         "utf-8": true
     },
     "jwt": {
-        "iss" : "http://example.org",
-        "aud" : "http://example.com",
-        "iat" : 1356999524,
-        "nbf" : 1357000000
+        "exp": 31557600
     },
     "authentication": {
         "size_of_code_for_email_ver": 10,

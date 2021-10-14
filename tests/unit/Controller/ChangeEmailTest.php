@@ -86,7 +86,7 @@ class ChangeEmailTest extends TestCase {
             'newEmail'=>'newEmail@newEmail.com',
             'password'=>$data['password']
         ]);
-        JWT::getPayload($signIn->jwt);
+        JWT::getPayloadWithUser($signIn->jwt);
     }
     private function getData() {
         return [

@@ -4,7 +4,6 @@ use Abdyek\Whoo\Core\Response;
 use Abdyek\Whoo\Config\Whoo;
 use Abdyek\Whoo\Config\JWT as JWTConfig;
 use Abdyek\Whoo\Config\Controller as ControllerConfig;
-use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Exception\InvalidDataException;
 use Abdyek\Whoo\Exception\InvalidTokenException;
 use Abdyek\Whoo\Tool\JWT;
@@ -35,8 +34,7 @@ class Controller {
     }
     private function detectUser() {
         if(isset($this->data['jwt'])) {
-            $userInfo = JWT::getPayload($this->data['jwt']);
-            $this->user = User::getById($userInfo['userId']);
+            $this->user = JWT::getPayloadWithUser($this->data['jwt'])['user'];
         }
     }
     private function checkRequiredWrapper() {

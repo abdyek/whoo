@@ -27,7 +27,11 @@ class Config {
             }
             $name = 'Abdyek\\Whoo\\Config\\' . $type;
             foreach($attributes as $con=>$val) {
-                $attr = strtoupper($con);
+                if($type==='JWT') {
+                    $attr = $con;
+                } else {
+                    $attr = strtoupper($con);
+                }
                 if($name::$$attr!==$val) {
                     if(is_bool($val)) {
                         $val = ($val===true)?'true': 'false';

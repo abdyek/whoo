@@ -40,11 +40,11 @@ class SignInTest extends TestCase {
         $data = $this->getData();
         $signUp = new SignUp($data);
         $signIn = new SignIn($data);
-        $decoded = (array) JWT::getPayload($signIn->jwt);
-        $this->assertNotNull($decoded);
+        $payload= (array) JWT::getPayloadWithUser($signIn->jwt)['payload'];
+        $this->assertNotNull($payload);
         $this->assertNotNull($signIn->user);
         $this->assertNull($signIn->temporaryToken);
-        $this->assertEquals($signIn->user->getId(), $decoded['userId']);
+        $this->assertEquals($signIn->user->getId(), $payload['whoo']->userId);
         $signIn = new SignIn($data);
     }
     public function testRunUseUsernameTrue() {
@@ -59,10 +59,10 @@ class SignInTest extends TestCase {
             'username'=>self::USERNAME
         ]);
         $signIn = new SignIn($data);
-        $decoded = (array) JWT::getPayload($signIn->jwt);
-        $this->assertNotNull($decoded);
+        $payload = (array) JWT::getPayloadWithUser($signIn->jwt)['payload'];
+        $this->assertNotNull($payload);
         $this->assertNotNull($signIn->user);
-        $this->assertEquals($signIn->user->getId(), $decoded['userId']);
+        $this->assertEquals($signIn->user->getId(), $payload['whoo']->userId);
         $this->assertSame(self::USERNAME, $signIn->user->getUsername());
         $this->assertNull($signIn->temporaryToken);
     }
@@ -74,10 +74,10 @@ class SignInTest extends TestCase {
         $data = $this->getData();
         $signUp = new SignUp($data);
         $signIn = new SignIn($data);
-        $decoded = (array) JWT::getPayload($signIn->jwt);
-        $this->assertNotNull($decoded);
+        $payload = (array) JWT::getPayloadWithUser($signIn->jwt)['payload'];
+        $this->assertNotNull($payload);
         $this->assertNotNull($signIn->user);
-        $this->assertEquals($signIn->user->getId(), $decoded['userId']);
+        $this->assertEquals($signIn->user->getId(), $payload['whoo']->userId);
         $this->assertNotNull($signIn->temporaryToken);
     }
     public function testNotFoundException() {
@@ -142,8 +142,8 @@ class SignInTest extends TestCase {
         new SignUp($data);
         $data['passwordAgain'] = $data['password'];
         $signIn = new SignIn($data);
-        $payload = JWT::getPayload($signIn->jwt);
-        $this->assertEquals($signIn->user->getId(), $payload['userId']);
+        $payload = JWT::getPayloadWithUser($signIn->jwt)['payload'];
+        $this->assertEquals($signIn->user->getId(), $payload['whoo']->userId);
     }
     public function testRunUnmatchedPasswordsException() {
         $this->expectException(UnmatchedPasswordsException::class);

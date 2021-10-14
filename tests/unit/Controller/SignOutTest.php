@@ -34,7 +34,7 @@ class SignOutTest extends TestCase {
         new SignOut([
             'jwt'=>$jwt
         ]);
-        print_r(JWT::getPayload($signIn->jwt));
+        JWT::getPayloadWithUser($signIn->jwt);
     }
     public function testTest() {
         $this->assertTrue(True);

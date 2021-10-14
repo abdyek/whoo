@@ -15,12 +15,12 @@ class JWTTest extends TestCase {
     public function testGenerateToken() {
         $user = $this->createExample();
         $jwt = JWT::generateToken($user->getId(), $user->getSignOutCount());
-        $payload = JWT::getPayload($jwt);
-        $this->assertEquals($user->getId(), $payload['userId']);
+        $payload = JWT::getPayloadWithUser($jwt)['payload'];
+        $this->assertEquals($user->getId(), $payload['whoo']->userId);
     }
     public function testGetPayloadInvalidTokenException() {
         $this->expectException(InvalidTokenException::class);
-        JWT::getPayload('invalid-token');
+        JWT::getPayloadWithUser('invalid-token');
     }
     public function setGetSecretKey() {
         $newSecret = 'new-secret-key';
