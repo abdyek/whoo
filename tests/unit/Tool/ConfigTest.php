@@ -22,7 +22,6 @@ class ConfigTest extends TestCase {
             [
                 [
                     'authentication'=>[
-                        'type_2fa'=>2,
                         'validity_time'=>181
                     ],
                     'jwt'=>[
@@ -30,7 +29,6 @@ class ConfigTest extends TestCase {
                     ]
                 ],
                 '<?php' . PHP_EOL . PHP_EOL .
-                'Abdyek\\Whoo\\Config\\Authentication::$TYPE_2FA = 2;' . PHP_EOL .
                 'Abdyek\\Whoo\\Config\\Authentication::$VALIDITY_TIME = 181;' . PHP_EOL .
                 'Abdyek\\Whoo\\Config\\JWT::$iat = 123;'. PHP_EOL
             ],

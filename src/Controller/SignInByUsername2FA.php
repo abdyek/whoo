@@ -19,7 +19,7 @@ class SignInByUsername2FA extends Controller {
         if(!$this->user) {
             throw new NotFoundException;
         }
-        $auth = AuthenticationCode::getByUserIdType($this->user->getId(), AuthConfig::$TYPE_2FA);
+        $auth = AuthenticationCode::getByUserIdType($this->user->getId(), AuthConfig::TYPE_2FA);
         if(!$auth) {
             throw new NotFoundAuthCodeException;
         }

@@ -3,6 +3,14 @@
 namespace Abdyek\Whoo\Config;
 
 class Authentication {
+
+    // mapping authentication type
+    const TYPE_EMAIL_VERIFICATION = 0;
+    const TYPE_MANAGE_2FA = 1;
+    const TYPE_RESET_PW = 2;
+    const TYPE_2FA = 3;
+
+    // default value of authentication configurations
     const SIZE_OF_CODE_FOR_EMAIL_VER = 10;
     const SIZE_OF_CODE_TO_RESET_PW = 10;
     const SIZE_OF_CODE_TO_MANAGE_2FA = 6;
@@ -15,10 +23,6 @@ class Authentication {
     const VALIDITY_TIME_TO_MANAGE_2FA = 180;
     const TRIAL_MAX_COUNT_TO_SIGN_IN_2FA = 3;
     const VALIDITY_TIME_TO_SIGN_IN_2FA = 180;
-    const TYPE_EMAIL_VERIFICATION = 0;
-    const TYPE_MANAGE_2FA = 1;
-    const TYPE_RESET_PW = 2;
-    const TYPE_2FA = 3;
 
     static $SIZE_OF_CODE_FOR_EMAIL_VER = self::SIZE_OF_CODE_FOR_EMAIL_VER;
     static $SIZE_OF_CODE_TO_RESET_PW = self::SIZE_OF_CODE_TO_RESET_PW;
@@ -32,8 +36,4 @@ class Authentication {
     static $VALIDITY_TIME_TO_MANAGE_2FA = self::VALIDITY_TIME_TO_MANAGE_2FA;
     static $TRIAL_MAX_COUNT_TO_SIGN_IN_2FA = self::TRIAL_MAX_COUNT_TO_SIGN_IN_2FA;
     static $VALIDITY_TIME_TO_SIGN_IN_2FA = self::VALIDITY_TIME_TO_SIGN_IN_2FA;
-    static $TYPE_EMAIL_VERIFICATION = self::TYPE_EMAIL_VERIFICATION;
-    static $TYPE_MANAGE_2FA = self::TYPE_MANAGE_2FA;
-    static $TYPE_RESET_PW = self::TYPE_RESET_PW;
-    static $TYPE_2FA = self::TYPE_2FA;
 }

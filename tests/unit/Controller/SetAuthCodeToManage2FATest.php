@@ -35,7 +35,7 @@ class SetAuthCodeToManage2FATest extends TestCase {
             'jwt'=>$signIn->jwt,
             'password'=>$data['password']
         ]);
-        $authCode = AuthenticationCode::getByUserIdType($signIn->user->getId(), AuthConfig::$TYPE_MANAGE_2FA);
+        $authCode = AuthenticationCode::getByUserIdType($signIn->user->getId(), AuthConfig::TYPE_MANAGE_2FA);
         $this->assertNotNull($authCode->getCode());
         $this->assertEquals(AuthConfig::$SIZE_OF_CODE_TO_MANAGE_2FA, strlen($authCode->getCode()));
     }

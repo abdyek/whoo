@@ -21,9 +21,5 @@ trait DefaultConfig {
         Abdyek\Whoo\Config\Authentication::$VALIDITY_TIME_TO_MANAGE_2FA = Abdyek\Whoo\Config\Authentication::VALIDITY_TIME_TO_MANAGE_2FA;
         Abdyek\Whoo\Config\Authentication::$TRIAL_MAX_COUNT_TO_SIGN_IN_2FA = Abdyek\Whoo\Config\Authentication::TRIAL_MAX_COUNT_TO_SIGN_IN_2FA;
         Abdyek\Whoo\Config\Authentication::$VALIDITY_TIME_TO_SIGN_IN_2FA = Abdyek\Whoo\Config\Authentication::VALIDITY_TIME_TO_SIGN_IN_2FA;
-        Abdyek\Whoo\Config\Authentication::$TYPE_EMAIL_VERIFICATION = Abdyek\Whoo\Config\Authentication::TYPE_EMAIL_VERIFICATION;
-        Abdyek\Whoo\Config\Authentication::$TYPE_MANAGE_2FA = Abdyek\Whoo\Config\Authentication::TYPE_MANAGE_2FA;
-        Abdyek\Whoo\Config\Authentication::$TYPE_RESET_PW = Abdyek\Whoo\Config\Authentication::TYPE_RESET_PW;
-        Abdyek\Whoo\Config\Authentication::$TYPE_2FA = Abdyek\Whoo\Config\Authentication::TYPE_2FA;
     }
 }

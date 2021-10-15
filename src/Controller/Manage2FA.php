@@ -12,7 +12,7 @@ use Abdyek\Whoo\Config\Authentication as AuthConfig;
 
 class Manage2FA extends Controller {
     protected function run () {
-        $auth = AuthenticationCode::getByUserIdType($this->user->getId(), AuthConfig::$TYPE_MANAGE_2FA);
+        $auth = AuthenticationCode::getByUserIdType($this->user->getId(), AuthConfig::TYPE_MANAGE_2FA);
         if(!$auth) {
             throw new NotFoundAuthCodeException;
         }

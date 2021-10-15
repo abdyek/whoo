@@ -34,9 +34,9 @@ class SignInByUsername extends Controller {
             throw new NotVerifiedEmailException;
         }
         if($this->user->getTwoFactorAuthentication()) {
-            AuthenticationCode::deleteByUserIdType($this->user->getId(), AuthConfig::$TYPE_2FA);
+            AuthenticationCode::deleteByUserIdType($this->user->getId(), AuthConfig::TYPE_2FA);
             $this->code = Random::number(AuthConfig::$SIZE_OF_CODE_FOR_2FA);
-            AuthenticationCode::create($this->user->getId(), AuthConfig::$TYPE_2FA, $this->code);
+            AuthenticationCode::create($this->user->getId(), AuthConfig::TYPE_2FA, $this->code);
             $e = new TwoFactorAuthEnabledException;
             $e->setAuthenticationCode($this->code);
             throw $e;

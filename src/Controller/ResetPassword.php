@@ -21,7 +21,7 @@ class ResetPassword extends Controller {
         if(Config::$DENY_IF_NOT_VERIFIED_TO_RESET_PW and !$user->getEmailVerified()) {
             throw new NotVerifiedEmailException;
         }
-        $auth = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::$TYPE_RESET_PW);
+        $auth = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_RESET_PW);
         if(!$auth) {
             throw new NotFoundAuthCodeException;
         }

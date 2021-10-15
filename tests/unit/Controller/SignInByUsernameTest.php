@@ -93,7 +93,7 @@ class SignInByUsernameTest extends TestCase {
             ]);
         } catch(TwoFactorAuthEnabledException $e) {
             $user = UserModel::getByUsername(self::USERNAME);
-            $code = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::$TYPE_2FA);
+            $code = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_2FA);
             $this->assertSame($code->getCode(), $e->authenticationCode);
         }
     }

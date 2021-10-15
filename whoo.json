@@ -23,11 +23,7 @@
         "trial_max_count_to_manage_2fa": 3,
         "validity_time_to_manage_2fa": 180,
         "trial_max_count_to_sign_in_2fa": 3,
-        "validity_time_to_sign_in_2fa": 180,
-        "type_email_verification": 0,
-        "type_manage_2fa": 1,
-        "type_reset_pw": 2,
-        "type_2fa": 3
+        "validity_time_to_sign_in_2fa": 180
     },
     "whoo": {
         "deny_if_not_verified_to_sign_in" : true,
