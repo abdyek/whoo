@@ -21,12 +21,12 @@ class VerifyEmail extends Controller {
         if($auth === null) {
             throw new NotFoundAuthCodeException;
         }
-        if($auth->getTrialCount()+1>=AuthConfig::$TRIAL_MAX_COUNT) {
+        if($auth->getTrialCount()+1>=AuthConfig::$TRIAL_MAX_COUNT_TO_VERIFY_EMAIL) {
             throw new TrialCountOverException;
         }
         $dateTime = $auth->getDateTime();
         $timestamp = $dateTime->getTimestamp();
-        if((time()-$timestamp)>AuthConfig::$VALIDITY_TIME) {
+        if((time()-$timestamp)>AuthConfig::$VALIDITY_TIME_TO_VERIFY_EMAIL) {
             throw new TimeOutCodeException;
         }
         if($auth->getCode()!==$this->data['code']) {

@@ -22,14 +22,14 @@ class ConfigTest extends TestCase {
             [
                 [
                     'authentication'=>[
-                        'validity_time'=>181
+                        'validity_time_to_verify_email'=>181
                     ],
                     'jwt'=>[
                         'iat'=>123
                     ]
                 ],
                 '<?php' . PHP_EOL . PHP_EOL .
-                'Abdyek\\Whoo\\Config\\Authentication::$VALIDITY_TIME = 181;' . PHP_EOL .
+                'Abdyek\\Whoo\\Config\\Authentication::$VALIDITY_TIME_TO_VERIFY_EMAIL = 181;' . PHP_EOL .
                 'Abdyek\\Whoo\\Config\\JWT::$iat = 123;'. PHP_EOL
             ],
             [

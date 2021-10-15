@@ -13,8 +13,8 @@ trait DefaultConfig {
         Abdyek\Whoo\Config\Authentication::$SIZE_OF_CODE_TO_RESET_PW = Abdyek\Whoo\Config\Authentication::SIZE_OF_CODE_TO_RESET_PW;
         Abdyek\Whoo\Config\Authentication::$SIZE_OF_CODE_TO_MANAGE_2FA = Abdyek\Whoo\Config\Authentication::SIZE_OF_CODE_TO_MANAGE_2FA;
         Abdyek\Whoo\Config\Authentication::$SIZE_OF_CODE_FOR_2FA = Abdyek\Whoo\Config\Authentication::SIZE_OF_CODE_FOR_2FA;
-        Abdyek\Whoo\Config\Authentication::$TRIAL_MAX_COUNT = Abdyek\Whoo\Config\Authentication::TRIAL_MAX_COUNT;
-        Abdyek\Whoo\Config\Authentication::$VALIDITY_TIME = Abdyek\Whoo\Config\Authentication::VALIDITY_TIME;
+        Abdyek\Whoo\Config\Authentication::$TRIAL_MAX_COUNT_TO_VERIFY_EMAIL = Abdyek\Whoo\Config\Authentication::TRIAL_MAX_COUNT_TO_VERIFY_EMAIL;
+        Abdyek\Whoo\Config\Authentication::$VALIDITY_TIME_TO_VERIFY_EMAIL = Abdyek\Whoo\Config\Authentication::VALIDITY_TIME_TO_VERIFY_EMAIL;
         Abdyek\Whoo\Config\Authentication::$TRIAL_MAX_COUNT_TO_RESET_PW = Abdyek\Whoo\Config\Authentication::TRIAL_MAX_COUNT_TO_RESET_PW;
         Abdyek\Whoo\Config\Authentication::$VALIDITY_TIME_TO_RESET_PW = Abdyek\Whoo\Config\Authentication::VALIDITY_TIME_TO_RESET_PW;
         Abdyek\Whoo\Config\Authentication::$TRIAL_MAX_COUNT_TO_MANAGE_2FA = Abdyek\Whoo\Config\Authentication::TRIAL_MAX_COUNT_TO_MANAGE_2FA;
