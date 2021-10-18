@@ -6,12 +6,17 @@ use Abdyek\Whoo\Tool\Config as ConfigTool;
 use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 class CLI {
-    private static $config;
-    private static $outputDir;
-    public static function init($config='whoo.json', $outputDir='whoo') {
-        self::$config = ($config!==null?$config:'whoo.json');
-        self::$outputDir = ($outputDir!==null?$outputDir:'whoo');
+    private static $config = 'whoo';
+    private static $outputDir = 'whoo';
+    public static function init($config=null, $outputDir=null) {
+        self::$config = $config ?? self::$config;
+        self::$outputDir = $outputDir ?? self::$outputDir;
         self::generateConfig();
+    }
+    public static function updateConfig($config = null, $outputDir = null) {
+        self::$config = $config ?? self::$config;
+        self::$outputDir = $outputDir ?? self::$outputDir;
+        self::generateWhooConfig();
     }
     private static function generateConfig() {
         if(!file_exists(self::$outputDir)) {

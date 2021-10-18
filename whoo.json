@@ -12,17 +12,17 @@
         "exp": 31557600
     },
     "authentication": {
-        "size_of_code_for_email_ver": 10,
+        "size_of_code_to_verify_email": 10,
         "size_of_code_to_reset_pw": 10,
         "size_of_code_to_manage_2fa": 6,
         "size_of_code_for_2fa": 5,
         "trial_max_count_to_verify_email": 3,
-        "validity_time_to_verify_email": 180,
         "trial_max_count_to_reset_pw": 3,
-        "validity_time_to_reset_pw": 180,
         "trial_max_count_to_manage_2fa": 3,
-        "validity_time_to_manage_2fa": 180,
         "trial_max_count_to_sign_in_2fa": 3,
+        "validity_time_to_verify_email": 180,
+        "validity_time_to_reset_pw": 180,
+        "validity_time_to_manage_2fa": 180,
         "validity_time_to_sign_in_2fa": 180
     },
     "whoo": {

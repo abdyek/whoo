@@ -9,7 +9,7 @@ trait DefaultConfig {
         Abdyek\Whoo\Config\Whoo::$DENY_IF_NOT_SET_USERNAME = Abdyek\Whoo\Config\Whoo::DENY_IF_NOT_SET_USERNAME;
         Abdyek\Whoo\Config\Whoo::$DENY_IF_SIGN_UP_BEFORE_BY_EMAIL = Abdyek\Whoo\Config\Whoo::DENY_IF_SIGN_UP_BEFORE_BY_EMAIL;
         Abdyek\Whoo\Config\Whoo::$DEFAULT_2FA = Abdyek\Whoo\Config\Whoo::DEFAULT_2FA;
-        Abdyek\Whoo\Config\Authentication::$SIZE_OF_CODE_FOR_EMAIL_VER = Abdyek\Whoo\Config\Authentication::SIZE_OF_CODE_FOR_EMAIL_VER;
+        Abdyek\Whoo\Config\Authentication::$SIZE_OF_CODE_TO_VERIFY_EMAIL = Abdyek\Whoo\Config\Authentication::SIZE_OF_CODE_TO_VERIFY_EMAIL;
         Abdyek\Whoo\Config\Authentication::$SIZE_OF_CODE_TO_RESET_PW = Abdyek\Whoo\Config\Authentication::SIZE_OF_CODE_TO_RESET_PW;
         Abdyek\Whoo\Config\Authentication::$SIZE_OF_CODE_TO_MANAGE_2FA = Abdyek\Whoo\Config\Authentication::SIZE_OF_CODE_TO_MANAGE_2FA;
         Abdyek\Whoo\Config\Authentication::$SIZE_OF_CODE_FOR_2FA = Abdyek\Whoo\Config\Authentication::SIZE_OF_CODE_FOR_2FA;

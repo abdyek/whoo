@@ -11,7 +11,7 @@ class Authentication {
     const TYPE_2FA = 3;
 
     // default value of authentication configurations
-    const SIZE_OF_CODE_FOR_EMAIL_VER = 10;
+    const SIZE_OF_CODE_TO_VERIFY_EMAIL = 10;
     const SIZE_OF_CODE_TO_RESET_PW = 10;
     const SIZE_OF_CODE_TO_MANAGE_2FA = 6;
     const SIZE_OF_CODE_FOR_2FA = 5;
@@ -24,7 +24,7 @@ class Authentication {
     const TRIAL_MAX_COUNT_TO_SIGN_IN_2FA = 3;
     const VALIDITY_TIME_TO_SIGN_IN_2FA = 180;
 
-    static $SIZE_OF_CODE_FOR_EMAIL_VER = self::SIZE_OF_CODE_FOR_EMAIL_VER;
+    static $SIZE_OF_CODE_TO_VERIFY_EMAIL = self::SIZE_OF_CODE_TO_VERIFY_EMAIL;
     static $SIZE_OF_CODE_TO_RESET_PW = self::SIZE_OF_CODE_TO_RESET_PW;
     static $SIZE_OF_CODE_TO_MANAGE_2FA = self::SIZE_OF_CODE_TO_MANAGE_2FA;
     static $SIZE_OF_CODE_FOR_2FA = self::SIZE_OF_CODE_FOR_2FA;
