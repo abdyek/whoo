@@ -10,6 +10,11 @@ use Abdyek\Whoo\Tool\JWT;
 
 class Controller {
     public $user = null;
+    protected $data;
+    private string $className;
+    private bool $requiredFree;
+    private ?array $required;
+    protected function run() {}
     public function __construct($data) {
         $this->data = $data;
         $this->setClassName();

@@ -30,7 +30,7 @@ class SignInByUsername2FATest extends TestCase {
         self::reset();
     }
     public function testRun() {
-        $this->assertTrue(true);
+        $signIn2FA = null;
         Config::$USE_USERNAME = true;
         Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
         Config::$DEFAULT_2FA = true;

@@ -7,6 +7,7 @@ use Abdyek\Whoo\Exception\InvalidDataException;
 use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 class Example extends Controller {
+    public $data;
     protected function run() {
     }
 }

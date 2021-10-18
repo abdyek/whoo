@@ -28,6 +28,7 @@ class SignIn2FATest extends TestCase {
         self::reset();
     }
     public function testRun() {
+        $signIn2FA = null;
         $data = $this->getData();
         Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
         Config::$USE_USERNAME = false;

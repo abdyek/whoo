@@ -7,6 +7,7 @@ use Abdyek\Whoo\Model\AuthenticationCode;
 use Abdyek\Whoo\Exception\NotFoundException;
 use Abdyek\Whoo\Exception\NotFoundAuthCodeException;
 use Abdyek\Whoo\Exception\InvalidCodeException;
+use Abdyek\Whoo\Exception\TimeOutCodeException;
 use Abdyek\Whoo\Exception\NotVerifiedEmailException;
 use Abdyek\Whoo\Exception\TrialCountOverException;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;

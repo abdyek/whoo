@@ -42,10 +42,10 @@ class SignIn extends Controller {
         }
         if($this->user->getTwoFactorAuthentication()) {
             AuthenticationCode::deleteByUserIdType($this->user->getId(), AuthConfig::TYPE_2FA);
-            $this->code = Random::number(AuthConfig::$SIZE_OF_CODE_FOR_2FA);
-            AuthenticationCode::create($this->user->getId(), AuthConfig::TYPE_2FA, $this->code);
+            $code = Random::number(AuthConfig::$SIZE_OF_CODE_FOR_2FA);
+            AuthenticationCode::create($this->user->getId(), AuthConfig::TYPE_2FA, $code);
             $e = new TwoFactorAuthEnabledException;
-            $e->setAuthenticationCode($this->code);
+            $e->setAuthenticationCode($code);
             throw $e;
         }
         $this->jwt = JWT::generateToken($this->user->getId(), $this->user->getSignOutCount());

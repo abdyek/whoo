@@ -10,13 +10,13 @@ class Propel {
             if(isset($database['adapter'])) {
                 PropelConfig::$ADAPTER = $database['adapter'];
             }
-            if(isset($adapter['dsn'])) {
+            if(isset($database['dsn'])) {
                 PropelConfig::$DSN = $database['dsn'];
             }
             if(isset($database['host'])) {
                 PropelConfig::$HOST = $database['host'];
             }
-            if(isset($adapter['dbname'])) {
+            if(isset($database['dbname'])) {
                 PropelConfig::$DBNAME = $database['dbname'];
             }
             if(isset($database['user'])) {
