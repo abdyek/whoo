@@ -41,6 +41,20 @@ class SetAuthCodeToResetPasswordTest extends TestCase {
             'email'=>'nothingness@nothingness.com'
         ]);
     }
+    public function testRunAuthCode() {
+        Config::$DENY_IF_NOT_VERIFIED_TO_RESET_PW = true;
+        Config::$USE_USERNAME = false;
+        $data = $this->getData();
+        $signUp = new SignUp($data);
+        try {
+            new SetAuthCodeToResetPassword([
+                'email'=>$data['email']
+            ]);
+        } catch (NotVerifiedEmailException $e) {
+            $authCode = AuthenticationCode::getByUserIdType($signUp->user->getId(), AuthConfig::TYPE_EMAIL_VERIFICATION);
+            $this->assertSame($authCode->getCode(), $e->authCode);
+        }
+    }
     public function testRunDenyIfNotVerifiedToResetPWTrue() {
         $this->expectException(NotVerifiedEmailException::class);
         $data = $this->getData();

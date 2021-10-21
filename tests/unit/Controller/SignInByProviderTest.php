@@ -8,6 +8,7 @@ use Abdyek\Whoo\Exception\SignUpByEmailException;
 use Abdyek\Whoo\Model\User as UserModel;
 use Abdyek\Whoo\Config\Whoo as Config;
 use Abdyek\Whoo\Config\Propel as PropelConfig;
+use Abdyek\Whoo\Tool\TemporaryToken;
 
 /**
  * @covers SignInByProvider::
@@ -22,6 +23,17 @@ class SignInByProviderTest extends TestCase {
     public function setUp(): void {
         self::setDefaultConfig();
         self::reset();
+    }
+    public function testSignUpTempToken() {
+        Config::$USE_USERNAME = true;
+        Config::$DENY_IF_NOT_SET_USERNAME = true;
+        $dataForProvider = self::getDataForProvider();
+        try {
+            new SignInByProvider($dataForProvider);
+        } catch (NullUsernameException $e) {
+            $user = UserModel::getByEmail($dataForProvider['email']);
+            $this->assertSame(TemporaryToken::generate($user->getId()), $e->tempToken);
+        }
     }
     public function testSignUpUseUsernameTrueException() {
         $this->expectException(NullUsernameException::class);

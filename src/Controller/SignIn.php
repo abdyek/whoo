@@ -19,7 +19,6 @@ use Abdyek\Whoo\Config\Whoo as Config;
 class SignIn extends Controller {
     public $jwt = null;
     public $user = null;
-    public $temporaryToken = null;
     protected function run() {
         $this->user = User::getByEmail($this->data['email']);
         if($this->user ===null) {
@@ -32,12 +31,15 @@ class SignIn extends Controller {
             throw new IncorrectPasswordException;
         }
         if(Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN and $this->user->getEmailVerified()===false) {
-            throw new NotVerifiedEmailException;
+            $e = new NotVerifiedEmailException;
+            $e->generateAuthCode($this->user);
+            throw $e;
         }
         if(Config::$USE_USERNAME and $this->user->getUsername()===null) {
-            $this->temporaryToken = TemporaryToken::generate($this->user->getId());
             if(Config::$DENY_IF_NOT_SET_USERNAME) {
-                throw new NullUsernameException;
+                $e = new NullUsernameException;
+                $e->generateTempToken($this->user);
+                throw $e;
             }
         }
         if($this->user->getTwoFactorAuthentication()) {

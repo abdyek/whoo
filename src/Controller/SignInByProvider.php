@@ -22,7 +22,9 @@ class SignInByProvider extends Controller {
         }
         $user = UserModel::getByEmail($this->data['email']);
         if(Config::$USE_USERNAME and $user->getUsername()===null) {
-            throw new NullUsernameException;
+            $e = new NullUsernameException;
+            $e->generateTempToken($user);
+            throw $e;
         }
         $this->jwt = JWT::generateToken($user->getId(), $user->getSignOutCount());
     }

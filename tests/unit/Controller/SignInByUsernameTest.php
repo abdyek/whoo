@@ -64,6 +64,24 @@ class SignInByUsernameTest extends TestCase {
             'password'=>'not_found_paSsWorD'
         ]);
     }
+    public function testRunAuthCode() {
+        Config::$USE_USERNAME = true;
+        Config::$DEFAULT_2FA = false;
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = true;
+        $data = $this->getData();
+        new SignUp($data);
+        $user = UserModel::getByEmail($data['email']);
+        UserModel::setUsername($user, self::USERNAME);
+        try {
+            new SignInByUsername([
+                'username'=>self::USERNAME,
+                'password'=>$data['password']
+            ]);
+        } catch (NotVerifiedEmailException $e) {
+            $authCode = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_EMAIL_VERIFICATION);
+            $this->assertSame($authCode->getCode(), $e->authCode);
+        }
+    }
     public function testRunNotVerifiedEmailException() {
         $this->expectException(NotVerifiedEmailException::class);
         Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = true;

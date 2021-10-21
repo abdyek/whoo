@@ -15,6 +15,7 @@ use Abdyek\Whoo\Exception\UnmatchedPasswordsException;
 use Abdyek\Whoo\Config\JWT as JWTConfig;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
 use Abdyek\Whoo\Tool\JWT;
+use Abdyek\Whoo\Tool\TemporaryToken;
 use Abdyek\Whoo\Config\Whoo as Config;
 use Abdyek\Whoo\Config\Propel as PropelConfig;
 
@@ -43,7 +44,6 @@ class SignInTest extends TestCase {
         $payload= (array) JWT::getPayloadWithUser($signIn->jwt)['payload'];
         $this->assertNotNull($payload);
         $this->assertNotNull($signIn->user);
-        $this->assertNull($signIn->temporaryToken);
         $this->assertEquals($signIn->user->getId(), $payload['whoo']->userId);
         $signIn = new SignIn($data);
     }
@@ -64,7 +64,6 @@ class SignInTest extends TestCase {
         $this->assertNotNull($signIn->user);
         $this->assertEquals($signIn->user->getId(), $payload['whoo']->userId);
         $this->assertSame(self::USERNAME, $signIn->user->getUsername());
-        $this->assertNull($signIn->temporaryToken);
     }
     public function testRunDenyIfNotSetUsernameFalse() {
         Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
@@ -78,7 +77,6 @@ class SignInTest extends TestCase {
         $this->assertNotNull($payload);
         $this->assertNotNull($signIn->user);
         $this->assertEquals($signIn->user->getId(), $payload['whoo']->userId);
-        $this->assertNotNull($signIn->temporaryToken);
     }
     public function testNotFoundException() {
         $this->expectException(NotFoundException::class);
@@ -93,6 +91,20 @@ class SignInTest extends TestCase {
         $data['password'] = 'wrong password';
         $signIn = new SignIn($data);
     }
+    public function testRunAuthCode() {
+        Config::$USE_USERNAME = false;
+        Config::$DEFAULT_2FA = false;
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = true;
+        $data = $this->getData();
+        new SignUp($data);
+        try {
+            new SignIn($data);
+        } catch(NotVerifiedEmailException $e) {
+            $user = User::getByEmail($data['email']);
+            $authCode = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_EMAIL_VERIFICATION);
+            $this->assertSame($authCode->getCode(), $e->authCode);
+        }
+    }
     public function testRunNotVerifiedEmailException() {
         $this->expectException(NotVerifiedEmailException::class);
         $data = $this->getData();
@@ -100,6 +112,20 @@ class SignInTest extends TestCase {
         Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = true;
         Config::$USE_USERNAME = false;
         new SignIn($data);
+    }
+    public function testRunTemporaryToken() {
+        Config::$USE_USERNAME = true;
+        Config::$DEFAULT_2FA = false;
+        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
+        Config::$DENY_IF_NOT_SET_USERNAME = true;
+        $data = $this->getData();
+        new SignUp($data);
+        try {
+            new SignIn($data);
+        } catch(NullUsernameException $e) {
+            $user = User::getByEmail($data['email']);
+            $this->assertSame(TemporaryToken::generate($user->getId()), $e->tempToken);
+        }
     }
     public function testRunNullUsernameException() {
         $this->expectException(NullUsernameException::class);

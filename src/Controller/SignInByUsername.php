@@ -31,7 +31,9 @@ class SignInByUsername extends Controller {
             throw new IncorrectPasswordException;
         }
         if(Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN and $this->user->getEmailVerified()===false) {
-            throw new NotVerifiedEmailException;
+            $e = new NotVerifiedEmailException;
+            $e->generateAuthCode($this->user);
+            throw $e;
         }
         if($this->user->getTwoFactorAuthentication()) {
             AuthenticationCode::deleteByUserIdType($this->user->getId(), AuthConfig::TYPE_2FA);
