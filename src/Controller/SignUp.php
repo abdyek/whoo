@@ -10,7 +10,7 @@ use Abdyek\Whoo\Tool\TemporaryToken;
 use Abdyek\Whoo\Config\Whoo as Config;
 
 class SignUp extends Controller {
-    public $temporaryToken;
+    public $tempToken;
     public $user = null;
     protected function run() {
         if(!User::isUniqueEmail($this->data['email'])) {
@@ -30,7 +30,7 @@ class SignUp extends Controller {
         if($optionalUsername) {
             User::setUsername($this->user, $this->data['username']);
         } elseif(Config::$USE_USERNAME) {
-            $this->temporaryToken = TemporaryToken::generate($this->user->getId());
+            $this->tempToken = TemporaryToken::generate($this->user->getId());
         }
     }
 }

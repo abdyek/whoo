@@ -30,7 +30,7 @@ class SetUsernameTest extends TestCase {
         Config::$USE_USERNAME = true;
         $signUp = new SignUp($data);
         new SetUsername([
-            'temporaryToken'=>$signUp->temporaryToken,
+            'tempToken'=>$signUp->tempToken,
             'username'=>self::USERNAME
         ]);
         $user = UserModel::getByEmail($data['email']);
@@ -41,7 +41,7 @@ class SetUsernameTest extends TestCase {
         $data = $this->getData();
         $signUp = new SignUp($data);
         new SetUsername([
-            'temporaryToken'=>'Zvix5wJf3VkW5tqGMKgZTT73GRZcy7ewfFvrZSxbmVQKXcwAA7fkJnthgGf3',
+            'tempToken'=>'Zvix5wJf3VkW5tqGMKgZTT73GRZcy7ewfFvrZSxbmVQKXcwAA7fkJnthgGf3',
             'username'=>self::USERNAME
         ]);
     }
@@ -51,11 +51,11 @@ class SetUsernameTest extends TestCase {
         $data = $this->getData();
         $signUp = new SignUp($data);
         new SetUsername([
-            'temporaryToken'=>$signUp->temporaryToken,
+            'tempToken'=>$signUp->tempToken,
             'username'=>self::USERNAME
         ]);
         new SetUsername([
-            'temporaryToken'=>$signUp->temporaryToken,
+            'tempToken'=>$signUp->tempToken,
             'username'=>self::USERNAME
         ]);
     }
@@ -65,7 +65,7 @@ class SetUsernameTest extends TestCase {
         $data = $this->getData();
         $signUp = new SignUp($data);
         new SetUsername([
-            'temporaryToken'=>$signUp->temporaryToken,
+            'tempToken'=>$signUp->tempToken,
             'username'=>self::USERNAME
         ]);
         $otherUser = new SignUp([
@@ -73,7 +73,7 @@ class SetUsernameTest extends TestCase {
             'password'=>'top_secret_pass'
         ]);
         new SetUsername([
-            'temporaryToken'=>$otherUser->temporaryToken,
+            'tempToken'=>$otherUser->tempToken,
             'username'=>self::USERNAME
         ]);
     }

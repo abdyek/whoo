@@ -88,7 +88,7 @@ class Controller {
             ]
         ],
         'SetUsername'=>[
-            'temporaryToken'=>[
+            'tempToken'=>[
                 'type'=>'str',
                 'limits'=>[
                     'min'=>60,

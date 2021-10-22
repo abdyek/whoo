@@ -55,7 +55,7 @@ class SignInTest extends TestCase {
         Config::$DEFAULT_2FA = false;
         $signUp = new SignUp($data);
         new SetUsername([
-            'temporaryToken'=>$signUp->temporaryToken,
+            'tempToken'=>$signUp->tempToken,
             'username'=>self::USERNAME
         ]);
         $signIn = new SignIn($data);

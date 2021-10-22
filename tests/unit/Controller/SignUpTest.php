@@ -32,7 +32,7 @@ class SignUpTest extends TestCase {
         Config::$DEFAULT_2FA = false;
         $signUp = new SignUp($data);
         $this->assertNotNull($signUp->user);
-        $this->assertEquals(60, strlen($signUp->temporaryToken));
+        $this->assertEquals(60, strlen($signUp->tempToken));
     }
     /**
      * @dataProvider trueFalse
@@ -56,7 +56,7 @@ class SignUpTest extends TestCase {
         $data = $this->getData();
         Config::$USE_USERNAME = false;
         $signUp = new SignUp($data);
-        $this->assertNull($signUp->temporaryToken);
+        $this->assertNull($signUp->tempToken);
     }
     public function testRunOptionalPasswordAgain() {
         $data = $this->getData();

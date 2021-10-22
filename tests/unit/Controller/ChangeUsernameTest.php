@@ -30,7 +30,7 @@ class ChangeUsernameTest extends TestCase {
         $data = $this->getData();
         $signUp = new SignUp($data);
         new SetUsername([
-            'temporaryToken'=>$signUp->temporaryToken,
+            'tempToken'=>$signUp->tempToken,
             'username'=>'username'
         ]);
         $signIn = new SignIn($data);
@@ -52,11 +52,11 @@ class ChangeUsernameTest extends TestCase {
         $signUp = new SignUp($data);
         $signUp2 = new SignUp($data2);
         new SetUsername([
-            'temporaryToken'=>$signUp->temporaryToken,
+            'tempToken'=>$signUp->tempToken,
             'username'=>self::NEW_USERNAME
         ]);
         new SetUsername([
-            'temporaryToken'=>$signUp2->temporaryToken,
+            'tempToken'=>$signUp2->tempToken,
             'username'=>'another_username'
         ]);
         $signIn = new SignIn($data2);

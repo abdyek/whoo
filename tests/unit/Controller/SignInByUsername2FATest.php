@@ -37,7 +37,7 @@ class SignInByUsername2FATest extends TestCase {
         $data = $this->getData();
         $signUp = new SignUp($data);
         new SetUsername([
-            'temporaryToken'=>$signUp->temporaryToken,
+            'tempToken'=>$signUp->tempToken,
             'username'=>self::USERNAME
         ]);
         try {
@@ -61,7 +61,7 @@ class SignInByUsername2FATest extends TestCase {
         $data = $this->getData();
         $signUp = new SignUp($data);
         new SetUsername([
-            'temporaryToken'=>$signUp->temporaryToken,
+            'tempToken'=>$signUp->tempToken,
             'username'=>self::USERNAME
         ]);
         try {
@@ -90,7 +90,7 @@ class SignInByUsername2FATest extends TestCase {
         $data = $this->getData();
         $signUp = new SignUp($data);
         new SetUsername([
-            'temporaryToken'=>$signUp->temporaryToken,
+            'tempToken'=>$signUp->tempToken,
             'username'=>self::USERNAME
         ]);
         $signIn2FA = new SignInByUsername2FA([
@@ -106,7 +106,7 @@ class SignInByUsername2FATest extends TestCase {
         $data = $this->getData();
         $signUp = new SignUp($data);
         new SetUsername([
-            'temporaryToken'=>$signUp->temporaryToken,
+            'tempToken'=>$signUp->tempToken,
             'username'=>self::USERNAME
         ]);
         try {

@@ -10,7 +10,7 @@ use Abdyek\Whoo\Model\User;
 
 class SetUsername extends Controller {
     protected function run() {
-        $userId = TemporaryToken::getUserId($this->data['temporaryToken']);
+        $userId = TemporaryToken::getUserId($this->data['tempToken']);
         if($userId===null) {
             throw new InvalidTemporaryTokenException;
         }
