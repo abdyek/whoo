@@ -32,7 +32,7 @@ class SetAuthCodeToResetPasswordTest extends TestCase {
         $setAuth = new SetAuthCodeToResetPassword([
             'email'=>$data['email']
         ]);
-        $this->assertEquals(AuthConfig::$SIZE_OF_CODE_TO_RESET_PW, strlen($setAuth->code));
+        $this->assertEquals(AuthConfig::$SIZE_OF_CODE_TO_RESET_PW, strlen($setAuth->authCode));
     }
     public function testRunNotFoundException() {
         $this->expectException(NotFoundException::class);

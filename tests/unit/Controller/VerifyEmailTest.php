@@ -30,7 +30,7 @@ class VerifyEmailTest extends TestCase {
         $this->expectException(NotFoundException::class);
         new VerifyEmail([
             'email'=>'notFound@notFound.com',
-            'code'=>'noneNONE'
+            'authCode'=>'noneNONE'
         ]);
     }
     public function testRunNotFoundAuthCodeException() {
@@ -38,7 +38,7 @@ class VerifyEmailTest extends TestCase {
         $user = $this->createExample();
         new VerifyEmail([
             'email'=>self::$traitEmail,
-            'code'=>'codee'
+            'authCode'=>'codee'
         ]);
     }
     public function testRunInvalidCodeException() {
@@ -49,7 +49,7 @@ class VerifyEmailTest extends TestCase {
         ]);
         new VerifyEmail([
             'email'=>self::$traitEmail,
-            'code'=>'wrongCode'
+            'authCode'=>'wrongCode'
         ]);
     }
     public function testRunTrialCountOverException() {
@@ -62,7 +62,7 @@ class VerifyEmailTest extends TestCase {
             try {
                 new VerifyEmail([
                     'email'=>self::$traitEmail,
-                    'code'=>'wrongCode'
+                    'authCode'=>'wrongCode'
                 ]);
             } catch(InvalidCodeException $e) { }
         }
@@ -78,7 +78,7 @@ class VerifyEmailTest extends TestCase {
         ]);
         new VerifyEmail([
             'email'=>self::$traitEmail,
-            'code'=>$setAuth->code
+            'authCode'=>$setAuth->authCode
         ]);
         $auth = AuthenticationCode::getByUserIdType($user->getId(), 'emailVerification');
         $this->assertTrue($user->getEmailVerified());

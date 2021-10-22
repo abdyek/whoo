@@ -41,7 +41,7 @@ class ResetPasswordTest extends TestCase {
         new ResetPassword([
             'email'=>$data['email'],
             'newPassword'=>self::NEW_PASSWORD,
-            'code'=>$setAuth->code
+            'authCode'=>$setAuth->authCode
         ]);
         $data['password'] = self::NEW_PASSWORD;
         $signIn = new SignIn($data);
@@ -52,7 +52,7 @@ class ResetPasswordTest extends TestCase {
         new ResetPassword([
             'email'=>'none@none.com',
             'newPassword'=>self::NEW_PASSWORD,
-            'code'=>'code'
+            'authCode'=>'authCode'
         ]);
     }
     public function testRunInvalidCodeException() {
@@ -68,7 +68,7 @@ class ResetPasswordTest extends TestCase {
         new ResetPassword([
             'email'=>$data['email'],
             'newPassword'=>self::NEW_PASSWORD,
-            'code'=>'w-rg-c-o-e'
+            'authCode'=>'w-rg-c-o-e'
         ]);
     }
     public function testRunNotFoundAuthCodeException() {
@@ -81,7 +81,7 @@ class ResetPasswordTest extends TestCase {
         new ResetPassword([
             'email'=>$data['email'],
             'newPassword'=>self::NEW_PASSWORD,
-            'code'=>'codee'
+            'authCode'=>'codee'
         ]);
     }
     public function testRunDenyIfNotVerifiedToResetPWTrue() {
@@ -98,7 +98,7 @@ class ResetPasswordTest extends TestCase {
         new ResetPassword([
             'email'=>$data['email'],
             'newPassword'=>self::NEW_PASSWORD,
-            'code'=>$setAuth->code
+            'authCode'=>$setAuth->authCode
         ]);
     }
     public function testRunTrialCountOverException() {
@@ -116,7 +116,7 @@ class ResetPasswordTest extends TestCase {
                 new ResetPassword([
                     'email'=>$data['email'],
                     'newPassword'=>'this_is_new_ps',
-                    'code'=>'wrong-code'
+                    'authCode'=>'wrong-code'
                 ]);
             } catch(InvalidCodeException $e) { }
         }

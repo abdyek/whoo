@@ -39,7 +39,7 @@ class Manage2FATest extends TestCase {
         ]);
         new Manage2FA([
             'jwt'=>$signIn->jwt,
-            'code'=>$auth->code,
+            'authCode'=>$auth->authCode,
             'open'=>true
         ]);
         $this->assertTrue($signIn->user->getTwoFactorAuthentication());
@@ -58,7 +58,7 @@ class Manage2FATest extends TestCase {
         ]);
         new Manage2FA([
             'jwt'=>$signIn->jwt,
-            'code'=>'wrong-code',
+            'authCode'=>'wrong-code',
             'open'=>true
         ]);
     }
@@ -72,7 +72,7 @@ class Manage2FATest extends TestCase {
         $signIn = new SignIn($data);
         new Manage2FA([
             'jwt'=>$signIn->jwt,
-            'code'=>'thisIsCode',
+            'authCode'=>'thisIsCode',
             'open'=>true
         ]);
     }
@@ -92,7 +92,7 @@ class Manage2FATest extends TestCase {
             try {
                 new Manage2FA([
                     'jwt'=>$signIn->jwt,
-                    'code'=>'wrongCode-',
+                    'authCode'=>'wrongCode-',
                     'open'=>true
                 ]);
             } catch(InvalidCodeException $e) { }

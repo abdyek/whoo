@@ -120,7 +120,7 @@ class Controller {
                     'max'=>255
                 ]
             ],
-            'code'=>[
+            'authCode'=>[
                 'type'=>'str',
                 'limits'=>[
                     'min'=>1,
@@ -168,7 +168,7 @@ class Controller {
                     'max'=>255
                 ]
             ],
-            'authenticationCode'=>[
+            'authCode'=>[
                 'type'=>'str',
                 'limits'=>[
                     'min'=>1,
@@ -184,7 +184,7 @@ class Controller {
                     'max'=>40
                 ]
             ],
-            'authenticationCode'=>[
+            'authCode'=>[
                 'type'=>'str',
                 'limits'=>[
                     'min'=>1,
@@ -216,7 +216,7 @@ class Controller {
                     'max'=>50
                 ]
             ],
-            'code'=>[
+            'authCode'=>[
                 'type'=>'str',
                 'limits'=>[
                     'min'=>1,
@@ -310,7 +310,7 @@ class Controller {
                     'max'=>5000
                 ]
             ],
-            'code'=>[
+            'authCode'=>[
                 'type'=>'str',
                 'limits'=>[
                     'min'=>1,

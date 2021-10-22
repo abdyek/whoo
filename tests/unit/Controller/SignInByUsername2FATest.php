@@ -48,7 +48,7 @@ class SignInByUsername2FATest extends TestCase {
         } catch(TwoFactorAuthEnabledException $e) {
             $signIn2FA = new SignInByUsername2FA([
                 'username'=>self::USERNAME,
-                'authenticationCode'=>$e->authenticationCode
+                'authCode'=>$e->authCode
             ]);
         }
         $this->assertNotNull($signIn2FA->jwt);
@@ -72,14 +72,14 @@ class SignInByUsername2FATest extends TestCase {
         } catch(TwoFactorAuthEnabledException $e) {}
         $signIn2FA = new SignInByUsername2FA([
             'username'=>self::USERNAME,
-            'authenticationCode'=>'wrong-code'
+            'authCode'=>'wrong-code'
         ]);
     }
     public function testRunNotFoundException() {
         $this->expectException(NotFoundException::class);
         new SignInByUsername2FA([
             'username'=>'nothing',
-            'authenticationCode'=>'12345'
+            'authCode'=>'12345'
         ]);
     }
     public function testRunNotFoundAuthCodeException() {
@@ -95,7 +95,7 @@ class SignInByUsername2FATest extends TestCase {
         ]);
         $signIn2FA = new SignInByUsername2FA([
             'username'=>self::USERNAME,
-            'authenticationCode'=>'123123123'
+            'authCode'=>'123123123'
         ]);
     }
     public function testRunTrialCountOverException() {
@@ -119,7 +119,7 @@ class SignInByUsername2FATest extends TestCase {
             try {
                 new SignInByUsername2FA([
                     'username'=>self::USERNAME,
-                    'authenticationCode'=>'123123123'
+                    'authCode'=>'123123123'
                 ]);
             } catch(InvalidCodeException $e) { }
         }

@@ -32,7 +32,7 @@ class SignInByUsername2FA extends Controller {
         if((time()-$timestamp)>AuthConfig::$VALIDITY_TIME_TO_SIGN_IN_2FA) {
             throw new TimeOutCodeException;
         }
-        if($auth->getCode()!==$this->data['authenticationCode']) {
+        if($auth->getCode()!==$this->data['authCode']) {
             AuthenticationCode::increaseTrialCount($auth);
             throw new InvalidCodeException;
         }

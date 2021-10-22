@@ -32,7 +32,7 @@ class SetAuthCodeForEmailVerificationTest extends TestCase {
         $setAuth = new SetAuthCodeForEmailVerification([
             'email'=>self::$traitEmail
         ]);
-        $this->assertIsString($setAuth->code);
-        $this->assertEquals(AuthConfig::$SIZE_OF_CODE_TO_VERIFY_EMAIL, strlen($setAuth->code));
+        $this->assertIsString($setAuth->authCode);
+        $this->assertEquals(AuthConfig::$SIZE_OF_CODE_TO_VERIFY_EMAIL, strlen($setAuth->authCode));
     }
 }

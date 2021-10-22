@@ -29,7 +29,7 @@ class VerifyEmail extends Controller {
         if((time()-$timestamp)>AuthConfig::$VALIDITY_TIME_TO_VERIFY_EMAIL) {
             throw new TimeOutCodeException;
         }
-        if($auth->getCode()!==$this->data['code']) {
+        if($auth->getCode()!==$this->data['authCode']) {
             AuthenticationCode::increaseTrialCount($auth);
             throw new InvalidCodeException;
         }

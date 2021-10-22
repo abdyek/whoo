@@ -24,7 +24,7 @@ class Manage2FA extends Controller {
         if((time()-$timestamp)>AuthConfig::$VALIDITY_TIME_TO_MANAGE_2FA) {
             throw new TimeOutCodeException;
         }
-        if($auth->getCode()!==$this->data['code']) {
+        if($auth->getCode()!==$this->data['authCode']) {
             AuthenticationCode::increaseTrialCount($auth);
             throw new InvalidCodeException;
         }

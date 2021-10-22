@@ -17,7 +17,7 @@ use Abdyek\Whoo\Config\Whoo as Config;
 
 class SignInByUsername extends Controller {
     public $jwt = null;
-    public $code = null;
+    public $authCode = null;
     protected function run() {
         $this->user = User::getByUsername($this->data['username']);
         if($this->user===null) {
@@ -37,10 +37,10 @@ class SignInByUsername extends Controller {
         }
         if($this->user->getTwoFactorAuthentication()) {
             AuthenticationCode::deleteByUserIdType($this->user->getId(), AuthConfig::TYPE_2FA);
-            $this->code = Random::number(AuthConfig::$SIZE_OF_CODE_FOR_2FA);
-            AuthenticationCode::create($this->user->getId(), AuthConfig::TYPE_2FA, $this->code);
+            $this->authCode = Random::number(AuthConfig::$SIZE_OF_CODE_FOR_2FA);
+            AuthenticationCode::create($this->user->getId(), AuthConfig::TYPE_2FA, $this->authCode);
             $e = new TwoFactorAuthEnabledException;
-            $e->setAuthenticationCode($this->code);
+            $e->setAuthenticationCode($this->authCode);
             throw $e;
         }
         $this->jwt = JWT::generateToken($this->user->getId(), $this->user->getSignOutCount());

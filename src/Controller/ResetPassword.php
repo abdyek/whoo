@@ -34,8 +34,8 @@ class ResetPassword extends Controller {
         if((time()-$timestamp)>AuthConfig::$VALIDITY_TIME_TO_RESET_PW) {
             throw new TimeOutCodeException;
         }
-        $code = $auth->getCode();
-        if($code!==$this->data['code']) {
+        $authCode = $auth->getCode();
+        if($authCode!==$this->data['authCode']) {
             AuthenticationCode::increaseTrialCount($auth);
             throw new InvalidCodeException;
         }

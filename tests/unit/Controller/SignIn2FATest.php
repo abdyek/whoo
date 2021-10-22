@@ -39,7 +39,7 @@ class SignIn2FATest extends TestCase {
         } catch(TwoFactorAuthEnabledException $e) {
             $signIn2FA = new SignIn2FA([
                 'email'=>$data['email'],
-                'authenticationCode'=>$e->authenticationCode
+                'authCode'=>$e->authCode
             ]);
         }
         $this->assertNotNull($signIn2FA->jwt);
@@ -48,7 +48,7 @@ class SignIn2FATest extends TestCase {
         $this->expectException(NotFoundException::class);
         new SignIn2FA([
             'email'=>'notfound@notfound.com',
-            'authenticationCode'=>'nothing'
+            'authCode'=>'nothing'
         ]);
     }
     public function testRunNotFoundAuthCodeException() {
@@ -59,7 +59,7 @@ class SignIn2FATest extends TestCase {
         new SignUp($data);
         new SignIn2FA([
             'email'=>$data['email'],
-            'authenticationCode'=>'nothing'
+            'authCode'=>'nothing'
         ]);
     }
     public function testRunTrialCountOverException() {
@@ -76,7 +76,7 @@ class SignIn2FATest extends TestCase {
             try {
                 new SignIn2FA([
                     'email'=>$data['email'],
-                    'authenticationCode'=>'123123123'
+                    'authCode'=>'123123123'
                 ]);
             } catch(InvalidCodeException $e) { }
         }
