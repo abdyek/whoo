@@ -27,9 +27,9 @@ class JWT {
     }
     public static function getPayloadWithUser($jwt) {
         try {
-            $payload = (array) FirebaseJWT::decode($jwt, JWT::getSecretKey(), array('HS256'));
-            $user = User::getById($payload['whoo']->userId);
-            if($payload['whoo']->signOutCount!=$user->getSignOutCount()) {
+            $payload = FirebaseJWT::decode($jwt, JWT::getSecretKey(), array('HS256'));
+            $user = User::getById($payload->whoo->userId);
+            if($payload->whoo->signOutCount!=$user->getSignOutCount()) {
                 throw new InvalidTokenException;
             }
             return [

@@ -16,7 +16,7 @@ class JWTTest extends TestCase {
         $user = $this->createExample();
         $jwt = JWT::generateToken($user->getId(), $user->getSignOutCount());
         $payload = JWT::getPayloadWithUser($jwt)['payload'];
-        $this->assertEquals($user->getId(), $payload['whoo']->userId);
+        $this->assertEquals($user->getId(), $payload->whoo->userId);
     }
     public function testGetPayloadInvalidTokenException() {
         $this->expectException(InvalidTokenException::class);
@@ -34,6 +34,6 @@ class JWTTest extends TestCase {
         $user = $this->createExample();
         $jwt = JWT::generateToken($user->getId(), $user->getSignOutCount());
         $payload = JWT::getPayloadWithUser($jwt)['payload'];
-        $this->assertEquals('admin', $payload['role']);
+        $this->assertEquals('admin', $payload->role);
     }
 }

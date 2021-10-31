@@ -169,7 +169,7 @@ class SignInTest extends TestCase {
         $data['passwordAgain'] = $data['password'];
         $signIn = new SignIn($data);
         $payload = JWT::getPayloadWithUser($signIn->jwt)['payload'];
-        $this->assertEquals($signIn->user->getId(), $payload['whoo']->userId);
+        $this->assertEquals($signIn->user->getId(), $payload->whoo->userId);
     }
     public function testRunUnmatchedPasswordsException() {
         $this->expectException(UnmatchedPasswordsException::class);
