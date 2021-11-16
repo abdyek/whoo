@@ -1,3 +1,4 @@
 /tests export-ignore
 /phpunit.xml export-ignore
 /propel export-ignore
+/generated-conf export-ignore

@@ -1,7 +1,8 @@
 # Whoo
-Whoo is a database agnostic authentication library to manage authentication operation easily. Whoo provides you a layer to access and manage user and authentication in your application using Propel ORM. Actually whoo only presents [JWT](https://github.com/firebase/php-jwt) library and [Propel ORM](ttps://github.com/propelorm/Propel2) as wrapped to import authentication operation in your application fast.
+Whoo is a database agnostic authentication library to manage authentication operation easily. Whoo provides you a layer to access and manage user and authentication in your application using [Propel ORM](https://github.com/propelorm/Propel2).
+
 ## Installation
-`composer require abdyek/whoo "1.0.0-beta3"`
+`composer require abdyek/whoo "1.0.0-beta4"`
 
 ### Notice!
 
@@ -27,6 +28,12 @@ use Abdyek\Whoo\Exception\IncorrectPasswordException;
 use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
 use Abdyek\Whoo\Exception\InvalidTokenException;
 use Abdyek\Whoo\Tool\JWT;
+
+// Whoo once needs to load config
+Abdyek\Whoo\Tool\Config::load();
+
+// set secret key of JWT
+JWT::setSecretKey('top_secret');
  
 // Sign Up
 try {
@@ -55,16 +62,18 @@ try {
 
 // JWT Payload
 try {
+    // $jwt is incoming token from the user
     $payload = JWT::getPayload($jwt);
-    $userId = $payload['userId'];
-    // userId is a unique number for every user in Whoo user model.
+    $userId = $payload->whoo->userId;
+    // userId is a unique number for each user in Whoo user model.
     // You can use it in your application to expand the user model
 } catch(InvalidTokenException $e) {
     // Oops!! The token invalid!!   
 }
 ```
 
-
-
 ## Documentation
 You can reach all controller class ant other information at [wiki](https://github.com/abdyek/whoo/wiki) page. You can feedback me about documentation.
+
+## Versioning
+Whoo will have semantic versioning when first stable release.
