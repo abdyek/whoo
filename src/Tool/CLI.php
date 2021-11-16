@@ -6,7 +6,7 @@ use Abdyek\Whoo\Tool\Config as ConfigTool;
 use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 class CLI {
-    private static $config = 'whoo';
+    private static $config = 'vendor/abdyek/whoo/whoo.json';
     private static $outputDir = 'whoo';
     public static function init($config=null, $outputDir=null) {
         self::$config = $config ?? self::$config;
