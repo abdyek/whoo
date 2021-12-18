@@ -19,12 +19,7 @@ Whoo is a database agnostic authentication library to manage authentication oper
 ## Getting Started
 
 ```php
-use Abdyek\Whoo\Controller\SignUp;
-use Abdyek\Whoo\Controller\SignIn;
-use Abdyek\Whoo\Exception\NotUniqueEmailException;
-use Abdyek\Whoo\Exception\IncorrectPasswordException;
-use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
-use Abdyek\Whoo\Exception\InvalidTokenException;
+use Abdyek\Whoo\Whoo;
 use Abdyek\Whoo\Tool\JWT;
 
 // Whoo once needs to load config
@@ -34,31 +29,43 @@ Abdyek\Whoo\Tool\Config::load();
 JWT::setSecretKey('top_secret');
  
 // Sign Up
-try {
-    new SignUp([
-        'email'=>'new_user_email@example.com',
-        'password'=>'this_is_password'
-    ]);
-    // successfully registered
-} catch(NotUniqueEmailException $e) {
+$signUp = new Whoo('SignUp', [
+    'email'=>'new_user_email@example.com',
+    'password'=>'this_is_password'
+]);
+
+$signUp->catchException('NotUniqueEmail', function() {
     // Oops! the email already is registered
+});
+
+$signUp->run();
+
+if($signUp->success) {
+    echo 'signed up successfully!';
 }
 
 // Sign In
-try {
-    $signIn = new SignIn([
-        'email'=>'new_user_email@example.com',
-        'password'=>'this_is_password'
-    ]);
-    // You can use $signIn->$jwt you want
-} catch(IncorrectPasswordException $e) {
-    // Wrong password!
-} catch(TwoFactorAuthEnabledException $e) {
+
+$signIn = new Whoo('SignIn', [
+    'email'=>'new_user_email@example.com',
+    'password'=>'this_is_password'
+]);
+
+$signIn->catchException('IncorrectPassword', function() {
+    // Oops! Wrong password
+})->catchException('TwoFactorAuthEnabled', function() use($signIn) {
     // You can send authentication code to user via any way you want
-    // $e->authenticationCode;
+    // $signIn->getException()->authCode;
+})->run();
+
+if($signIn->success) {
+    echo 'signed in successfully!';
 }
 
 // JWT Payload
+
+use Abdyek\Whoo\Exception\InvalidTokenException;
+
 try {
     // $jwt is incoming token from the user
     $payload = JWT::getPayload($jwt);
