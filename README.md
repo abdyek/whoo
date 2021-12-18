@@ -2,11 +2,9 @@
 Whoo is a database agnostic authentication library to manage authentication operation easily. Whoo provides you a layer to access and manage user and authentication in your application using [Propel ORM](https://github.com/propelorm/Propel2).
 
 ## Installation
-`composer require abdyek/whoo "1.0.0-beta4"`
+`composer require propel/propel "2.0.0-beta1"`
 
-### Notice!
-
-Whoo uses version 2.0 of Propel. Version 2 is not stable version of Propel. So you must hold `"minimum-stability":"beta"` in your composer.json until I replace the stable version of Propel instead of the beta version.
+`composer require abdyek/whoo "1.0.0-beta5"`
 
 ## Features
 

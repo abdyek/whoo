@@ -13,12 +13,13 @@ class Whoo
     public function __construct(string $controller, array $args)
     {
         $this->controller = $controller;
-        return $this;
+        $this->args = $args;
     }
 
     public function catchException(string $exception, object $callback)
     {
         $this->callbacks[$exception] = $callback;
+        return $this;
     }
 
     public function run(): void
