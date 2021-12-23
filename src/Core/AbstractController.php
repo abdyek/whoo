@@ -8,14 +8,14 @@ use Abdyek\Whoo\Core\Validator;
 
 abstract class AbstractController
 {
-    protected Data $data;
-    protected Config $config;
+    private Data $data;
+    private Config $config;
     private Validator $validator;
     private \DateTime $dateTime;
 
-    abstract public function run();
+    abstract public function run(): void;
 
-    public function __construct(Data $data, ?Config $config, ?Validator $validator, ?\DateTime $dateTime)
+    public function __construct(Data $data, Config $config = null, Validator $validator = null, \DateTime $dateTime = null)
     {
         $this->data = $data;
         $this->config = $config ?? new Config;
@@ -49,7 +49,7 @@ abstract class AbstractController
     
     public function getData(): Data
     {
-        return $this->data();
+        return $this->data;
     }
 
     public function setData(Data $data): void
@@ -60,7 +60,7 @@ abstract class AbstractController
 
     public function getConfig(): Config
     {
-        return $this->config();
+        return $this->config;
     }
 
     public function setConfig(Config $config): void

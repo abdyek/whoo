@@ -2,13 +2,13 @@
 
 namespace Abdyek\Whoo\Core;
 
-use Abdyek\Whoo\Controller;
+use Abdyek\Whoo\Core\AbstractController;
 
 class Core
 {
-    protected Controller $controller;
+    protected AbstractController $controller;
 
-    public function setController(Controller $controller)
+    public function setController(AbstractController $controller)
     {
         $this->controller = $controller;
     }

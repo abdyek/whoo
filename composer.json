@@ -26,6 +26,9 @@
         }
     },
     "autoload-dev": {
+        "psr-4": {
+            "Pseudo\\": "tests/unit/pseudo"
+        },
         "classmap": [
             "tests/unit/traits",
             "propel/model"
