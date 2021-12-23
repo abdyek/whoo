@@ -8,6 +8,6 @@ class ExampleController extends AbstractController
 {
     public function run(): void
     {
-        echo 'merhaba';
+
     }
 }

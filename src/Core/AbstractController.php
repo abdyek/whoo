@@ -8,10 +8,10 @@ use Abdyek\Whoo\Core\Validator;
 
 abstract class AbstractController
 {
-    private Data $data;
-    private Config $config;
-    private Validator $validator;
-    private \DateTime $dateTime;
+    protected Data $data;
+    protected Config $config;
+    protected Validator $validator;
+    protected \DateTime $dateTime;
 
     abstract public function run(): void;
 
@@ -34,7 +34,7 @@ abstract class AbstractController
     public function triggerRun(): void
     {
         // User sınıfı oluşturulacak
-        $this->user->checkPermission();
+        // $this->user->checkPermission();
         $this->validator->validate();
         $this->run();
     }

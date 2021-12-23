@@ -3,16 +3,19 @@
 namespace Abdyek\Whoo\Core;
 
 use Abdyek\Whoo\Core\Core;
+use Abdyek\Whoo\Exception\InvalidDataException;
 
 class Validator extends Core
 {
 
     public function validate(): void
     {
-        
+        if(!$this->check()) {
+            throw new InvalidDataException;
+        }
     }
 
-    public function check(): bool
+    private function check(): bool
     {
         $className = $this->controller->getClassName();
         $requiredMap = $this->controller->getConfig()->getRequiredMap();
