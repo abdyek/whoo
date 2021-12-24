@@ -22,7 +22,7 @@ class Validator extends Core
         if(!isset($requiredMap[$className])) {
             return true;
         }
-        if(!$this->checkRequired($this->controller->getData(), $requiredMap[$className])) {
+        if(!$this->checkRequired($this->controller->getData()->getContent(), $requiredMap[$className])) {
             return false;
         }
         return true;
