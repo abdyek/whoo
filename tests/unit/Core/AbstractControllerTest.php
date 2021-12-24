@@ -2,7 +2,6 @@
 
 use PHPUnit\Framework\TestCase;
 use Abdyek\Whoo\Core\AbstractController;
-use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Core\Config;
 use Abdyek\Whoo\Core\Validator;
 use Pseudo\ExampleController;
@@ -15,22 +14,22 @@ class AbstractControllerTest extends TestCase
 {
     public function testGetClassName()
     {
-        $exampleController = new ExampleController(new Data([]));
+        $exampleController = new ExampleController();
         $this->assertSame('ExampleController', $exampleController->getClassName());
     }
 
     public function testGetSetData()
     {
-        $exampleController = new ExampleController(new Data(['a' => 'b']));
-        $exampleController2 = new ExampleController(new Data(['a' => 'c']));
+        $exampleController = new ExampleController(['a' => 'b']);
+        $exampleController2 = new ExampleController(['a' => 'c']);
         $exampleController->setData($exampleController2->getData());
-        $this->assertSame('c', $exampleController->getData()->getData()['a']);
+        $this->assertSame('c', $exampleController->getData()['a']);
     }
 
     public function testGetSetConfig()
     {
         $config = new Config;
-        $exampleController = new ExampleController(new Data([]));
+        $exampleController = new ExampleController();
         $exampleController->setConfig($config);
         $this->assertSame($config, $exampleController->getConfig());
     }
@@ -38,7 +37,7 @@ class AbstractControllerTest extends TestCase
     public function testGetSetValidator()
     {
         $validator = new Validator;
-        $exampleController = new ExampleController(new Data([]));
+        $exampleController = new ExampleController();
         $exampleController->setValidator($validator);
         $this->assertSame($validator, $exampleController->getValidator());
     }
@@ -46,7 +45,7 @@ class AbstractControllerTest extends TestCase
     public function testGetSetDateTime()
     {
         $dateTime = new \DateTime('1994-01-01');
-        $exampleController = new ExampleController(new Data([]));
+        $exampleController = new ExampleController();
         $exampleController->setDateTime($dateTime);
         $this->assertSame('1994-01', $exampleController->getDateTime()->format('Y-m'));
     }

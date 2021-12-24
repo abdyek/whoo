@@ -19,11 +19,10 @@ class Validator extends Core
     {
         $className = $this->controller->getClassName();
         $requiredMap = $this->controller->getConfig()->getRequiredMap();
-        $data = $this->controller->getData();
         if(!isset($requiredMap[$className])) {
             return true;
         }
-        if(!$this->checkRequired($data->getData(), $requiredMap[$className])) {
+        if(!$this->checkRequired($this->controller->getData(), $requiredMap[$className])) {
             return false;
         }
         return true;

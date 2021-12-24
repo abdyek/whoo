@@ -11,8 +11,7 @@ class Authenticator extends Core
 
     public function check(): void
     {
-        $dataClass = $this->controller->getData();
-        $data = $dataClass->getData();
+        $data = $this->controller->getData();
         // I will make it dynamic
         if(isset($data['jwt'])) {
             $this->user = JWT::getPayloadWithUser($data['jwt'])['user'];
