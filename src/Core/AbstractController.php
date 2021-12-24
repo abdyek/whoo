@@ -5,6 +5,7 @@ namespace Abdyek\Whoo\Core;
 use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Core\Config;
 use Abdyek\Whoo\Core\Validator;
+use Abdyek\Whoo\Core\Authenticator;
 
 abstract class AbstractController
 {
@@ -12,15 +13,17 @@ abstract class AbstractController
     protected Config $config;
     protected Validator $validator;
     protected \DateTime $dateTime;
+    protected Authenticator $authenticator;
 
     abstract public function run(): void;
 
-    public function __construct(Data $data, Config $config = null, Validator $validator = null, \DateTime $dateTime = null)
+    public function __construct(Data $data, ?Config $config = null, ?Validator $validator = null, ?\DateTime $dateTime = null, ?Authenticator $authenticator = null)
     {
         $this->data = $data;
         $this->config = $config ?? new Config;
         $this->validator = $validator ?? new Validator;
         $this->dateTime = $dateTime ?? new \DateTime;
+        $this->authenticator = $authenticator ?? new Authenticator;
         $this->setThis();
     }
 
@@ -29,12 +32,12 @@ abstract class AbstractController
         $this->data->setController($this);
         $this->config->setController($this);
         $this->validator->setController($this);
+        $this->authenticator->setController($this);
     }
 
     public function triggerRun(): void
     {
-        // User sınıfı oluşturulacak
-        // $this->user->checkPermission();
+        $this->authenticator->check();
         $this->validator->validate();
         $this->run();
     }
@@ -88,6 +91,17 @@ abstract class AbstractController
     public function setDateTime(\DateTime $dateTime): void
     {
         $this->dateTime = $dateTime;
+    }
+
+    public function getAuthenticator(): Authenticator
+    {
+        return $this->authenticator;
+    }
+
+    public function setAuthenticator(Authenticator $authenticator): void
+    {
+        $this->authenticator = $authenticator;
+        $authenticator->setController($this);
     }
 
 }
