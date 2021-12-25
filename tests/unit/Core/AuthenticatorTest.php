@@ -2,7 +2,6 @@
 
 use PHPUnit\Framework\TestCase;
 use Abdyek\Whoo\Core\Authenticator;
-use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Tool\JWT;
 use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Exception\InvalidTokenException;
@@ -23,7 +22,7 @@ class AuthenticatorTest extends TestCase
             'password' => '123456789',
         ]);
         $jwt = JWT::generateToken($user->getId(), $user->getSignOutCount());
-        $controller = new ExampleController(new Data(['jwt' => $jwt]));
+        $controller = new ExampleController(['jwt' => $jwt]);
         $authenticator = $controller->getAuthenticator();
         $authenticator->check();
         $this->assertSame($user, $authenticator->getUser());
@@ -32,15 +31,8 @@ class AuthenticatorTest extends TestCase
     public function testInvalidaTokenException()
     {
         $this->expectException(InvalidTokenException::class);
-        $controller = new ExampleController(new Data(['jwt' => 'invalid token']));
+        $controller = new ExampleController(['jwt' => 'invalid token']);
         $authenticator = $controller->getAuthenticator();
         $authenticator->check();
-    }
-
-    public function testGetSetJwt()
-    {
-        $authenticator = new Authenticator();
-        $authenticator->setJwt('example');
-        $this->assertSame('example', $authenticator->getJwt());
     }
 }
