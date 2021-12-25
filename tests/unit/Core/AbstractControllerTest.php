@@ -5,6 +5,8 @@ use Abdyek\Whoo\Core\AbstractController;
 use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Core\Config;
 use Abdyek\Whoo\Core\Validator;
+use Abdyek\Whoo\Core\Authenticator;
+use Abdyek\Whoo\Core\Response;
 use Pseudo\ExampleController;
 
 /**
@@ -49,6 +51,22 @@ class AbstractControllerTest extends TestCase
         $exampleController = new ExampleController();
         $exampleController->setDateTime($dateTime);
         $this->assertSame('1994-01', $exampleController->getDateTime()->format('Y-m'));
+    }
+
+    public function testGetSetAuthenticator()
+    {
+        $authenticator = new Authenticator();
+        $exampleController = new ExampleController();
+        $exampleController->setAuthenticator($authenticator);
+        $this->assertSame($authenticator, $exampleController->getAuthenticator());
+    }
+
+    public function testGetSetResponse()
+    {
+        $response = new Response();
+        $exampleController = new ExampleController();
+        $exampleController->setResponse($response);
+        $this->assertSame($response, $exampleController->getResponse());
     }
 
 }
