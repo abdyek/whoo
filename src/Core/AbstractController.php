@@ -19,7 +19,7 @@ abstract class AbstractController
 
     public function __construct(?Data $data = null, ?Config $config = null, ?Validator $validator = null, ?\DateTime $dateTime = null, ?Authenticator $authenticator = null)
     {
-        $this->data = $data ?? new Data([]);
+        $this->data = $data ?? new Data();
         $this->config = $config ?? new Config;
         $this->validator = $validator ?? new Validator;
         $this->dateTime = $dateTime ?? new \DateTime;
@@ -29,6 +29,7 @@ abstract class AbstractController
 
     private function setThis(): void
     {
+        $this->data->setController($this);
         $this->config->setController($this);
         $this->validator->setController($this);
         $this->authenticator->setController($this);
@@ -57,6 +58,7 @@ abstract class AbstractController
     public function setData(Data $data): void
     {
         $this->data = $data;
+        $data->setController($this);
     }
 
     public function getConfig(): Config

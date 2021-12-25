@@ -33,6 +33,9 @@ class Validator extends Core
         $dataKeys = array_keys($data);
         foreach($required as $key=>$value) {
             $keysInValues = array_keys($value);
+            if(in_array('optional', $keysInValues) and $value['optional'] === true and !in_array($key, $dataKeys)) {
+                continue;
+            }
             if(!in_array($key, $dataKeys)) {
                 return false;
             }

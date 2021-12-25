@@ -2,11 +2,14 @@
 
 namespace Abdyek\Whoo\Core;
 
-class Data
+use Abdyek\Whoo\Core\Core;
+use Abdyek\Whoo\Exception\InvalidDataException;
+
+class Data extends Core
 {
     private array $content;
 
-    public function __construct(array $content)
+    public function __construct(?array $content = [])
     {
         $this->content = $content;
     }

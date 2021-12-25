@@ -46,11 +46,15 @@ class ValidatorTest extends TestCase
                             'min' => 0,
                             'max' => 255
                         ]
+                    ],
+                    'dontForgetMe' => [
+                        'type' => 'bool',
+                        'optional' => true
                     ]
                 ],
                 [
                     'username' => 'yunusEmre',
-                    'email' => 'yunusemrebulut123@gmail.com'
+                    'email' => 'yunusemrebulut123@gmail.com',
                 ]
             ],
             [
@@ -70,7 +74,8 @@ class ValidatorTest extends TestCase
                         ]
                     ],
                     'dontForgetMe' => [
-                        'type' => 'bool'
+                        'type' => 'bool',
+                        'optional' => false
                     ],
                     'phone' => [
                         'type' => 'num',
@@ -155,6 +160,30 @@ class ValidatorTest extends TestCase
                 ],
                 [ 
                     // there isn't 'dontForgetMe' in the data
+                ]
+            ],
+            [
+                [
+                    'password' => [
+                        'type' =>  'str',
+                        'limits' => [
+                            'min' => 5,
+                            'max' => 10
+                        ]
+                    ],
+                    'passwordAgain' => [
+                        'type' =>  'str',
+                        'limits' => [
+                            'min' => 5,
+                            'max' => 10
+                        ],
+                        'optional' => true
+                    ],
+                ],
+                [
+                    // different type for optional
+                    'password' => 'this_is_pw',
+                    'passwordAgain' => 1234
                 ]
             ]
         ];

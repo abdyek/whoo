@@ -15,7 +15,23 @@ return [
                 'min'=>8,
                 'max'=>50
             ]
-        ]
+        ],
+        'passwordAgain'=>[
+            'type'=>'str',
+            'limits'=>[
+                'min'=>8,
+                'max'=>50
+            ],
+            'optional' => true
+        ],
+        'username'=>[
+            'type'=>'str',
+            'limits'=>[
+                'min'=>1,
+                'max'=>40
+            ],
+            'optional' => true
+        ],
     ],
     'SignIn'=>[
         'email'=>[
@@ -31,6 +47,14 @@ return [
                 'min'=>8,
                 'max'=>50
             ]
+        ],
+        'passwordAgain' => [
+            'type' => 'str',
+            'limits' => [
+                'min' => 8,
+                'max' => 50
+            ],
+            'optional' => true
         ]
     ],
     'SignInByUsername'=>[
@@ -47,6 +71,14 @@ return [
                 'min'=>8,
                 'max'=>50
             ]
+        ],
+        'passwordAgain'=>[
+            'type'=>'str',
+            'limits'=>[
+                'min'=>8,
+                'max'=>50
+            ],
+            'optional' => true
         ]
     ],
     'SetUsername'=>[
