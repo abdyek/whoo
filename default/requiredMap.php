@@ -299,13 +299,4 @@ return [
             ]
         ]
     ],
-    'FetchInfo'=> [
-        'jwt'=>[
-            'type'=>'str',
-            'limits'=>[
-                'min'=>1,
-                'max'=>5000
-            ]
-        ]
-    ]
 ];

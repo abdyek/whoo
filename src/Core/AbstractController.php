@@ -9,7 +9,7 @@ use Abdyek\Whoo\Core\Authenticator;
 
 abstract class AbstractController
 {
-    protected array $data;
+    protected Data $data;
     protected Config $config;
     protected Validator $validator;
     protected \DateTime $dateTime;
@@ -17,9 +17,9 @@ abstract class AbstractController
 
     abstract public function run(): void;
 
-    public function __construct(?array $data = [], ?Config $config = null, ?Validator $validator = null, ?\DateTime $dateTime = null, ?Authenticator $authenticator = null)
+    public function __construct(?Data $data = null, ?Config $config = null, ?Validator $validator = null, ?\DateTime $dateTime = null, ?Authenticator $authenticator = null)
     {
-        $this->data = $data;
+        $this->data = $data ?? new Data([]);
         $this->config = $config ?? new Config;
         $this->validator = $validator ?? new Validator;
         $this->dateTime = $dateTime ?? new \DateTime;
@@ -49,12 +49,12 @@ abstract class AbstractController
 
     // get & set
     
-    public function getData(): array
+    public function getData(): Data
     {
         return $this->data;
     }
 
-    public function setData(array $data): void
+    public function setData(Data $data): void
     {
         $this->data = $data;
     }

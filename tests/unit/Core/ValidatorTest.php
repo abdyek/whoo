@@ -1,8 +1,9 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Abdyek\Whoo\Core\Validator;
 use Abdyek\Whoo\Core\Config;
+use Abdyek\Whoo\Core\Data;
+use Abdyek\Whoo\Core\Validator;
 use Abdyek\Whoo\Exception\InvalidDataException;
 use Pseudo\ExampleController;
 
@@ -15,14 +16,14 @@ class ValidatorTest extends TestCase
     /**
      * @dataProvider providerForSuccess
      */
-    public function test($pattern, $data)
+    public function test($pattern, $content)
     {
         $validator = new Validator();
         $config = new Config();
         $config->setRequiredMap([
             'ExampleController' => $pattern
         ]);
-        $controller = new ExampleController($data, $config, $validator);
+        $controller = new ExampleController(new Data($content), $config, $validator);
         $controller->triggerRun();
         $this->assertTrue(true);
     }
@@ -92,7 +93,7 @@ class ValidatorTest extends TestCase
     /**
      * @dataProvider providerForInvalid
      */
-    public function testInvalidDataException($pattern, $data)
+    public function testInvalidDataException($pattern, $content)
     {
         $this->expectException(InvalidDataException::class);
         $validator = new Validator();
@@ -100,7 +101,7 @@ class ValidatorTest extends TestCase
         $config->setRequiredMap([
             'ExampleController' => $pattern
         ]);
-        $controller = new ExampleController($data, $config, $validator);
+        $controller = new ExampleController(new Data($content), $config, $validator);
         $controller->triggerRun();
         
     }

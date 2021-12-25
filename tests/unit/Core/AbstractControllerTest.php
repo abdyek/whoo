@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Abdyek\Whoo\Core\AbstractController;
+use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Core\Config;
 use Abdyek\Whoo\Core\Validator;
 use Pseudo\ExampleController;
@@ -20,10 +21,10 @@ class AbstractControllerTest extends TestCase
 
     public function testGetSetData()
     {
-        $exampleController = new ExampleController(['a' => 'b']);
-        $exampleController2 = new ExampleController(['a' => 'c']);
+        $exampleController = new ExampleController(new Data(['a' => 'b']));
+        $exampleController2 = new ExampleController(new Data(['a' => 'c']));
         $exampleController->setData($exampleController2->getData());
-        $this->assertSame('c', $exampleController->getData()['a']);
+        $this->assertSame('c', $exampleController->getData()->getContent()['a']);
     }
 
     public function testGetSetConfig()
