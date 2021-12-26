@@ -4,6 +4,8 @@ use PHPUnit\Framework\TestCase;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SignIn;
 use Abdyek\Whoo\Controller\SetUsername;
+use Abdyek\Whoo\Core\Config;
+use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Model\AuthenticationCode;
 use Abdyek\Whoo\Exception\NotFoundException;
@@ -16,172 +18,215 @@ use Abdyek\Whoo\Config\JWT as JWTConfig;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
 use Abdyek\Whoo\Tool\JWT;
 use Abdyek\Whoo\Tool\TemporaryToken;
-use Abdyek\Whoo\Config\Whoo as Config;
-use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 /**
  * @covers SignIn::
  */
 
-class SignInTest extends TestCase {
-    const USERNAME = 'usernamee';
-    use DefaultConfig;
+class SignInTest extends TestCase
+{
+    private const USERNAME = 'usernamee';
+
     use Reset;
-    public static function setUpBeforeClass(): void {
-        PropelConfig::$CONFIG_FILE = 'propel/config.php';
-    }
-    public function setUp(): void {
-        self::setDefaultConfig();
+
+    public function setUp(): void
+    {
         self::reset();
     }
-    public function testRun() {
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$USE_USERNAME = false;
-        Config::$DEFAULT_2FA = false;
-        $data = $this->getData();
-        $signUp = new SignUp($data);
-        $signIn = new SignIn($data);
-        $payload= (array) JWT::getPayloadWithUser($signIn->jwt)['payload'];
-        $this->assertNotNull($payload);
-        $this->assertNotNull($signIn->user);
-        $this->assertEquals($signIn->user->getId(), $payload['whoo']->userId);
-        $signIn = new SignIn($data);
+    
+    public function testRun()
+    {
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setUseUsername(false);
+        $config->setDefault2fa(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        $signIn = new SignIn(new Data($content), $config);
+        $signIn->triggerRun();
+    
+        $response = $signIn->getResponse();
+        $responseContent = $response->getContent();
+        $jwt = $responseContent['jwt'];
+        $user = $responseContent['user'];
+
+        $payload = (array) JWT::getPayloadWithUser($jwt)['payload'];
+
+        $this->assertNotNull($jwt);
+
+        $this->assertEquals($user->getId(), $payload['whoo']->userId);
     }
-    public function testRunUseUsernameTrue() {
-        $data = $this->getData();
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$USE_USERNAME = true;
-        Config::$DENY_IF_NOT_SET_USERNAME = true;
-        Config::$DEFAULT_2FA = false;
-        $signUp = new SignUp($data);
-        new SetUsername([
-            'tempToken'=>$signUp->tempToken,
-            'username'=>self::USERNAME
-        ]);
-        $signIn = new SignIn($data);
-        $payload = (array) JWT::getPayloadWithUser($signIn->jwt)['payload'];
-        $this->assertNotNull($payload);
-        $this->assertNotNull($signIn->user);
-        $this->assertEquals($signIn->user->getId(), $payload['whoo']->userId);
-        $this->assertSame(self::USERNAME, $signIn->user->getUsername());
-    }
-    public function testRunDenyIfNotSetUsernameFalse() {
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$USE_USERNAME = true;
-        Config::$DENY_IF_NOT_SET_USERNAME = false;
-        Config::$DEFAULT_2FA = false;
-        $data = $this->getData();
-        $signUp = new SignUp($data);
-        $signIn = new SignIn($data);
-        $payload = (array) JWT::getPayloadWithUser($signIn->jwt)['payload'];
-        $this->assertNotNull($payload);
-        $this->assertNotNull($signIn->user);
-        $this->assertEquals($signIn->user->getId(), $payload['whoo']->userId);
-    }
-    public function testNotFoundException() {
+
+    public function testNotFoundException()
+    {
         $this->expectException(NotFoundException::class);
-        $data = $this->getData();
-        $data['email'] = 'notFoundEmail@123.com';
-        $signIn = new SignIn($data);
+        $content = $this->getContent();
+        $content['email'] = 'notFound' . $content['email'];
+        (new SignIn(new Data($content)))->triggerRun();
     }
-    public function testRunIncorrectPasswordException() {
+    
+    public function testRunIncorrectPasswordException()
+    {
         $this->expectException(IncorrectPasswordException::class);
-        $data = $this->getData();
-        $signUp = new SignUp($data);
-        $data['password'] = 'wrong password';
-        $signIn = new SignIn($data);
+
+        $content = $this->getContent();
+
+        (new SignUp(new Data($content)))->triggerRun();
+        $content['password'] = 'wrong pw' . $content['password'];
+        $signIn = new SignIn(new Data($content));
+
+        $config = $signIn->getConfig();
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setUseUsername(false);
+
+        $signIn->triggerRun();
     }
-    public function testRunAuthCode() {
-        Config::$USE_USERNAME = false;
-        Config::$DEFAULT_2FA = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = true;
-        $data = $this->getData();
-        new SignUp($data);
-        try {
-            new SignIn($data);
-        } catch(NotVerifiedEmailException $e) {
-            $user = User::getByEmail($data['email']);
-            $authCode = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_EMAIL_VERIFICATION);
-            $this->assertSame($authCode->getCode(), $e->authCode);
-        }
-    }
-    public function testRunNotVerifiedEmailException() {
+
+    public function testRunNotVerifiedEmailException()
+    {
         $this->expectException(NotVerifiedEmailException::class);
-        $data = $this->getData();
-        $signUp = new SignUp($data);
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = true;
-        Config::$USE_USERNAME = false;
-        new SignIn($data);
+        $content = $this->getContent();
+
+        (new SignUp(new Data($content)))->triggerRun();
+        
+        $config = new Config();
+        $config->setDenyIfNotVerifiedToSignIn(true);
+
+        (new SignIn(new Data($content), $config))->triggerRun();
     }
-    public function testRunTemporaryToken() {
-        Config::$USE_USERNAME = true;
-        Config::$DEFAULT_2FA = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$DENY_IF_NOT_SET_USERNAME = true;
-        $data = $this->getData();
-        new SignUp($data);
+
+    public function testRunAuthCode()
+    {
+        $content = $this->getContent();
+
+        (new SignUp(new Data($content)))->triggerRun();
+
         try {
-            new SignIn($data);
+            $config = new Config();
+            $config->setDenyIfNotVerifiedToSignIn(true);
+            (new SignIn(new Data($content), $config))->triggerRun();
+        } catch(NotVerifiedEmailException $e) {
+            $user = User::getByEmail($content['email']);
+            $authCode = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_EMAIL_VERIFICATION);
+        }
+        $this->assertSame($authCode->getCode(), $e->authCode);
+    }
+
+    public function testRunNullUsernameException()
+    {
+        $this->expectException(NullUsernameException::class);
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(true);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        (new SignIn(new Data($content), $config))->triggerRun();
+    }
+
+    public function testRunTemporaryToken()
+    {
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(true);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        try {
+            (new SignIn(new Data($content), $config))->triggerRun();
         } catch(NullUsernameException $e) {
-            $user = User::getByEmail($data['email']);
+            $user = User::getByEmail($content['email']);
             $this->assertSame(TemporaryToken::generate($user->getId()), $e->tempToken);
         }
     }
-    public function testRunNullUsernameException() {
-        $this->expectException(NullUsernameException::class);
-        Config::$USE_USERNAME = true;
-        Config::$DEFAULT_2FA = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$DENY_IF_NOT_SET_USERNAME = true;
-        $data = $this->getData();
-        $signUp = new SignUp($data);
-        new SignIn($data);
+
+    public function testRun2FAEnabledException() {
+        $this->expectException(TwoFactorAuthEnabledException::class);
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(false);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setDefault2fa(true);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        (new SignIn(new Data($content), $config))->triggerRun();
     }
-    public function testRun2FA() {
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$USE_USERNAME = false;
-        Config::$DEFAULT_2FA = true;
-        $data = $this->getData();
-        new SignUp($data);
+
+    public function testRun2FA()
+    {
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(false);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setDefault2fa(true);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
         try {
-            new SignIn($data);
+            (new SignIn(new Data($content), $config))->triggerRun();
         } catch(TwoFactorAuthEnabledException $e) {
-            $user = User::getByEmail($data['email']);
+            $user = User::getByEmail($content['email']);
             $authCode = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_2FA);
             $this->assertSame($authCode->getCode(), $e->authCode);
         }
     }
-    public function testRun2FAWithException() {
-        $this->expectException(TwoFactorAuthEnabledException::class);
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$USE_USERNAME = false;
-        Config::$DEFAULT_2FA = true;
-        $data = $this->getData();
-        new SignUp($data);
-        new SignIn($data);
-    }
-    public function testRunOptionalPasswordAgain() {
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$USE_USERNAME = false;
-        Config::$DEFAULT_2FA = false;
-        $data = $this->getData();
-        new SignUp($data);
-        $data['passwordAgain'] = $data['password'];
-        $signIn = new SignIn($data);
-        $payload = JWT::getPayloadWithUser($signIn->jwt)['payload'];
-        $this->assertEquals($signIn->user->getId(), $payload->whoo->userId);
-    }
-    public function testRunUnmatchedPasswordsException() {
+
+    public function testRunUnmatchedPasswordsException()
+    {
         $this->expectException(UnmatchedPasswordsException::class);
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$USE_USERNAME = false;
-        Config::$DEFAULT_2FA = false;
-        $data = $this->getData();
-        new SignUp($data);
-        $data['passwordAgain'] = 'wrong-password';
-        new SignIn($data);
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setDefault2fa(false);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setUseUsername(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        $content['passwordAgain'] = 'wrong-pw' . $content['password'];
+
+        (new SignIn(new Data($content), $config))->triggerRun();
+
     }
-    private function getData() {
+
+    public function testRunOptionalPasswordAgain()
+    {
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setDefault2fa(false);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setUseUsername(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        $content['passwordAgain'] = $content['password'];
+
+        $signIn = new SignIn(new Data($content), $config);
+        $signIn->triggerRun();
+
+        $response = $signIn->getResponse();
+        $responseContent = $response->getContent();
+
+        $user = $responseContent['user'];
+        $jwt = $responseContent['jwt'];
+
+        $payload = JWT::getPayloadWithUser($jwt)['payload'];
+        $this->assertEquals($user->getId(), $payload->whoo->userId);
+    }
+
+    private function getContent(): array
+    {
         return [
             'email'=>'example@example.com',
             'password'=>'this is too secret password'

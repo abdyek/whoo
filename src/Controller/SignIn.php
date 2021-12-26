@@ -1,7 +1,7 @@
 <?php
 
 namespace Abdyek\Whoo\Controller;
-use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Core\AbstractController;
 use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Model\AuthenticationCode;
 use Abdyek\Whoo\Exception\NotFoundException;
@@ -14,46 +14,55 @@ use Abdyek\Whoo\Tool\JWT;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
 use Abdyek\Whoo\Tool\TemporaryToken;
 use Abdyek\Whoo\Tool\Random;
-use Abdyek\Whoo\Config\Whoo as Config;
 
-class SignIn extends Controller {
-    public $jwt = null;
-    public $user = null;
-    protected function run() {
-        $this->user = User::getByEmail($this->data['email']);
-        if($this->user ===null) {
+class SignIn extends AbstractController
+{
+    public function run(): void
+    {
+        $content = $this->data->getContent();
+        $config = $this->getConfig();
+        $user = User::getByEmail($content['email']);
+
+        if(!$user) {
             throw new NotFoundException;
         }
-        if($this->isThereOptional('passwordAgain') and $this->data['password']!==$this->data['passwordAgain']) {
+        
+        if(isset($content['passwordAgain']) and $content['password'] !== $content['passwordAgain']) {
             throw new UnmatchedPasswordsException;
         }
-        if($this->validateEmailPassword()===false) {
+
+        if(!password_verify($content['password'], $user->getPasswordHash())) {
             throw new IncorrectPasswordException;
         }
-        if(Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN and $this->user->getEmailVerified()===false) {
+
+        if($config->getDenyIfNotVerifiedToSignIn() and !$user->getEmailVerified()) {
             $e = new NotVerifiedEmailException;
-            $e->generateAuthCode($this->user);
+            $e->generateAuthCode($user);
             throw $e;
         }
-        if(Config::$USE_USERNAME and $this->user->getUsername()===null) {
-            if(Config::$DENY_IF_NOT_SET_USERNAME) {
-                $e = new NullUsernameException;
-                $e->generateTempToken($this->user);
-                throw $e;
-            }
+
+        if($config->getUseUsername() and !$user->getUsername() and $config->getDenyIfNotSetUsername()) {
+            $e = new NullUsernameException;
+            $e->generateTempToken($user);
+            throw $e;
         }
-        if($this->user->getTwoFactorAuthentication()) {
-            AuthenticationCode::deleteByUserIdType($this->user->getId(), AuthConfig::TYPE_2FA);
-            $authCode = Random::number(AuthConfig::$SIZE_OF_CODE_FOR_2FA);
-            AuthenticationCode::create($this->user->getId(), AuthConfig::TYPE_2FA, $authCode);
+
+        if($user->getTwoFactorAuthentication()) {
+            AuthenticationCode::deleteByUserIdType($user->getId(), AuthConfig::TYPE_2FA);
+            $authCode = Random::number($config->getSizeOfCodeFor2fa());
+            AuthenticationCode::create($user->getId(), AuthConfig::TYPE_2FA, $authCode);
+            
             $e = new TwoFactorAuthEnabledException;
             $e->setAuthenticationCode($authCode);
+
             throw $e;
         }
-        $this->jwt = JWT::generateToken($this->user->getId(), $this->user->getSignOutCount());
-    }
-    private function validateEmailPassword() {
-        $pwHash = $this->user->getPasswordHash();
-        return password_verify($this->data['password'], $pwHash);
+
+        $jwt = JWT::generateToken($user->getId(), $user->getSignOutCount());
+
+        $this->response->setContent([
+            'jwt' => $jwt,
+            'user' => $user
+        ]);
     }
 }
