@@ -2,7 +2,7 @@
 
 trait Reset {
     public static function reset(){
-        require Abdyek\Whoo\Config\Propel::$CONFIG_FILE;
+        require 'generated-conf/config.php';
         $authCodes = AuthenticationCodeQuery::create()->find();
         $authCodes->delete();
         $users = UserQuery::create()->find();

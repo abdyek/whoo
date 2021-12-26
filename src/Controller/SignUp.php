@@ -1,36 +1,45 @@
 <?php
 
 namespace Abdyek\Whoo\Controller;
-use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Core\AbstractController;
 use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Exception\NotUniqueEmailException;
 use Abdyek\Whoo\Exception\UnmatchedPasswordsException;
 use Abdyek\Whoo\Exception\NotUniqueUsernameException;
 use Abdyek\Whoo\Tool\TemporaryToken;
-use Abdyek\Whoo\Config\Whoo as Config;
+//use Abdyek\Whoo\Config\Whoo as Config;
 
-class SignUp extends Controller {
-    public $tempToken;
-    public $user = null;
-    protected function run() {
-        if(!User::isUniqueEmail($this->data['email'])) {
+class SignUp extends AbstractController
+{
+    //public $tempToken;
+    //public $user = null;
+    public function run():void
+    {
+        $content = $this->data->getContent();
+
+        if(!User::isUniqueEmail($content['email'])) {
             throw new NotUniqueEmailException;
         }
-        if($this->isThereOptional('passwordAgain')) {
-            if($this->data['password']!==$this->data['passwordAgain']) {
-                throw new UnmatchedPasswordsException;
-            }
+        if(isset($content['passwordAgain']) and $content['password'] !== $content['passwordAgain']) {
+            throw new UnmatchedPasswordsException;
         }
-        $optionalUsername = (Config::$USE_USERNAME and $this->isThereOptional('username'));
-        if($optionalUsername and User::isUniqueUsername($this->data['username'])===false) {
+        if($this->config->getUseUsername() and isset($content['username']) and !User::isUniqueUsername($content['username'])) {
             throw new NotUniqueUsernameException;
         }
-        $data = array_merge($this->data, ['twoFactorAuthentication'=>Config::$DEFAULT_2FA]);
-        $this->user = User::create($data);
-        if($optionalUsername) {
-            User::setUsername($this->user, $this->data['username']);
-        } elseif(Config::$USE_USERNAME) {
-            $this->tempToken = TemporaryToken::generate($this->user->getId());
+
+        $data = array_merge($content, ['twoFactorAuthentication'=>$this->config->getDefault2fa()]);
+        $user = User::create($data);
+
+        $tempToken = null;
+        if(!($this->config->getUseUsername() and isset($content['username']))) {
+            $tempToken = TemporaryToken::generate($user->getId());
+        } else {
+            User::setUsername($user, $content['username']);
         }
+        $this->response->setContent([
+            'user' => $user,
+            'tempToken' => $tempToken
+        ]);
+
     }
 }
