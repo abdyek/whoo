@@ -1,7 +1,7 @@
 <?php
 
 namespace Abdyek\Whoo\Controller;
-use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Core\AbstractController;
 use Abdyek\Whoo\Model\AuthenticationCode;
 use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Exception\NotFoundException;
@@ -10,33 +10,45 @@ use Abdyek\Whoo\Exception\TimeOutCodeException;
 use Abdyek\Whoo\Exception\TrialCountOverException;
 use Abdyek\Whoo\Exception\InvalidCodeException;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
-use Abdyek\Whoo\Config\JWT as JWTConfig;
 use Abdyek\Whoo\Tool\JWT;
 
-class SignIn2FA extends Controller {
-    public $jwt = null;
-    protected function run() {
-        $this->user = User::getByEmail($this->data['email']);
-        if(!$this->user) {
+class SignIn2FA extends AbstractController
+{
+    public function run(): void
+    {
+        $content = $this->data->getContent();
+
+        $user = User::getByEmail($content['email']);
+
+        if(!$user) {
             throw new NotFoundException;
         }
-        $auth = AuthenticationCode::getByUserIdType($this->user->getId(), AuthConfig::TYPE_2FA);
+
+        $auth = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_2FA);
         if(!$auth) {
             throw new NotFoundAuthCodeException;
         }
-        if($auth->getTrialCount()+1>=AuthConfig::$TRIAL_MAX_COUNT_TO_SIGN_IN_2FA) {
+
+        if($auth->getTrialCount()+1 >= $this->config->getTrialMaxCountToSignIn2fa()) {
             throw new TrialCountOverException;
         }
+
         $dateTime = $auth->getDateTime();
         $timestamp = $dateTime->getTimestamp();
-        if((time()-$timestamp)>AuthConfig::$VALIDITY_TIME_TO_SIGN_IN_2FA) {
+        if(($this->dateTime->getTimestamp() - $timestamp) > $this->config->getValidityTimeToSignIn2fa()) {
             throw new TimeOutCodeException;
         }
-        if($auth->getCode()!==$this->data['authCode']) {
+        if($auth->getCode() !== $content['authCode']) {
             AuthenticationCode::increaseTrialCount($auth);
             throw new InvalidCodeException;
         }
-        $this->jwt = JWT::generateToken($this->user->getId(), $this->user->getSignOutCount());
+        $jwt = JWT::generateToken($user->getId(), $user->getSignOutCount());
+
         AuthenticationCode::delete($auth);
+
+        $this->response->setContent([
+            'jwt' => $jwt,
+            'user' => $user
+        ]);
     }
 }
