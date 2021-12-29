@@ -4,93 +4,127 @@ use PHPUnit\Framework\TestCase;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SignIn;
 use Abdyek\Whoo\Controller\ChangeEmail;
+use Abdyek\Whoo\Core\Config;
+use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Tool\JWT;
 use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Exception\IncorrectPasswordException;
 use Abdyek\Whoo\Exception\NotUniqueEmailException;
 use Abdyek\Whoo\Exception\InvalidTokenException;
-use Abdyek\Whoo\Config\Whoo as Config;
-use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 /**
  * @covers ChangeEmail::
  */
 
-class ChangeEmailTest extends TestCase {
-    use DefaultConfig;
+class ChangeEmailTest extends TestCase
+{
     use Reset;
-    public static function setUpBeforeClass(): void {
-        PropelConfig::$CONFIG_FILE = 'propel/config.php';
-    }
-    public function setUp(): void {
-        self::setDefaultConfig();
+
+    public function setUp(): void
+    {
         self::reset();
     }
-    public function testRun() {
-        $newEmail = 'new@new.com';
-        $data = $this->getData();
-        Config::$USE_USERNAME = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        new SignUp($data);
-        $signIn = new SignIn($data);
-        new ChangeEmail([
-            'jwt'=>$signIn->jwt,
-            'newEmail'=>$newEmail,
-            'password'=>$data['password']
-        ]);
-        $data['email'] = $newEmail;
-        $signIn = new SignIn($data);
-        $this->assertNotNull($signIn->jwt);
+
+    public function testRun()
+    {
+        $content = $this->getContent();
+        $newEmail = 'new@example.com';
+
+        $config = new Config();
+        $config->setUseUsername(false);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        ($signIn = new SignIn(new Data($content), $config))->triggerRun();
+
+        $userId = $signIn->getResponse()->getContent()['user']->getId();
+
+        (new ChangeEmail(new Data([
+            'jwt' => $signIn->getResponse()->getContent()['jwt'],
+            'newEmail' => $newEmail,
+            'password' => $content['password']
+        ]), $config))->triggerRun();
+
+        $this->assertEquals($userId, User::getByEmail($newEmail)->getId());
     }
-    public function testRunIncorrectPasswordException() {
+
+    public function testRunIncorrectPasswordException()
+    {
         $this->expectException(IncorrectPasswordException::class);
-        $data = $this->getData();
-        Config::$USE_USERNAME = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$DEFAULT_2FA = false;
-        new SignUp($data);
-        $signIn = new SignIn($data);
-        new ChangeEmail([
-            'jwt'=>$signIn->jwt,
-            'newEmail'=>'newEmail@email.com',
-            'password'=>'wrong_password'
-        ]);
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(false);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setDefault2fa(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        ($signIn = new SignIn(new Data($content), $config))->triggerRun();
+
+        (new ChangeEmail(new Data([
+            'jwt' => $signIn->getResponse()->getContent()['jwt'],
+            'newEmail' => 'newEmail@example.com',
+            'password' => 'wrong-' . $content['password'],
+        ]), $config))->triggerRun();
     }
-    public function testRunNotUniqueEmailException() {
+
+    public function testRunNotUniqueEmailException()
+    {
         $this->expectException(NotUniqueEmailException::class);
-        $data = $this->getData();
-        $data2 = [
-            'email'=>'email2@email.com',
-            'password'=>'this_is_password2'
+        $content = $this->getContent();
+
+        $anotherUser = [
+            'email' => 'unique@example.com',
+            'password' => $content['password'],
         ];
-        Config::$USE_USERNAME = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        new SignUp($data);
-        new SignUp($data2);
-        $signIn = new SignIn($data);
-        new ChangeEmail([
-            'jwt'=>$signIn->jwt,
-            'newEmail'=>$data2['email'],
-            'password'=>$data['password']
-        ]);
+
+        $config = new Config();
+        $config->setUseUsername(false);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setDefault2fa(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        (new SignUp(new Data($anotherUser), $config))->triggerRun();
+
+        ($signIn = new SignIn(new Data($content), $config))->triggerRun();
+
+        (new ChangeEmail(new Data([
+            'jwt' => $signIn->getResponse()->getContent()['jwt'],
+            'newEmail' => $anotherUser['email'],
+            'password' => $content['password'],
+        ]), $config))->triggerRun();
     }
-    public function testRunSignOut() {
+
+    public function testRunSignOut()
+    {
         $this->expectException(InvalidTokenException::class);
-        $data = $this->getData();
-        Config::$USE_USERNAME = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        new SignUp($data);
-        $signIn = new SignIn($data);
-        new ChangeEmail([
-            'jwt'=>$signIn->jwt,
-            'newEmail'=>'newEmail@newEmail.com',
-            'password'=>$data['password']
-        ]);
-        JWT::getPayloadWithUser($signIn->jwt);
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(false);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setDefault2fa(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        ($signIn = new SignIn(new Data($content), $config))->triggerRun();
+
+        (new ChangeEmail(new Data([
+            'jwt' => $signIn->getResponse()->getContent()['jwt'],
+            'newEmail' => 'newEmail@example.com',
+            'password' => $content['password'],
+        ]), $config))->triggerRun();
+
+        JWT::getPayloadWithUser($signIn->getResponse()->getContent()['jwt']);
     }
-    private function getData() {
+
+    private function getContent(): array
+    {
         return [
-            'email'=>'email@email.com',
+            'email'=>'email@example.com',
             'password'=>'this_is_password'
         ];
     }
