@@ -5,133 +5,208 @@ use Abdyek\Whoo\Controller\SignInByUsername2FA;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SetUsername;
 use Abdyek\Whoo\Controller\SignInByUsername;
+use Abdyek\Whoo\Core\Config;
+use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
+use Abdyek\Whoo\Exception\TimeOutCodeException;
 use Abdyek\Whoo\Exception\NotFoundException;
 use Abdyek\Whoo\Exception\NotFoundAuthCodeException;
 use Abdyek\Whoo\Exception\TrialCountOverException;
 use Abdyek\Whoo\Exception\InvalidCodeException;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
-use Abdyek\Whoo\Config\Whoo as Config;
-use Abdyek\Whoo\Config\Propel as PropelConfig;
+use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Tool\JWT;
 
 /**
  * @covers SignInByUsername2FA::
  */
 
-class SignInByUsername2FATest extends TestCase {
-    use DefaultConfig;
+class SignInByUsername2FATest extends TestCase
+{
     use Reset;
-    private const USERNAME = 'this_is_username';
-    public static function setUpBeforeClass(): void {
-        PropelConfig::$CONFIG_FILE = 'propel/config.php';
-    }
-    public function setUp(): void {
-        self::setDefaultConfig();
+
+    public function setUp(): void
+    {
         self::reset();
     }
-    public function testRun() {
-        $signIn2FA = null;
-        Config::$USE_USERNAME = true;
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$DEFAULT_2FA = true;
-        $data = $this->getData();
-        $signUp = new SignUp($data);
-        new SetUsername([
-            'tempToken'=>$signUp->tempToken,
-            'username'=>self::USERNAME
-        ]);
+
+    public function testRun()
+    {
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(true);
+        $config->setDefault2fa(true);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
         try {
-            $signIn = new SignInByUsername([
-                'username'=>self::USERNAME,
-                'password'=>$data['password']
-            ]);
+            (new SignInByUsername(new Data($content), $config))->triggerRun();
         } catch(TwoFactorAuthEnabledException $e) {
-            $signIn2FA = new SignInByUsername2FA([
-                'username'=>self::USERNAME,
-                'authCode'=>$e->authCode
-            ]);
+            ($signIn2FA = new SignInByUsername2FA(new Data([
+                'username' => $content['username'],
+                'authCode' => $e->authCode,
+            ]), $config))->triggerRun();
+
+            $responseContent = $signIn2FA->getResponse()->getContent();
+            $jwt = $responseContent['jwt'];
+            $user = $responseContent['user'];
         }
-        $this->assertNotNull($signIn2FA->jwt);
+        $payload = (array) JWT::getPayloadWithUser($jwt)['payload'];
+
+        $this->assertEquals($user->getId(), $payload['whoo']->userId);
     }
-    public function testRunInvalidCodeException() {
+
+    public function testRunInvalidCodeException()
+    {
         $this->expectException(InvalidCodeException::class);
-        Config::$USE_USERNAME = true;
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$DEFAULT_2FA = true;
-        $data = $this->getData();
-        $signUp = new SignUp($data);
-        new SetUsername([
-            'tempToken'=>$signUp->tempToken,
-            'username'=>self::USERNAME
-        ]);
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(true);
+        $config->setDefault2fa(true);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
         try {
-            $signIn = new SignInByUsername([
-                'username'=>self::USERNAME,
-                'password'=>$data['password']
-            ]);
-        } catch(TwoFactorAuthEnabledException $e) {}
-        $signIn2FA = new SignInByUsername2FA([
-            'username'=>self::USERNAME,
-            'authCode'=>'wrong-code'
-        ]);
+            (new SignInByUsername(new Data($content), $config))->triggerRun();
+        } catch(TwoFactorAuthEnabledException $e) {
+            (new SignInByUsername2FA(new Data([
+                'username' => $content['username'],
+                'authCode' => 'wrong' . $e->authCode,
+            ]), $config))->triggerRun();
+        }
     }
-    public function testRunNotFoundException() {
+
+    public function testRunNotFoundException()
+    {
         $this->expectException(NotFoundException::class);
-        new SignInByUsername2FA([
+        (new SignInByUsername2FA(new Data([
             'username'=>'nothing',
             'authCode'=>'12345'
-        ]);
+        ])))->triggerRun();
     }
-    public function testRunNotFoundAuthCodeException() {
+    
+    public function testRunNotFoundAuthCodeException()
+    {
         $this->expectException(NotFoundAuthCodeException::class);
-        Config::$USE_USERNAME = true;
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$DEFAULT_2FA = true;
-        $data = $this->getData();
-        $signUp = new SignUp($data);
-        new SetUsername([
-            'tempToken'=>$signUp->tempToken,
-            'username'=>self::USERNAME
-        ]);
-        $signIn2FA = new SignInByUsername2FA([
-            'username'=>self::USERNAME,
-            'authCode'=>'123123123'
-        ]);
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(true);
+        $config->setDefault2fa(true);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        (new SignInByUsername2FA(new Data([
+            'username' => $content['username'],
+            'authCode' => 'wrong',
+        ]), $config))->triggerRun();
     }
-    public function testRunTrialCountOverException() {
+
+    public function testRunTrialCountOverException()
+    {
         $this->expectException(TrialCountOverException::class);
-        Config::$USE_USERNAME = true;
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$DEFAULT_2FA = true;
-        $data = $this->getData();
-        $signUp = new SignUp($data);
-        new SetUsername([
-            'tempToken'=>$signUp->tempToken,
-            'username'=>self::USERNAME
-        ]);
+
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(true);
+        $config->setDefault2fa(true);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
         try {
-            $signIn = new SignInByUsername([
-                'username'=>self::USERNAME,
-                'password'=>$data['password']
-            ]);
-        } catch(TwoFactorAuthEnabledException $e) {}
-        for($i=0;$i<AuthConfig::$TRIAL_MAX_COUNT_TO_SIGN_IN_2FA;$i++) {
-            try {
-                new SignInByUsername2FA([
-                    'username'=>self::USERNAME,
-                    'authCode'=>'123123123'
-                ]);
-            } catch(InvalidCodeException $e) { }
+            (new SignInByUsername(new Data($content), $config))->triggerRun();
+        } catch(TwoFactorAuthEnabledException $e) {
+            for($i = 0; $i < $config->getTrialMaxCountToSignIn2fa(); $i++) {
+                try {
+                    (new SignInByUsername2FA(new Data([
+                        'username' => $content['username'],
+                        'authCode' => 'wrong',
+                    ]), $config))->triggerRun();
+                } catch(InvalidCodeException $e) { }
+            }
         }
     }
-    /*
-    public function testRunTimeOutCodeException() {
-        // I will fill it after
-    }*/
-    private function getData() {
+
+    /**
+     * @dataProvider providerForRunTimeOutCode
+     */
+    public function testRunTimeOutCodeException(int $validityTime, int $requestTime, bool $exception) {
+        if($exception) {
+            $this->expectException(TimeOutCodeException::class);
+        }
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setUseUsername(true);
+        $config->setDefault2fa(true);
+        $config->setValidityTimeToSignIn2fa($validityTime);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        try {
+            (new SignInByUsername(new Data($content), $config))->triggerRun();
+        } catch(TwoFactorAuthEnabledException $e) {
+            $user = User::getByEmail($content['email']);
+            $auth = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_2FA);
+            $timestamp = $auth->getDateTime()->getTimestamp();
+
+            $dateTime = new \DateTime();
+            $dateTime->setTimestamp($timestamp + $requestTime);
+
+            ($signIn2FA = new SignInByUsername2FA(new Data([
+                'username' => $content['username'],
+                'authCode' => $e->authCode,
+            ]), $config, null, $dateTime))->triggerRun();
+
+            if(!$exception) {
+                $responseContent = $signIn2FA->getResponse()->getContent();
+                $user = $responseContent['user'];
+                $this->assertSame($content['email'], $user->getEmail());
+            }
+        }
+    }
+
+    public function providerForRunTimeOutCode(): array
+    {
         return [
-            'email'=>'example@example.com',
-            'password'=>'this_is_password'
+            [
+                120,
+                120,
+                false
+            ],
+            [
+                120,
+                110,
+                false
+            ],
+            [
+                120,
+                130,
+                true
+            ],
+            [
+                120,
+                121,
+                true
+            ]
+        ];
+    }
+
+    private function getContent(): array
+    {
+        return [
+            'email' => 'example@example.com',
+            'password' => 'this_is_password',
+            'username' => 'userName',
         ];
     }
 }
