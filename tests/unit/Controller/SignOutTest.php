@@ -4,45 +4,53 @@ use PHPUnit\Framework\TestCase;
 use Abdyek\Whoo\Controller\SignOut;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SignIn;
+use Abdyek\Whoo\Core\Config;
+use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Tool\JWT;
 use Abdyek\Whoo\Exception\InvalidTokenException;
-use Abdyek\Whoo\Config\Whoo as Config;
-use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 /**
  * @covers SignOut::
  */
 
-class SignOutTest extends TestCase {
-    use DefaultConfig;
+class SignOutTest extends TestCase
+{
     use Reset;
-    public static function setUpBeforeClass(): void {
-        PropelConfig::$CONFIG_FILE = 'propel/config.php';
-    }
-    public function setUp(): void {
-        self::setDefaultConfig();
+
+    public function setUp(): void
+    {
         self::reset();
     }
-    public function testRunRealStatelessFalse() {
+
+    public function testRun()
+    {
         $this->expectException(InvalidTokenException::class);
-        Config::$USE_USERNAME = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        $data = self::getData();
-        $signUp = new SignUp($data);
-        $signIn = new SignIn($data);
-        $jwt = $signIn->jwt;
-        new SignOut([
-            'jwt'=>$jwt
-        ]);
-        JWT::getPayloadWithUser($signIn->jwt);
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(false);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        $signIn = new SignIn(new Data($content), $config);
+        $signIn->triggerRun();
+
+        $responseContent = $signIn->getResponse()->getContent();
+        $jwt = $responseContent['jwt'];
+        
+        (new SignOut(new Data([
+            'jwt' => $jwt,
+        ]), $config))->triggerRun();
+
+        JWT::getPayloadWithUser($jwt);
     }
-    public function testTest() {
-        $this->assertTrue(True);
-    }
-    private function getData() {
+
+    private function getContent(): array
+    {
         return [
-            'email'=>'example@example.com',
-            'password'=>'this is password'
+            'email' => 'example@example.com',
+            'password' => 'this is password'
         ];
     }
 }
