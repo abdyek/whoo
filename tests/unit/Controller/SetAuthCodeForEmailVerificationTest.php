@@ -1,38 +1,65 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SetAuthCodeForEmailVerification;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
 use Abdyek\Whoo\Exception\NotFoundException;
-use Abdyek\Whoo\Config\Propel as PropelConfig;
+use Abdyek\Whoo\Core\Config;
+use Abdyek\Whoo\Core\Data;
+use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Model\AuthenticationCode;
 
 /**
  * @covers SetAuthCodeForEmailVerification::
  */
 
-class SetAuthCodeForEmailVerificationTest extends TestCase {
-    use DefaultConfig;
+class SetAuthCodeForEmailVerificationTest extends TestCase
+{
     use Reset;
-    use UserTool;
-    public static function setUpBeforeClass(): void {
-        PropelConfig::$CONFIG_FILE = 'propel/config.php';
-    }
-    public function setUp(): void {
-        self::setDefaultConfig();
+
+    public function setUp(): void
+    {
         self::reset();
     }
-    public function testRunNotFoundException() {
+
+    public function testRunNotFoundException()
+    {
         $this->expectException(NotFoundException::class);
-        new SetAuthCodeForEmailVerification([
-            'email'=>'notFound@notFound.com'
-        ]);
+        (new SetAuthCodeForEmailVerification(new Data([
+            'email' => 'notFound@example.com'
+        ])))->triggerRun();
     }
-    public function testRun() {
-        $user = $this->createExample();
-        $setAuth = new SetAuthCodeForEmailVerification([
-            'email'=>self::$traitEmail
-        ]);
-        $this->assertIsString($setAuth->authCode);
-        $this->assertEquals(AuthConfig::$SIZE_OF_CODE_TO_VERIFY_EMAIL, strlen($setAuth->authCode));
+
+    public function testRun()
+    {
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(false);
+        $config->setDefault2fa(false);
+
+        $signUp = new SignUp(new Data($content), $config);
+        $signUp->triggerRun();
+
+        $user = User::getByEmail($content['email']);
+
+        $setAuth = new SetAuthCodeForEmailVerification(new Data([
+            'email' => $content['email']
+        ]), $config);
+        $setAuth->triggerRun();
+
+        $authCode = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_EMAIL_VERIFICATION);
+
+        $this->assertSame($authCode->getCode(), $setAuth->getResponse()->getContent()['authCode']);
     }
+
+    private function getContent(): array
+    {
+        return [
+            'email' => 'example@example.com',
+            'password' => '12341234'
+        ];
+    }
+
 }
