@@ -1,29 +1,37 @@
 <?php
 
 namespace Abdyek\Whoo\Controller;
-use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Core\AbstractController;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
 use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Model\AuthenticationCode;
 use Abdyek\Whoo\Tool\Random;
 use Abdyek\Whoo\Exception\NotFoundException;
 use Abdyek\Whoo\Exception\NotVerifiedEmailException;
-use Abdyek\Whoo\Config\Whoo as Config;
 
-class SetAuthCodeToResetPassword extends Controller {
-    public $authCode;
-    protected function run() {
-        $user = User::getByEmail($this->data['email']);
-        if($user===null) {
+class SetAuthCodeToResetPassword extends AbstractController
+{
+    public function run(): void
+    {
+        $content = $this->data->getContent();
+
+        $user = User::getByEmail($content['email']);
+        if(!$user) {
             throw new NotFoundException;
         }
-        if(Config::$DENY_IF_NOT_VERIFIED_TO_RESET_PW and $user->getEmailVerified()===false) {
+
+        if($this->config->getDenyIfNotVerifiedToResetPw() and !$user->getEmailVerified()) {
             $e = new NotVerifiedEmailException;
             $e->generateAuthCode($user);
             throw $e;
         }
+
         AuthenticationCode::deleteByUserIdType($user->getId(), AuthConfig::TYPE_RESET_PW);
-        $this->authCode = Random::chars(AuthConfig::$SIZE_OF_CODE_TO_RESET_PW);
-        AuthenticationCode::create($user->getId(), AuthConfig::TYPE_RESET_PW, $this->authCode);
+        $authCode = Random::chars($this->config->getSizeOfCodeToResetPw());
+        AuthenticationCode::create($user->getId(), AuthConfig::TYPE_RESET_PW, $authCode);
+
+        $this->response->setContent([
+            'authCode' => $authCode
+        ]);
     }
 }
