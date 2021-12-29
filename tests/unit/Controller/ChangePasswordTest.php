@@ -4,55 +4,69 @@ use PHPUnit\Framework\TestCase;
 use Abdyek\Whoo\Controller\ChangePassword;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SignIn;
+use Abdyek\Whoo\Core\Config;
+use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Exception\IncorrectPasswordException;
-use Abdyek\Whoo\Config\Whoo as Config;
-use Abdyek\Whoo\Config\Propel as PropelConfig;
+use Abdyek\Whoo\Model\User;
 
 /**
  * @covers ChangePassword::
  */
 
-class ChangePasswordTest extends TestCase {
-    const NEW_PASSWORD = 'nEw_pAsSwOrD';
-    use DefaultConfig;
+class ChangePasswordTest extends TestCase
+{
     use Reset;
-    public static function setUpBeforeClass(): void {
-        PropelConfig::$CONFIG_FILE = 'propel/config.php';
-    }
-    public function setUp(): void {
-        self::setDefaultConfig();
+
+    public function setUp(): void
+    {
         self::reset();
     }
-    public function testRun() {
-        $data = $this->getData();
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$USE_USERNAME = false;
-        Config::$DEFAULT_2FA = false;
-        new SignUp($data);
-        $signIn = new SignIn($data);
-        new ChangePassword([
-            'jwt'=>$signIn->jwt,
-            'password'=>$data['password'],
-            'newPassword'=>self::NEW_PASSWORD
-        ]);
-        $data['password'] = self::NEW_PASSWORD;
-        $signIn = new SignIn($data);
-        $this->assertNotNull($signIn);
+
+    public function testRun()
+    {
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setUseUsername(false);
+        $config->setDefault2fa(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        ($signIn = new SignIn(new Data($content), $config))->triggerRun();
+
+        (new ChangePassword(new Data([
+            'jwt' => $signIn->getResponse()->getContent()['jwt'],
+            'password' => $content['password'],
+            'newPassword' => 'new' . $content['password'],
+        ]), $config))->triggerRun();
+
+        $this->assertTrue(User::checkPassword($signIn->getResponse()->getContent()['user'], 'new' . $content['password']));
     }
-    public function testRunIncorrectPasswordException() {
+
+    public function testRunIncorrectPasswordException()
+    {
         $this->expectException(IncorrectPasswordException::class);
-        $data = $this->getData();
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$USE_USERNAME = false;
-        new SignUp($data);
-        $signIn = new SignIn($data);
-        new ChangePassword([
-            'jwt'=>$signIn->jwt,
-            'password'=>'wrongPassword :( ',
-            'newPassword'=>'thisIsNewPassword'
-        ]);
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setUseUsername(false);
+        $config->setDefault2fa(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        ($signIn = new SignIn(new Data($content), $config))->triggerRun();
+
+        (new ChangePassword(new Data([
+            'jwt' => $signIn->getResponse()->getContent()['jwt'],
+            'password' => 'wrong-' . $content['password'],
+            'newPassword' => 'new' . $content['password'],
+        ]), $config))->triggerRun();
     }
-    private function getData() {
+
+    private function getContent(): array
+    {
         return [
             'email'=>'emailExample@email.com',
             'password'=>'this_is_password'

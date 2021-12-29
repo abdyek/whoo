@@ -1,15 +1,21 @@
 <?php
 
 namespace Abdyek\Whoo\Controller;
-use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Core\AbstractController;
 use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Exception\IncorrectPasswordException;
 
-class ChangePassword extends Controller {
-    protected function run() {
-        if(!User::checkPassword($this->user, $this->data['password'])) {
+class ChangePassword extends AbstractController
+{
+    public function run(): void
+    {
+        $content = $this->data->getContent();
+
+        $user = $this->authenticator->getUser();
+        if(!User::checkPassword($user, $content['password'])) {
             throw new IncorrectPasswordException;
         }
-        User::setPassword($this->user, $this->data['newPassword']);
+
+        User::setPassword($user, $content['newPassword']);
     }
 }
