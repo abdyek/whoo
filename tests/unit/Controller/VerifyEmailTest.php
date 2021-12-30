@@ -2,86 +2,198 @@
 
 use PHPUnit\Framework\TestCase;
 use Abdyek\Whoo\Controller\VerifyEmail;
+use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SetAuthCodeForEmailVerification;
+use Abdyek\Whoo\Core\Config;
+use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Exception\InvalidCodeException;
+use Abdyek\Whoo\Exception\TimeOutCodeException;
 use Abdyek\Whoo\Exception\TrialCountOverException;
 use Abdyek\Whoo\Exception\NotFoundException;
 use Abdyek\Whoo\Exception\NotFoundAuthCodeException;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
 use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 /**
  * @covers VerifyEmail::
  */
 
-class VerifyEmailTest extends TestCase {
-    use DefaultConfig;
+class VerifyEmailTest extends TestCase
+{
     use Reset;
-    use UserTool;
-    public static function setUpBeforeClass(): void {
-        PropelConfig::$CONFIG_FILE = 'propel/config.php';
-    }
-    public function setUp(): void {
-        self::setDefaultConfig();
+
+    public function setUp(): void
+    {
         self::reset();
     }
-    public function testRunNotFoundExcepiton() {
+
+    public function testRun()
+    {
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(false);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setDefault2fa(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        ($setAuth = new SetAuthCodeForEmailVerification(new Data([
+            'email' => $content['email'],
+        ]), $config))->triggerRun();
+
+        (new VerifyEmail(new Data([
+            'email' => $content['email'],
+            'authCode' => $setAuth->getResponse()->getContent()['authCode'],
+        ]), $config))->triggerRun();
+
+        $user = User::getByEmail($content['email']);
+
+        $this->assertTrue($user->getEmailVerified());
+    }
+
+    public function testRunNotFoundExcepiton()
+    {
         $this->expectException(NotFoundException::class);
-        new VerifyEmail([
-            'email'=>'notFound@notFound.com',
-            'authCode'=>'noneNONE'
-        ]);
+        (new VerifyEmail(new Data([
+            'email' => 'nothing@example.com',
+            'authCode' => 'authCode',
+        ])))->triggerRun();
     }
-    public function testRunNotFoundAuthCodeException() {
+
+    public function testRunNotFoundAuthCodeException()
+    {
         $this->expectException(NotFoundAuthCodeException::class);
-        $user = $this->createExample();
-        new VerifyEmail([
-            'email'=>self::$traitEmail,
-            'authCode'=>'codee'
-        ]);
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setDefault2fa(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        (new VerifyEmail(new Data([
+            'email' => $content['email'],
+            'authCode' => 'authCode',
+        ]), $config))->triggerRun();
     }
-    public function testRunInvalidCodeException() {
+
+    public function testRunInvalidCodeException()
+    {
         $this->expectException(InvalidCodeException::class);
-        $user = $this->createExample();
-        new SetAuthCodeForEmailVerification([
-            'email'=>self::$traitEmail
-        ]);
-        new VerifyEmail([
-            'email'=>self::$traitEmail,
-            'authCode'=>'wrongCode'
-        ]);
+
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setDefault2fa(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        (new SetAuthCodeForEmailVerification(new Data([
+            'email' => $content['email'],
+        ]), $config))->triggerRun();
+
+        (new VerifyEmail(new Data([
+            'email' => $content['email'],
+            'authCode' => 'wrong',
+        ]), $config))->triggerRun();
     }
-    public function testRunTrialCountOverException() {
+
+    public function testRunTrialCountOverException()
+    {
         $this->expectException(TrialCountOverException::class);
-        $user = $this->createExample();
-        new SetAuthCodeForEmailVerification([
-            'email'=>self::$traitEmail
-        ]);
-        for($i=0;$i<AuthConfig::$TRIAL_MAX_COUNT_TO_VERIFY_EMAIL;$i++) {
+
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setDefault2fa(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        (new SetAuthCodeForEmailVerification(new Data([
+            'email' => $content['email'],
+        ]), $config))->triggerRun();
+
+        for($i = 0; $i < $config->getTrialMaxCountToVerifyEmail(); $i++) {
             try {
-                new VerifyEmail([
-                    'email'=>self::$traitEmail,
-                    'authCode'=>'wrongCode'
-                ]);
+                (new VerifyEmail(new Data([
+                    'email' => $content['email'],
+                    'authCode' => 'wrong',
+                ]), $config))->triggerRun();
             } catch(InvalidCodeException $e) { }
         }
     }
-    /*
-    public function testRunTimeOutCodeException() {
-        // I will fill it after
-    }*/
-    public function testRun() {
-        $user = $this->createExample();
-        $setAuth = new SetAuthCodeForEmailVerification([
-            'email'=>self::$traitEmail
-        ]);
-        new VerifyEmail([
-            'email'=>self::$traitEmail,
-            'authCode'=>$setAuth->authCode
-        ]);
-        $auth = AuthenticationCode::getByUserIdType($user->getId(), 'emailVerification');
-        $this->assertTrue($user->getEmailVerified());
-        $this->assertNull($auth);
+
+    /**
+     * @dataProvider providerForRunTimeOutCode
+     */
+    public function testRunTimeOutCodeException(int $validityTime, int $requestTime, bool $exception)
+    {
+        if($exception) {
+            $this->expectException(TimeOutCodeException::class);
+        }
+
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setDefault2fa(false);
+        $config->setValidityTimeToVerifyEmail($validityTime);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        ($setAuth = new SetAuthCodeForEmailVerification(new Data([
+            'email' => $content['email'],
+        ]), $config))->triggerRun();
+
+        $user = User::getByEmail($content['email']);
+        $auth = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_EMAIL_VERIFICATION);
+        $timestamp = $auth->getDateTime()->getTimestamp();
+
+        $dateTime = new \DateTime();
+        $dateTime->setTimestamp($timestamp + $requestTime);
+
+        (new VerifyEmail(new Data([
+            'email' => $content['email'],
+            'authCode' => $setAuth->getResponse()->getContent()['authCode'],
+        ]), $config, null, $dateTime))->triggerRun();
+
+        if(!$exception) {
+            $this->assertTrue($user->getEmailVerified());
+        }
+    }
+
+    public function providerForRunTimeOutCode(): array
+    {
+        return [
+            [
+                120,
+                120,
+                false
+            ],
+            [
+                120,
+                110,
+                false
+            ],
+            [
+                120,
+                130,
+                true
+            ],
+            [
+                120,
+                121,
+                true
+            ]
+        ];
+    }
+
+    public function getContent(): array
+    {
+        return [
+            'email' => 'example@example.com',
+            'password' => '123123123'
+        ];
     }
 }

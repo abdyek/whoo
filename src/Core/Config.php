@@ -22,7 +22,7 @@ class Config extends Core
     private int $sizeOfCodeToManage2fa = 6;
     private int $sizeOfCodeFor2fa = 5;
     private int $trialMaxCountToVerifyEmail = 3;
-    private int $validityTimeToVerifyEmaiL = 180;
+    private int $validityTimeToVerifyEmail = 180;
     private int $trialMaxCountToResetPw = 3;
     private int $validityTimeToResetPw = 180;
     private int $trialMaxCountToManage2fa = 3;
@@ -155,14 +155,14 @@ class Config extends Core
         $this->trialMaxCountToVerifyEmail = $trialMaxCountToVerifyEmail;
     }
 
-    public function getValidityTimeToVerifyEmaiL(): int
+    public function getValidityTimeToVerifyEmail(): int
     {
-        return $this->validityTimeToVerifyEmaiL;
+        return $this->validityTimeToVerifyEmail;
     }
 
-    public function setValidityTimeToVerifyEmaiL(int $validityTimeToVerifyEmaiL): void
+    public function setValidityTimeToVerifyEmail(int $validityTimeToVerifyEmail): void
     {
-        $this->validityTimeToVerifyEmaiL = $validityTimeToVerifyEmaiL;
+        $this->validityTimeToVerifyEmail = $validityTimeToVerifyEmail;
     }
 
     public function getTrialMaxCountToResetPw(): int
