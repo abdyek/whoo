@@ -3,92 +3,116 @@
 use PHPUnit\Framework\TestCase;
 use Abdyek\Whoo\Controller\SignInByProvider;
 use Abdyek\Whoo\Controller\SignUp;
+use Abdyek\Whoo\Core\Config;
+use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Exception\NullUsernameException;
 use Abdyek\Whoo\Exception\SignUpByEmailException;
-use Abdyek\Whoo\Model\User as UserModel;
-use Abdyek\Whoo\Config\Whoo as Config;
-use Abdyek\Whoo\Config\Propel as PropelConfig;
+use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Tool\TemporaryToken;
+use Abdyek\Whoo\Tool\JWT;
 
 /**
  * @covers SignInByProvider::
  */
 
-class SignInByProviderTest extends TestCase {
-    use DefaultConfig;
+class SignInByProviderTest extends TestCase
+{
     use Reset;
-    public static function setUpBeforeClass(): void {
-        PropelConfig::$CONFIG_FILE = 'propel/config.php';
-    }
-    public function setUp(): void {
-        self::setDefaultConfig();
+
+    public function setUp(): void
+    {
         self::reset();
     }
-    public function testSignUpTempToken() {
-        Config::$USE_USERNAME = true;
-        Config::$DENY_IF_NOT_SET_USERNAME = true;
-        $dataForProvider = self::getDataForProvider();
-        try {
-            new SignInByProvider($dataForProvider);
-        } catch (NullUsernameException $e) {
-            $user = UserModel::getByEmail($dataForProvider['email']);
-            $this->assertSame(TemporaryToken::generate($user->getId()), $e->tempToken);
+
+    /**
+     * @dataProvider providerForRun
+     */
+
+    public function testRun(bool $first)
+    {
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(false);
+
+        if(!$first) {
+            ($signIn = new SignInByProvider(new Data($content), $config))->triggerRun();
         }
+        // ^ if it is not first, this means it sign in before.
+
+        ($signIn = new SignInByProvider(new Data($content), $config))->triggerRun();
+
+        $responseContent = $signIn->getResponse()->getContent();
+        $user = User::getByEmail($content['email']);
+
+        $payload = (array) JWT::getPayloadWithUser($responseContent['jwt'])['payload'];
+        $this->assertEquals($user->getId(), $payload['whoo']->userId);
+    
+        $this->assertSame($first, $responseContent['firstSignIn']);
     }
-    public function testSignUpUseUsernameTrueException() {
-        $this->expectException(NullUsernameException::class);
-        $dataForProvider = self::getDataForProvider();
-        Config::$USE_USERNAME = true;
-        $signUp = new SignInByProvider($dataForProvider);
-        $user = UserModel::getByEmail($dataForProvider['email']);
-        $this->assertTrue($signUp->registering);
-        $this->assertNotNull($user->getId());
-        $this->assertNull($signUp->jwt);
-    }
-    public function testSignUpUseUsernameFalseOK() {
-        Config::$USE_USERNAME = false;
-        $dataForProvider = self::getDataForProvider();
-        $signUp = new SignInByProvider($dataForProvider);
-        $this->assertTrue($signUp->registering);
-        $this->assertNotNull($signUp->jwt);
-    }
-    public function testSignInBlockIfSignUpBeforeByEmailTrueOK() {
-        Config::$USE_USERNAME = false;
-        Config::$DENY_IF_SIGN_UP_BEFORE_BY_EMAIL = true;
-        $dataForProvider = self::getDataForProvider();
-        $signUpIn= new SignInByProvider($dataForProvider);
-        $this->assertTrue($signUpIn->registering);
-        $this->assertNotNull($signUpIn->jwt);
-    }
-    public function testSignInBlockIfSignUpBeforeByEmailTrueException() {
-        $this->expectException(SignUpByEmailException::class);
-        $data = $this->getData();
-        Config::$USE_USERNAME = false;
-        Config::$DENY_IF_SIGN_UP_BEFORE_BY_EMAIL = true;
-        $signUpNormally = new SignUp($data);
-        $dataForProvider = $this->getDataForProvider();
-        $signIn = new SignInByProvider($dataForProvider);
-    }
-    public function testSignInBlockIfSignUpBeforeByEmailFalse() {
-        Config::$USE_USERNAME = false;
-        Config::$DENY_IF_SIGN_UP_BEFORE_BY_EMAIL = false;
-        $data = self::getData();
-        $signUp = new SignUp($data);
-        $dataForProvider = self::getDataForProvider();
-        $signIn = new SignInByProvider($dataForProvider);
-        $this->assertNotNull($signIn->jwt);
-    }
-    private function getData() {
-        return [
-            'email'=>'must_be_same_email@test.com',
-            'password'=>'this_is_password'
+
+    public function providerForRun(): array
+    {
+        return [ 
+            [true],
+            [false],
         ];
     }
-    private function getDataForProvider() {
+
+    public function testNullUsernameException()
+    {
+        $this->expectException(NullUsernameException::class);
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(true);
+
+        (new SignInByProvider(new Data($content), $config))->triggerRun();
+    }
+
+    /**
+     * @dataProvider providerForSignUpByEmail
+     */
+    public function testSignUpByEmailException(bool $deny)
+    {
+        if($deny) {
+            $this->expectException(SignUpByEmailException::class);
+        }
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(true);
+        $config->setDenyIfSignUpBeforeByEmail($deny);
+
+        (new SignUp(new Data([
+            'email' => $content['email'],
+            'password' => 'password',
+            'username' => 'username',
+        ]), $config))->triggerRun();
+
+        ($signIn = new SignInByProvider(new Data($content), $config))->triggerRun();
+
+        if(!$deny) {
+            $user = User::getByEmail($content['email']);
+            $payload = (array) JWT::getPayloadWithUser($signIn->getResponse()->getContent()['jwt'])['payload'];
+            $this->assertEquals($user->getId(), $payload['whoo']->userId);
+        }
+    }
+
+    public function providerForSignUpByEmail(): array
+    {
         return [
-            'email'=>'must_be_same_email@test.com',
-            'provider'=>'google',
-            'providerId'=>'this_is_provider_id'
+            [true],
+            [false],
+        ];
+    }
+
+    private function getContent(): array
+    {
+        return [
+            'email' => 'email@example.com',
+            'provider' => 'google',
+            'providerId' => 'this_is_provider_id',
         ];
     }
 }

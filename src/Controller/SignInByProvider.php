@@ -1,31 +1,38 @@
 <?php
 
 namespace Abdyek\Whoo\Controller;
-use Abdyek\Whoo\Core\Controller;
-use Abdyek\Whoo\Model\User as UserModel;
+use Abdyek\Whoo\Core\AbstractController;
+use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Config\JWT as JWTConfig;
 use Abdyek\Whoo\Exception\SignUpByEmailException;
 use Abdyek\Whoo\Exception\NullUsernameException;
 use Abdyek\Whoo\Tool\JWT;
-use Abdyek\Whoo\Config\Whoo as Config;
 
-class SignInByProvider extends Controller {
-    public $registering = false;
-    public $jwt = null;
-    protected function run() {
-        $user = UserModel::getByEmail($this->data['email']);
-        if($user===null) {
-            $user = UserModel::create($this->data);
-            $this->registering = true;
-        } else if(Config::$DENY_IF_SIGN_UP_BEFORE_BY_EMAIL and $user->getProvider()===null) {
+class SignInByProvider extends AbstractController
+{
+    public function run(): void
+    {
+        $firstSignIn = false;
+        $content = $this->data->getContent();
+
+        $user = User::getByEmail($content['email']);
+        if(!$user) {
+            $user = User::create($content);
+            $firstSignIn = true;
+        } else if($this->config->getDenyIfSignUpBeforeByEmail() and !$user->getProvider()) {
             throw new SignUpByEmailException;
         }
-        $user = UserModel::getByEmail($this->data['email']);
-        if(Config::$USE_USERNAME and $user->getUsername()===null) {
+
+        $user = User::getByEmail($content['email']);
+        if($this->config->getUseUsername() and !$user->getUsername()) {
             $e = new NullUsernameException;
             $e->generateTempToken($user);
             throw $e;
         }
-        $this->jwt = JWT::generateToken($user->getId(), $user->getSignOutCount());
+
+        $this->response->setContent([
+            'jwt' => JWT::generateToken($user->getId(), $user->getSignOutCount()),
+            'firstSignIn' => $firstSignIn,
+        ]);
     }
 }
