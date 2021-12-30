@@ -66,7 +66,7 @@ class ConfigTest extends TestCase
             ['sizeOfCodeFor2fa'],
             ['trialMaxCountToVerifyEmail'],
             ['validityTimeToVerifyEmaiL'],
-            ['trial_max_count_to_reset_pw'],
+            ['trialMaxCountToResetPw'],
             ['validityTimeToResetPw'],
             ['trialMaxCountToManage2fa'],
             ['validityTimeToManage2fa'],

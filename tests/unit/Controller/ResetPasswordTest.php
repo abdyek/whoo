@@ -5,129 +5,228 @@ use Abdyek\Whoo\Controller\ResetPassword;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SignIn;
 use Abdyek\Whoo\Controller\SetAuthCodeToResetPassword;
+use Abdyek\Whoo\Core\Config;
+use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Exception\InvalidCodeException;
 use Abdyek\Whoo\Exception\NotFoundException;
 use Abdyek\Whoo\Exception\NotFoundAuthCodeException;
 use Abdyek\Whoo\Exception\NotVerifiedEmailException;
+use Abdyek\Whoo\Exception\TimeOutCodeException;
 use Abdyek\Whoo\Exception\TrialCountOverException;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
-use Abdyek\Whoo\Config\Whoo as Config;
-use Abdyek\Whoo\Config\Propel as PropelConfig;
+use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Model\User;
 
 /**
  * @covers ResetPassword::
  */
 
-class ResetPasswordTest extends TestCase {
-    use DefaultConfig;
+class ResetPasswordTest extends TestCase
+{
     use Reset;
-    const NEW_PASSWORD = 'n e w PW';
-    public static function setUpBeforeClass(): void {
-        PropelConfig::$CONFIG_FILE = 'propel/config.php';
-    }
-    public function setUp(): void {
-        self::setDefaultConfig();
+
+    public function setUp(): void
+    {
         self::reset();
     }
-    public function testRun() {
-        $data = $this->getData();
-        Config::$USE_USERNAME = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_RESET_PW = false;
-        new SignUp($data);
-        $setAuth = new SetAuthCodeToResetPassword([
-            'email'=>$data['email']
-        ]);
-        new ResetPassword([
-            'email'=>$data['email'],
-            'newPassword'=>self::NEW_PASSWORD,
-            'authCode'=>$setAuth->authCode
-        ]);
-        $data['password'] = self::NEW_PASSWORD;
-        $signIn = new SignIn($data);
-        $this->assertNotNull($signIn->jwt);
+
+    public function testRun()
+    {
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(false);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setDenyIfNotVerifiedToResetPw(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        ($setAuth = new SetAuthCodeToResetPassword(new Data([
+            'email'=>$content['email']
+        ]), $config))->triggerRun();
+
+        (new ResetPassword(new Data([
+            'email' => $content['email'],
+            'newPassword' => 'new' . $content['password'],
+            'authCode' => $setAuth->getResponse()->getContent()['authCode'],
+        ]), $config))->triggerRun();
+
+        $user = User::getByEmail($content['email']);
+
+        $this->assertTrue(User::checkPassword($user, 'new'. $content['password']));
     }
-    public function testRunNotFoundException() {
+
+    public function testRunNotFoundException()
+    {
         $this->expectException(NotFoundException::class);
-        new ResetPassword([
-            'email'=>'none@none.com',
-            'newPassword'=>self::NEW_PASSWORD,
-            'authCode'=>'authCode'
-        ]);
+
+        (new ResetPassword(new Data([
+            'email' => 'nothing@example.com',
+            'newPassword' => 'password',
+            'authCode' => 'authCode',
+        ])))->triggerRun();
     }
-    public function testRunInvalidCodeException() {
+
+    public function testRunInvalidCodeException()
+    {
         $this->expectException(InvalidCodeException::class);
-        $data = $this->getData();
-        Config::$USE_USERNAME = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_RESET_PW = false;
-        new SignUp($data);
-        new SetAuthCodeToResetPassword([
-            'email'=>$data['email']
-        ]);
-        new ResetPassword([
-            'email'=>$data['email'],
-            'newPassword'=>self::NEW_PASSWORD,
-            'authCode'=>'w-rg-c-o-e'
-        ]);
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(false);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setDenyIfNotVerifiedToResetPw(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        ($setAuth = new SetAuthCodeToResetPassword(new Data([
+            'email'=>$content['email']
+        ]), $config))->triggerRun();
+
+        (new ResetPassword(new Data([
+            'email' => $content['email'],
+            'newPassword' => 'new' . $content['password'],
+            'authCode' => 'wrong',
+        ]), $config))->triggerRun();
     }
-    public function testRunNotFoundAuthCodeException() {
+
+    public function testRunNotFoundAuthCodeException()
+    {
         $this->expectException(NotFoundAuthCodeException::class);
-        $data = $this->getData();
-        Config::$USE_USERNAME = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_RESET_PW = false;
-        new SignUp($data);
-        new ResetPassword([
-            'email'=>$data['email'],
-            'newPassword'=>self::NEW_PASSWORD,
-            'authCode'=>'codee'
-        ]);
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(false);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setDenyIfNotVerifiedToResetPw(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        (new ResetPassword(new Data([
+            'email' => $content['email'],
+            'newPassword' => 'new' . $content['password'],
+            'authCode' => 'not-set',
+        ]), $config))->triggerRun();
     }
-    public function testRunDenyIfNotVerifiedToResetPWTrue() {
+
+    public function testRunDenyIfNotVerifiedToResetPWTrue()
+    {
         $this->expectException(NotVerifiedEmailException::class);
-        $data = $this->getData();
-        Config::$USE_USERNAME = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_RESET_PW = false;
-        new SignUp($data);
-        $setAuth = new SetAuthCodeToResetPassword([
-            'email'=>$data['email']
-        ]);
-        Config::$DENY_IF_NOT_VERIFIED_TO_RESET_PW = true;
-        new ResetPassword([
-            'email'=>$data['email'],
-            'newPassword'=>self::NEW_PASSWORD,
-            'authCode'=>$setAuth->authCode
-        ]);
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(false);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setDenyIfNotVerifiedToResetPw(true);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        ($setAuth = new SetAuthCodeToResetPassword(new Data([
+            'email'=>$content['email']
+        ]), $config))->triggerRun();
+
+        (new ResetPassword(new Data([
+            'email' => $content['email'],
+            'newPassword' => 'new' . $content['password'],
+            'authCode' => $setAuth->getResponse()->getContent()['authCode'],
+        ]), $config))->triggerRun();
     }
-    public function testRunTrialCountOverException() {
+
+    public function testRunTrialCountOverException()
+    {
         $this->expectException(TrialCountOverException::class);
-        $data = $this->getData();
-        Config::$USE_USERNAME = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_SIGN_IN = false;
-        Config::$DENY_IF_NOT_VERIFIED_TO_RESET_PW = false;
-        new SignUp($data);
-        $setAuth = new SetAuthCodeToResetPassword([
-            'email'=>$data['email']
-        ]);
-        for($i=0;$i<AuthConfig::$TRIAL_MAX_COUNT_TO_RESET_PW;$i++) {
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(false);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setDenyIfNotVerifiedToResetPw(false);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        ($setAuth = new SetAuthCodeToResetPassword(new Data([
+            'email'=>$content['email']
+        ]), $config))->triggerRun();
+
+        for($i = 0; $i < $config->getTrialMaxCountToResetPw(); $i++) {
             try {
-                new ResetPassword([
-                    'email'=>$data['email'],
-                    'newPassword'=>'this_is_new_ps',
-                    'authCode'=>'wrong-code'
-                ]);
+                (new ResetPassword(new Data([
+                    'email' => $content['email'],
+                    'newPassword' => 'new' . $content['password'],
+                    'authCode' => 'wrong',
+                ]), $config))->triggerRun();
             } catch(InvalidCodeException $e) { }
         }
     }
-    /*
-    public function testRunTimeOutCodeException() {
-        // I will fill it after
-    }*/
-    private function getData() {
+
+    /**
+     * @dataProvider providerForRunTimeOutCode
+     */
+    public function testRunTimeOutCodeException(int $validityTime, int $requestTime, bool $exception)
+    {
+        if($exception) {
+            $this->expectException(TimeOutCodeException::class);
+        }
+        $content = $this->getContent();
+
+        $config = new Config();
+        $config->setUseUsername(false);
+        $config->setDenyIfNotVerifiedToSignIn(false);
+        $config->setDenyIfNotVerifiedToResetPw(false);
+        $config->setValidityTimeToResetPw($validityTime);
+
+        (new SignUp(new Data($content), $config))->triggerRun();
+
+        ($setAuth = new SetAuthCodeToResetPassword(new Data([
+            'email'=>$content['email']
+        ]), $config))->triggerRun();
+
+        $user = User::getByEmail($content['email']);
+        $auth = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_RESET_PW);
+
+        $dateTime = new \DateTime();
+        $dateTime->setTimestamp($auth->getDateTime()->getTimestamp() + $requestTime);
+        (new ResetPassword(new Data([
+            'email' => $content['email'],
+            'newPassword' => 'new' . $content['password'],
+            'authCode' => $setAuth->getResponse()->getContent()['authCode'],
+        ]), $config, null, $dateTime))->triggerRun();
+
+        if(!$exception) {
+            $this->assertTrue(User::checkPassword($user, 'new' . $content['password']));
+        }
+    }
+
+    public function providerForRunTimeOutCode(): array
+    {
         return [
-            'email'=>'thisIsEmail@email.com',
+            [
+                120,
+                120,
+                false
+            ],
+            [
+                120,
+                110,
+                false
+            ],
+            [
+                120,
+                130,
+                true
+            ],
+            [
+                120,
+                121,
+                true
+            ]
+        ];
+    }
+
+    private function getContent(): array
+    {
+        return [
+            'email'=>'email@example.com',
             'password'=>'p a s s w o r d',
         ];
     }

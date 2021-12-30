@@ -1,7 +1,7 @@
 <?php
 
 namespace Abdyek\Whoo\Controller;
-use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Core\AbstractController;
 use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Model\AuthenticationCode;
 use Abdyek\Whoo\Exception\NotFoundException;
@@ -11,34 +11,40 @@ use Abdyek\Whoo\Exception\TimeOutCodeException;
 use Abdyek\Whoo\Exception\NotVerifiedEmailException;
 use Abdyek\Whoo\Exception\TrialCountOverException;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
-use Abdyek\Whoo\Config\Whoo as Config;
 
-class ResetPassword extends Controller {
-    protected function run() {
-        $user = User::getByEmail($this->data['email']);
+class ResetPassword extends AbstractController
+{
+    public function run(): void
+    {
+        $content = $this->data->getContent();
+
+        $user = User::getByEmail($content['email']);
         if(!$user) {
             throw new NotFoundException;
         }
-        if(Config::$DENY_IF_NOT_VERIFIED_TO_RESET_PW and !$user->getEmailVerified()) {
+
+        if($this->config->getDenyIfNotVerifiedToResetPw() and !$user->getEmailVerified()) {
             throw new NotVerifiedEmailException;
         }
+
         $auth = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_RESET_PW);
         if(!$auth) {
             throw new NotFoundAuthCodeException;
         }
-        if($auth->getTrialCount()+1>=AuthConfig::$TRIAL_MAX_COUNT_TO_RESET_PW) {
+
+        if($auth->getTrialCount()+1 >= $this->config->getTrialMaxCountToResetPw()) {
             throw new TrialCountOverException;
         }
-        $dateTime = $auth->getDateTime();
-        $timestamp = $dateTime->getTimestamp();
-        if((time()-$timestamp)>AuthConfig::$VALIDITY_TIME_TO_RESET_PW) {
+
+        if($this->dateTime->getTimestamp() - $auth->getDateTime()->getTimestamp() > $this->config->getValidityTimeToResetPw()) {
             throw new TimeOutCodeException;
         }
-        $authCode = $auth->getCode();
-        if($authCode!==$this->data['authCode']) {
+
+        if($auth->getCode() !== $content['authCode']) {
             AuthenticationCode::increaseTrialCount($auth);
             throw new InvalidCodeException;
         }
-        User::setPassword($user, $this->data['newPassword']);
+
+        User::setPassword($user, $content['newPassword']);
     }
 }
