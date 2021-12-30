@@ -1,7 +1,7 @@
 <?php
 
 namespace Abdyek\Whoo\Controller;
-use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Core\AbstractController;
 use Abdyek\Whoo\Model\AuthenticationCode;
 use Abdyek\Whoo\Model\User;
 use Abdyek\Whoo\Exception\NotFoundAuthCodeException;
@@ -10,25 +10,32 @@ use Abdyek\Whoo\Exception\TimeOutCodeException;
 use Abdyek\Whoo\Exception\InvalidCodeException;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
 
-class Manage2FA extends Controller {
-    protected function run () {
-        $auth = AuthenticationCode::getByUserIdType($this->user->getId(), AuthConfig::TYPE_MANAGE_2FA);
+class Manage2FA extends AbstractController
+{
+    public function run(): void
+    {
+        $content = $this->data->getContent();
+        $user = $this->authenticator->getUser();
+
+        $auth = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_MANAGE_2FA);
         if(!$auth) {
             throw new NotFoundAuthCodeException;
         }
-        if($auth->getTrialCount()+1>=AuthConfig::$TRIAL_MAX_COUNT_TO_MANAGE_2FA) {
+
+        if($auth->getTrialCount()+1 >= $this->config->getTrialMaxCountToManage2fa()) {
             throw new TrialCountOverException;
         }
-        $dataTime = $auth->getDateTime();
-        $timestamp = $dataTime->getTimestamp();
-        if((time()-$timestamp)>AuthConfig::$VALIDITY_TIME_TO_MANAGE_2FA) {
+
+        if($this->dateTime->getTimestamp() - $auth->getDateTime()->getTimestamp() > $this->config->getValidityTimeToManage2fa()) {
             throw new TimeOutCodeException;
         }
-        if($auth->getCode()!==$this->data['authCode']) {
+
+        if($auth->getCode() !== $content['authCode']) {
             AuthenticationCode::increaseTrialCount($auth);
             throw new InvalidCodeException;
         }
-        User::set2FA($this->user, $this->data['open']);
+
+        User::set2FA($user, $content['open']);
         AuthenticationCode::delete($auth);
     }
 }
