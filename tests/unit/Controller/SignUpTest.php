@@ -7,7 +7,7 @@ use Abdyek\Whoo\Core\Config;
 use Abdyek\Whoo\Exception\NotUniqueEmailException;
 use Abdyek\Whoo\Exception\NotUniqueUsernameException;
 use Abdyek\Whoo\Exception\UnmatchedPasswordsException;
-use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Repository\User;
 
 /**
  * @covers SignUp::

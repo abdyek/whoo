@@ -4,7 +4,7 @@ namespace Abdyek\Whoo\Tool;
 use Firebase\JWT\JWT as FirebaseJWT;
 use Abdyek\Whoo\Config\JWT as JWTConfig;
 use Abdyek\Whoo\Exception\InvalidTokenException;
-use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Repository\User;
 
 class JWT {
     const REGISTERED_CLAIM = ['iss', 'sub', 'aud', 'exp', 'nbf', 'iat', 'jti'];

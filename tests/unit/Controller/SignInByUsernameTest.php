@@ -5,8 +5,8 @@ use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Controller\SignInByUsername;
 use Abdyek\Whoo\Core\Config;
 use Abdyek\Whoo\Core\Data;
-use Abdyek\Whoo\Model\User as UserModel;
-use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Repository\User;
+use Abdyek\Whoo\Repository\AuthenticationCode;
 use Abdyek\Whoo\Exception\IncorrectPasswordException;
 use Abdyek\Whoo\Exception\NotFoundException;
 use Abdyek\Whoo\Exception\NotVerifiedEmailException;
@@ -101,7 +101,7 @@ class SignInByUsernameTest extends TestCase
         $config->setUseUsername(true);
 
         (new SignUp(new Data($content), $config))->triggerRun();
-        $user = UserModel::getByEmail($content['email']);
+        $user = User::getByEmail($content['email']);
 
         try {
             (new SignInByUsername(new Data($content), $config))->triggerRun();
@@ -140,7 +140,7 @@ class SignInByUsernameTest extends TestCase
         try {
             (new SignInByUsername(new Data($content), $config))->triggerRun();
         } catch(TwoFactorAuthEnabledException $e) {
-            $user = UserModel::getByUsername($content['username']);
+            $user = User::getByUsername($content['username']);
             $authCode = AuthenticationCode::getByUserIdType($user->getId(), AuthConfig::TYPE_2FA);
             $this->assertSame($authCode->getCode(), $e->authCode);
         }

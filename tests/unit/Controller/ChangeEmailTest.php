@@ -7,7 +7,7 @@ use Abdyek\Whoo\Controller\ChangeEmail;
 use Abdyek\Whoo\Core\Config;
 use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Tool\JWT;
-use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Repository\User;
 use Abdyek\Whoo\Exception\IncorrectPasswordException;
 use Abdyek\Whoo\Exception\NotUniqueEmailException;
 use Abdyek\Whoo\Exception\InvalidTokenException;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Abdyek\Whoo\Model;
+namespace Abdyek\Whoo\Repository;
 
 class AuthenticationCode {
     public static function create($userId, $type, $code) {

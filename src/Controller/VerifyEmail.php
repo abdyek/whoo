@@ -2,8 +2,8 @@
 
 namespace Abdyek\Whoo\Controller;
 use Abdyek\Whoo\Core\AbstractController;
-use Abdyek\Whoo\Model\User;
-use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Repository\User;
+use Abdyek\Whoo\Repository\AuthenticationCode;
 use Abdyek\Whoo\Exception\TimeOutCodeException;
 use Abdyek\Whoo\Exception\InvalidCodeException;
 use Abdyek\Whoo\Exception\TrialCountOverException;

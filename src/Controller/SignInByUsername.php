@@ -2,8 +2,8 @@
 
 namespace Abdyek\Whoo\Controller;
 use Abdyek\Whoo\Core\AbstractController;
-use Abdyek\Whoo\Model\User;
-use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Repository\User;
+use Abdyek\Whoo\Repository\AuthenticationCode;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
 use Abdyek\Whoo\Exception\NotFoundException;
 use Abdyek\Whoo\Exception\NotVerifiedEmailException;

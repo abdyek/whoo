@@ -18,8 +18,8 @@
         <testsuite name="core">
             <directory>tests/unit/Core</directory>
         </testsuite>
-        <testsuite name="model">
-            <directory>tests/unit/Model</directory>
+        <testsuite name="repository">
+            <directory>tests/unit/Repository</directory>
         </testsuite>
         <testsuite name="controller">
             <directory>tests/unit/Controller</directory>

@@ -14,8 +14,8 @@ use Abdyek\Whoo\Exception\NotFoundAuthCodeException;
 use Abdyek\Whoo\Exception\TrialCountOverException;
 use Abdyek\Whoo\Exception\InvalidCodeException;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
-use Abdyek\Whoo\Model\User;
-use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Repository\User;
+use Abdyek\Whoo\Repository\AuthenticationCode;
 use Abdyek\Whoo\Tool\JWT;
 
 /**

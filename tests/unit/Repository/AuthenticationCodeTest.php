@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Repository\AuthenticationCode;
 use Abdyek\Whoo\Tool\Random;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
 use Abdyek\Whoo\Config\Propel as PropelConfig;

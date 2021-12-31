@@ -7,7 +7,7 @@ use Abdyek\Whoo\Core\Config;
 use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Exception\NullUsernameException;
 use Abdyek\Whoo\Exception\SignUpByEmailException;
-use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Repository\User;
 use Abdyek\Whoo\Tool\TemporaryToken;
 use Abdyek\Whoo\Tool\JWT;
 

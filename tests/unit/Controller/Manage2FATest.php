@@ -12,7 +12,7 @@ use Abdyek\Whoo\Exception\InvalidCodeException;;
 use Abdyek\Whoo\Exception\TimeOutCodeException;
 use Abdyek\Whoo\Exception\TrialCountOverException;;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
-use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Repository\User;
 
 /**
  * @covers Manage2FA::

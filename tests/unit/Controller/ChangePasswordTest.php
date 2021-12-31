@@ -7,7 +7,7 @@ use Abdyek\Whoo\Controller\SignIn;
 use Abdyek\Whoo\Core\Config;
 use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Exception\IncorrectPasswordException;
-use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Repository\User;
 
 /**
  * @covers ChangePassword::

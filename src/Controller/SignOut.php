@@ -2,7 +2,7 @@
 
 namespace Abdyek\Whoo\Controller;
 use Abdyek\Whoo\Core\AbstractController;
-use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Repository\User;
 
 class SignOut extends AbstractController
 {

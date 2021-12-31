@@ -2,7 +2,7 @@
 
 namespace Abdyek\Whoo\Controller;
 use Abdyek\Whoo\Core\AbstractController;
-use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Repository\User;
 use Abdyek\Whoo\Config\JWT as JWTConfig;
 use Abdyek\Whoo\Exception\SignUpByEmailException;
 use Abdyek\Whoo\Exception\NullUsernameException;

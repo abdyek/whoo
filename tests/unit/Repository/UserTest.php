@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Abdyek\Whoo\Model\User;
-use Abdyek\Whoo\Model\AuthenticationCode;
+use Abdyek\Whoo\Repository\User;
+use Abdyek\Whoo\Repository\AuthenticationCode;
 use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 /**

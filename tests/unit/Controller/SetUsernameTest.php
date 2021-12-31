@@ -5,7 +5,7 @@ use Abdyek\Whoo\Controller\SetUsername;
 use Abdyek\Whoo\Controller\SignUp;
 use Abdyek\Whoo\Core\Config;
 use Abdyek\Whoo\Core\Data;
-use Abdyek\Whoo\Model\User as UserModel;
+use Abdyek\Whoo\Repository\User;
 use Abdyek\Whoo\Exception\InvalidTemporaryTokenException;
 use Abdyek\Whoo\Exception\NotNullUsernameException;
 use Abdyek\Whoo\Exception\NotUniqueUsernameException;
@@ -41,7 +41,7 @@ class SetUsernameTest extends TestCase
             'username' => self::USERNAME
         ]), $config))->triggerRun();
 
-        $user = UserModel::getByEmail($content['email']);
+        $user = User::getByEmail($content['email']);
         $this->assertEquals(self::USERNAME, $user->getUsername());
     }
 

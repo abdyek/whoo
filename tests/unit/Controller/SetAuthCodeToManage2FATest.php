@@ -8,8 +8,8 @@ use Abdyek\Whoo\Core\Config;
 use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
 use Abdyek\Whoo\Exception\IncorrectPasswordException;
-use Abdyek\Whoo\Model\AuthenticationCode;
-use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Repository\AuthenticationCode;
+use Abdyek\Whoo\Repository\User;
 
 /**
  * @covers SetAuthCodeToManage2FA::

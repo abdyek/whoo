@@ -6,7 +6,7 @@ use Abdyek\Whoo\Tool\TemporaryToken;
 use Abdyek\Whoo\Exception\InvalidTemporaryTokenException;
 use Abdyek\Whoo\Exception\NotNullUsernameException;
 use Abdyek\Whoo\Exception\NotUniqueUsernameException;
-use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Repository\User;
 
 class SetUsername extends AbstractController
 {

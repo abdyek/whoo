@@ -13,8 +13,8 @@ use Abdyek\Whoo\Exception\TimeOutCodeException;
 use Abdyek\Whoo\Exception\TrialCountOverException;
 use Abdyek\Whoo\Exception\InvalidCodeException;
 use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
-use Abdyek\Whoo\Model\AuthenticationCode;
-use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Repository\AuthenticationCode;
+use Abdyek\Whoo\Repository\User;
 
 /**
  * @covers SignIn2FA::

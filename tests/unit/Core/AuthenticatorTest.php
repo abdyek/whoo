@@ -4,7 +4,7 @@ use PHPUnit\Framework\TestCase;
 use Abdyek\Whoo\Core\Authenticator;
 use Abdyek\Whoo\Core\Data;
 use Abdyek\Whoo\Tool\JWT;
-use Abdyek\Whoo\Model\User;
+use Abdyek\Whoo\Repository\User;
 use Abdyek\Whoo\Exception\InvalidTokenException;
 use Pseudo\ExampleController;
 
