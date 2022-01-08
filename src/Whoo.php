@@ -7,15 +7,16 @@ use Abdyek\Whoo\Core\Controller;
 class Whoo
 {
     public bool $success = true;
-    private Controller $controller;
+    private string $controllerString;
+    private ? Controller $controller = null;
+    private ? \Exception $exception = null;
+    private array $args;
     private array $callbacks = [];
 
-    public function __construct(string $controllerStr, array $args)
+    public function __construct(string $controller, array $args)
     {
-        $container = new DI\Container();
-        $this->controller = $container->get('Abdyek\\Whoo\\Controller\\' . $controllerStr);
-        $data = $this->controller->getData();
-        $data->setContent($args);
+        $this->controllerString = $controller;
+        $this->args = $args;
     }
 
     public function catchException(string $exception, object $callback)
@@ -27,18 +28,25 @@ class Whoo
     public function run(): void
     {
         try {
-            $this->controller->triggerRun();
+            $class = 'Abdyek\\Whoo\\Controller\\' . $this->controllerString;
+            $this->controller = new $class($this->args);
         } catch(\Exception $e) {
             $this->success = false;
+            $this->exception = $e;
             $pieces = explode('\\', get_class($e));
             $pieces = explode('Exception', end($pieces));
             ($this->callbacks[$pieces[0]])();
         }
     }
 
-    public function getController(): Controller
+    public function getController(): ? Controller
     {
         return $this->controller;
+    }
+
+    public function getException(): ? \Exception
+    {
+        return $this->exception;
     }
 
 }
