@@ -361,11 +361,6 @@ class Config extends Core
     private int $trialMaxCountToSignIn2fa = 3;
     private int $validityTimeToSignIn2fa = 180;
 
-    public function __construct() 
-    {
-        $this->requiredMap = require 'default/requiredMap.php';
-    }
-
     public function getRequiredMap(): array
     {
         return $this->requiredMap;
