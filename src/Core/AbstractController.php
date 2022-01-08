@@ -19,14 +19,14 @@ abstract class AbstractController
 
     abstract public function run(): void;
 
-    public function __construct(?Data $data = null, ?Config $config = null, ?Validator $validator = null, ?\DateTime $dateTime = null, ?Authenticator $authenticator = null, ?Response $response = null)
+    public function __construct(Data $data, Config $config, Validator $validator, \DateTime $dateTime, Authenticator $authenticator, Response $response)
     {
-        $this->data = $data ?? new Data();
-        $this->config = $config ?? new Config;
-        $this->validator = $validator ?? new Validator;
-        $this->dateTime = $dateTime ?? new \DateTime;
-        $this->authenticator = $authenticator ?? new Authenticator;
-        $this->response = $response ?? new Response;
+        $this->data = $data;
+        $this->config = $config;
+        $this->validator = $validator;
+        $this->dateTime = $dateTime;
+        $this->authenticator = $authenticator;
+        $this->response = $response;
         $this->setThis();
     }
 
