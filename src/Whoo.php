@@ -2,15 +2,15 @@
 
 namespace Abdyek\Whoo;
 
-use Abdyek\Whoo\Core\Controller;
+use Abdyek\Whoo\Core\AbstractController;
 
 class Whoo
 {
     public bool $success = true;
-    private Controller $controller;
+    private AbstractController $controller;
     private array $callbacks = [];
 
-    public function __construct(string $controller, array $args)
+    public function __construct(string $controller, ?array $args = [])
     {
         $class = 'Abdyek\\Whoo\\Controller\\' . $controller;
         $this->controller = new $class();
@@ -37,7 +37,7 @@ class Whoo
         }
     }
 
-    public function getController(): ? Controller
+    public function getController(): ? AbstractController
     {
         return $this->controller;
     }

@@ -27,6 +27,9 @@
         <testsuite name="tool">
             <directory>tests/unit/Tool</directory>
         </testsuite>
+        <testsuite name="root">
+            <directory>tests/unit/Root</directory>
+        </testsuite>
 
     </testsuites>
 
