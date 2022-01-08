@@ -9,12 +9,6 @@ use Abdyek\Whoo\Core\Config;
 
 class ConfigTest extends TestCase
 {
-    public function testConstruct()
-    {
-        $config = new Config();
-        $this->assertSame(require 'default/requiredMap.php', $config->getRequiredMap());
-    }
-
     /**
      * @dataProvider providerForWhooConfig
      */
