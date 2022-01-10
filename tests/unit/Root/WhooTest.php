@@ -38,9 +38,10 @@ class WhooTest extends TestCase
     public function testSetConfig()
     {
         $config = new Config();
+        $config->setValidityTimeToVerifyEmail(123);
         Whoo::setConfig($config);
         $whoo = new Whoo('SignUp');
-        $this->assertSame($config, $whoo->getController()->getConfig());
+        $this->assertEquals(123, $whoo->getController()->getConfig()->getValidityTimeToVerifyEmail());
     }
 
     public function testContent()

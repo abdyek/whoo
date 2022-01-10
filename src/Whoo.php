@@ -11,14 +11,15 @@ class Whoo
 {
     public bool $success = true;
     private AbstractController $controller;
-    public static ?Config $config = null;
+    private static ?Config $config = null;
     private array $callbacks = [];
     public array $content = [];
 
     public function __construct(string $controller, ?array $args = [])
     {
         $class = 'Abdyek\\Whoo\\Controller\\' . $controller;
-        $this->controller = new $class(new Data($args), self::$config);
+        $config = (self::$config !== null ? clone(self::$config) : null);
+        $this->controller = new $class(new Data($args), $config);
     }
 
     public function catchException(string $exception, object $callback)
@@ -37,11 +38,14 @@ class Whoo
             $this->exception = $e;
             $pieces = explode('\\', get_class($e));
             $pieces = explode('Exception', end($pieces));
+            if(!isset($this->callbacks[$pieces[0]])) {
+                throw $e;
+            }
             ($this->callbacks[$pieces[0]])();
         }
     }
 
-    public function loadPropelConfig(): void
+    public static function loadPropelConfig(): void
     {
         require Propel::$CONFIG_FILE;
     }
@@ -60,5 +64,12 @@ class Whoo
     {
         return $this->controller;
     }
+
+    /*
+    public function setJWTAdditionalClaims(array $claims): void
+    {
+        $this->controller->getConfig()->setJWTPayload($claims);
+    }
+     */
 
 }
