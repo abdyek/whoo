@@ -1,6 +1,5 @@
 <?php
 
-require 'propel/config.php';
 use PHPUnit\Framework\TestCase;
 use Abdyek\Whoo\Tool\JWT;
 use Abdyek\Whoo\Exception\InvalidTokenException;
@@ -9,31 +8,27 @@ use Abdyek\Whoo\Exception\InvalidTokenException;
  * @covers JWT::
  */
 
-class JWTTest extends TestCase {
-    use Reset;
-    use UserTool;
-    public function testGenerateToken() {
-        $user = $this->createExample();
-        $jwt = JWT::generateToken($user->getId(), $user->getSignOutCount());
-        $payload = JWT::getPayloadWithUser($jwt)['payload'];
-        $this->assertEquals($user->getId(), $payload->whoo->userId);
+class JWTTest extends TestCase
+{
+    public function test()
+    {
+        $jwtObject = new JWT;
+        $claims = [
+            'iss' => 'http://example.org',
+            'aud' => 'http://example.com',
+            'iat' => 1356999524,
+            'nbf' => 1357000000,
+        ];
+        $jwtObject->setClaims($claims);
+        $jwt = $jwtObject->generateToken(12, 0);
+        $payload = $jwtObject->payload($jwt);
+        $this->assertEquals(12, $payload['whoo']->userId);
     }
-    public function testGetPayloadInvalidTokenException() {
+
+    public function testInvalidTokenException()
+    {
         $this->expectException(InvalidTokenException::class);
-        JWT::getPayloadWithUser('invalid-token');
-    }
-    public function setGetSecretKey() {
-        $newSecret = 'new-secret-key';
-        JWT::setSecretKey($newSecret);
-        $this->assertEquals($newSecret, JWT::getSecretKey());
-    }
-    public function testSetAdditionalClaims() {
-        JWT::setAdditionalClaims([
-            'role'=>'admin'
-        ]);
-        $user = $this->createExample();
-        $jwt = JWT::generateToken($user->getId(), $user->getSignOutCount());
-        $payload = JWT::getPayloadWithUser($jwt)['payload'];
-        $this->assertEquals('admin', $payload->role);
+        $jwtObject = new JWT;
+        $jwtObject->payload('invalid');
     }
 }

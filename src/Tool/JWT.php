@@ -1,52 +1,67 @@
 <?php
 
 namespace Abdyek\Whoo\Tool;
-use Firebase\JWT\JWT as FirebaseJWT;
-use Abdyek\Whoo\Config\JWT as JWTConfig;
-use Abdyek\Whoo\Exception\InvalidTokenException;
-use Abdyek\Whoo\Repository\User;
 
-class JWT {
-    const REGISTERED_CLAIM = ['iss', 'sub', 'aud', 'exp', 'nbf', 'iat', 'jti'];
-    private static $additionalClaims = [];
-    private static $secretKey = 's3cr3t';
-    public static function generateToken($userId, $signOutCount) {
-        $data = [];
-        foreach(self::REGISTERED_CLAIM as $claim) {
-            $val = JWTConfig::$$claim;
-            if($val !== null) {
-                $data[$claim] = $val;
-            }
-        }
-        $data['whoo'] = [
-            'userId' => $userId,
-            'signOutCount'=> $signOutCount
-        ];
-        $data = array_merge($data, self::$additionalClaims);
-        return FirebaseJWT::encode($data, self::$secretKey);
+use Firebase\JWT\JWT as FirebaseJWT;
+use Firebase\JWT\Key;
+use Abdyek\Whoo\Exception\InvalidTokenException;
+use Abdyek\Whoo\Tool\Interfaces\JWTInterface;
+
+class JWT implements JWTInterface
+{
+    private string $secretKey = 's3cr3t';
+    private string $algorithm = 'HS256';
+    private array $claims = [];
+
+    public function generateToken(int $userId, int $signOutCount): string
+    {
+        $payload = array_merge($this->claims, [
+            'whoo' => [
+                'userId' => $userId,
+                'signOutCount' => $signOutCount,
+            ]
+        ]);
+        return FirebaseJWT::encode($payload, $this->secretKey, $this->algorithm);
     }
-    public static function getPayloadWithUser($jwt) {
+
+    public function payload(string $jwt): array
+    {
         try {
-            $payload = FirebaseJWT::decode($jwt, JWT::getSecretKey(), array('HS256'));
-            $user = User::getById($payload->whoo->userId);
-            if($payload->whoo->signOutCount!=$user->getSignOutCount()) {
-                throw new InvalidTokenException;
-            }
-            return [
-                'payload'=>$payload,
-                'user'=>$user
-            ];
+            $payload = FirebaseJWT::decode($jwt, new Key($this->secretKey, $this->algorithm));
         } catch (\UnexpectedValueException $e) {
             throw new InvalidTokenException;
         }
+        return (array) $payload;
     }
-    public static function setSecretKey($secretKey) {
-        self::$secretKey = $secretKey;
+
+    public function getSecretKey(): string
+    {
+        return $this->secretKey;
     }
-    public static function getSecretKey() {
-        return self::$secretKey;
+
+    public function setSecretKey(string $secretKey): void
+    {
+        $this->secretKey = $secretKey;
     }
-    public static function setAdditionalClaims($additionalClaims) {
-        self::$additionalClaims = $additionalClaims;
+
+    public function getAlgorithm(): string
+    {
+        return $this->algorithm;
     }
+
+    public function setAlgorithm(string $algorithm): void
+    {
+        $this->algorithm = $algorithm;
+    }
+
+    public function getClaims(): array
+    {
+        return $this->claims;
+    }
+
+    public function setClaims(array $claims): void
+    {
+        $this->claims = $claims;
+    }
+
 }
