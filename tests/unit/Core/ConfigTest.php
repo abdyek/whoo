@@ -68,6 +68,28 @@ class ConfigTest extends TestCase
             ['validityTimeToSignIn2fa'],
         ];
     }
+
+    /**
+     * @dataProvider providerForOther
+     */
+    public function testGetSetOther($name)
+    {
+        $config = new Config();
+        $pascalCase = ucfirst($name);
+        $setFunction = 'set' . $pascalCase;
+        $getFunction = 'get' . $pascalCase;
+        $config->{$setFunction}('string value');
+        $result = $config->{$getFunction}();
+        $this->assertEquals('string value', $result);
+    }
+
+    public function providerForOther(): array
+    {
+        return [
+            ['secretKey']
+        ];
+    }
+
     
 }
 

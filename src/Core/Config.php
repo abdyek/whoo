@@ -361,6 +361,9 @@ class Config extends Core
     private int $trialMaxCountToSignIn2fa = 3;
     private int $validityTimeToSignIn2fa = 180;
 
+    // other
+    private string $secretKey = 's3cr3t';
+
     public function getRequiredMap(): array
     {
         return $this->requiredMap;
@@ -549,6 +552,16 @@ class Config extends Core
     public function setValidityTimeToSignIn2fa(int $validityTimeToSignIn2fa): void
     {
         $this->validityTimeToSignIn2fa = $validityTimeToSignIn2fa;
+    }
+
+    public function getSecretKey(): string
+    {
+        return $this->secretKey;
+    }
+
+    public function setSecretKey(string $secretKey): void
+    {
+        $this->secretKey = $secretKey;
     }
 
 }

@@ -7,12 +7,9 @@ use Abdyek\Whoo\Exception\NotUniqueEmailException;
 use Abdyek\Whoo\Exception\UnmatchedPasswordsException;
 use Abdyek\Whoo\Exception\NotUniqueUsernameException;
 use Abdyek\Whoo\Tool\TemporaryToken;
-//use Abdyek\Whoo\Config\Whoo as Config;
 
 class SignUp extends AbstractController
 {
-    //public $tempToken;
-    //public $user = null;
     public function run():void
     {
         $content = $this->data->getContent();
@@ -32,7 +29,7 @@ class SignUp extends AbstractController
 
         $tempToken = null;
         if(!($this->config->getUseUsername() and isset($content['username']))) {
-            $tempToken = TemporaryToken::generate($user->getId());
+            $tempToken = TemporaryToken::generate($user->getId(), $this->config->getSecretKey());
         } else {
             User::setUsername($user, $content['username']);
         }

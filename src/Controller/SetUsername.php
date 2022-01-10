@@ -13,7 +13,7 @@ class SetUsername extends AbstractController
     public function run(): void
     {
         $content = $this->data->getContent();
-        $userId = TemporaryToken::getUserId($content['tempToken']);
+        $userId = TemporaryToken::getUserId($content['tempToken'], $this->config->getSecretKey());
 
         if(!$userId) {
             throw new InvalidTemporaryTokenException;

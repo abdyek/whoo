@@ -1,25 +1,29 @@
 <?php
 
 namespace Abdyek\Whoo\Tool;
-use Abdyek\Whoo\Tool\JWT as JWTTool;
 
-class TemporaryToken {
+class TemporaryToken
+{
     const SEPARATOR = 't';
-    public static function generate($userId) {
+
+    public static function generate(int $userId, string $secretKey): string
+    {
         $idLen = strlen((string)$userId);
-        $string = $userId . JWTTool::getSecretKey() . $userId;
+        $string = $userId . $secretKey . $userId;
         $rawHash = hash('sha256', $string);
         $tempToken = $userId . self::SEPARATOR . substr($rawHash, 0, 59-$idLen);
         return $tempToken;
     }
-    public static function getUserId($tempToken) {
+
+    public static function getUserId(string $tempToken, string $secretKey): ?int
+    {
         $exploded = explode(self::SEPARATOR, $tempToken);
-        if(count($exploded)===1) {
+        if(count($exploded) === 1) {
             return null;
         }
         $userId = $exploded[0];
-        $generated = self::generate((int)$userId);
-        if($generated!==$tempToken) {
+        $generated = self::generate((int) $userId, $secretKey);
+        if($generated !== $tempToken) {
             return null;
         }
         return $userId;

@@ -141,10 +141,10 @@ class SignInTest extends TestCase
         (new SignUp(new Data($content), $config))->triggerRun();
 
         try {
-            (new SignIn(new Data($content), $config))->triggerRun();
+            ($signIn = new SignIn(new Data($content), $config))->triggerRun();
         } catch(NullUsernameException $e) {
             $user = User::getByEmail($content['email']);
-            $this->assertSame(TemporaryToken::generate($user->getId()), $e->tempToken);
+            $this->assertSame(TemporaryToken::generate($user->getId(), $signIn->getConfig()->getSecretKey()), $e->tempToken);
         }
     }
 

@@ -12,7 +12,6 @@ use Abdyek\Whoo\Exception\TwoFactorAuthEnabledException;
 use Abdyek\Whoo\Exception\UnmatchedPasswordsException;
 use Abdyek\Whoo\Tool\JWT;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
-use Abdyek\Whoo\Tool\TemporaryToken;
 use Abdyek\Whoo\Tool\Random;
 
 class SignIn extends AbstractController
@@ -43,7 +42,7 @@ class SignIn extends AbstractController
 
         if($config->getUseUsername() and !$user->getUsername() and $config->getDenyIfNotSetUsername()) {
             $e = new NullUsernameException;
-            $e->generateTempToken($user);
+            $e->generateTempToken($user, $this->config->getSecretKey());
             throw $e;
         }
 

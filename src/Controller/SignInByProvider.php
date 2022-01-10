@@ -26,7 +26,7 @@ class SignInByProvider extends AbstractController
         $user = User::getByEmail($content['email']);
         if($this->config->getUseUsername() and !$user->getUsername()) {
             $e = new NullUsernameException;
-            $e->generateTempToken($user);
+            $e->generateTempToken($user, $this->config->getSecretKey());
             throw $e;
         }
 
