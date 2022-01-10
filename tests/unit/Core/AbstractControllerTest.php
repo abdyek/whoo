@@ -7,6 +7,7 @@ use Abdyek\Whoo\Core\Config;
 use Abdyek\Whoo\Core\Validator;
 use Abdyek\Whoo\Core\Authenticator;
 use Abdyek\Whoo\Core\Response;
+use Abdyek\Whoo\Tool\JWT;
 use Pseudo\ExampleController;
 
 /**
@@ -55,7 +56,7 @@ class AbstractControllerTest extends TestCase
 
     public function testGetSetAuthenticator()
     {
-        $authenticator = new Authenticator();
+        $authenticator = new Authenticator(new JWT);
         $exampleController = new ExampleController();
         $exampleController->setAuthenticator($authenticator);
         $this->assertSame($authenticator, $exampleController->getAuthenticator());

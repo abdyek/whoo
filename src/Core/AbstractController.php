@@ -7,6 +7,7 @@ use Abdyek\Whoo\Core\Config;
 use Abdyek\Whoo\Core\Validator;
 use Abdyek\Whoo\Core\Authenticator;
 use Abdyek\Whoo\Core\Response;
+use Abdyek\Whoo\Tool\JWT;
 
 abstract class AbstractController
 {
@@ -19,13 +20,14 @@ abstract class AbstractController
 
     abstract public function run(): void;
 
+    // TODO: add a service container library to manage them.
     public function __construct(?Data $data = null, ?Config $config = null, ?Validator $validator = null, ?\DateTime $dateTime = null, ?Authenticator $authenticator = null, ?Response $response = null)
     {
         $this->data = $data ?? new Data();
         $this->config = $config ?? new Config;
         $this->validator = $validator ?? new Validator;
         $this->dateTime = $dateTime ?? new \DateTime;
-        $this->authenticator = $authenticator ?? new Authenticator;
+        $this->authenticator = $authenticator ?? new Authenticator(new JWT);
         $this->response = $response ?? new Response;
         $this->setThis();
     }
