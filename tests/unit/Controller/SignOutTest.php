@@ -39,11 +39,11 @@ class SignOutTest extends TestCase
         $responseContent = $signIn->getResponse()->getContent();
         $jwt = $responseContent['jwt'];
         
-        (new SignOut(new Data([
+        ($signOut = new SignOut(new Data([
             'jwt' => $jwt,
         ]), $config))->triggerRun();
 
-        JWT::getPayloadWithUser($jwt);
+        $signOut->getAuthenticator()->check();
     }
 
     private function getContent(): array

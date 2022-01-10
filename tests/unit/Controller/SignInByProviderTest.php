@@ -45,7 +45,8 @@ class SignInByProviderTest extends TestCase
         $responseContent = $signIn->getResponse()->getContent();
         $user = User::getByEmail($content['email']);
 
-        $payload = (array) JWT::getPayloadWithUser($responseContent['jwt'])['payload'];
+        $jwtObject = new JWT;
+        $payload = $jwtObject->payload($responseContent['jwt']);
         $this->assertEquals($user->getId(), $payload['whoo']->userId);
     
         $this->assertSame($first, $responseContent['firstSignIn']);
@@ -94,7 +95,8 @@ class SignInByProviderTest extends TestCase
 
         if(!$deny) {
             $user = User::getByEmail($content['email']);
-            $payload = (array) JWT::getPayloadWithUser($signIn->getResponse()->getContent()['jwt'])['payload'];
+            $jwtObject = new JWT;
+            $payload = $jwtObject->payload($signIn->getResponse()->getContent()['jwt']);
             $this->assertEquals($user->getId(), $payload['whoo']->userId);
         }
     }

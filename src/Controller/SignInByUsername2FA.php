@@ -41,7 +41,7 @@ class SignInByUsername2FA extends AbstractController
             throw new InvalidCodeException;
         }
 
-        $jwt = JWT::generateToken($user->getId(), $user->getSignOutCount());
+        $jwt = $this->getAuthenticator()->getJWTObject()->generateToken($user->getId(), $user->getSignOutCount());
 
         AuthenticationCode::delete($auth);
 

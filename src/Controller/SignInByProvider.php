@@ -31,7 +31,7 @@ class SignInByProvider extends AbstractController
         }
 
         $this->response->setContent([
-            'jwt' => JWT::generateToken($user->getId(), $user->getSignOutCount()),
+            'jwt' => $this->getAuthenticator()->getJWTObject()->generateToken($user->getId(), $user->getSignOutCount()),
             'firstSignIn' => $firstSignIn,
         ]);
     }

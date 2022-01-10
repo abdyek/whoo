@@ -112,13 +112,13 @@ class ChangeEmailTest extends TestCase
 
         ($signIn = new SignIn(new Data($content), $config))->triggerRun();
 
-        (new ChangeEmail(new Data([
+        ($changeEmail = new ChangeEmail(new Data([
             'jwt' => $signIn->getResponse()->getContent()['jwt'],
             'newEmail' => 'newEmail@example.com',
             'password' => $content['password'],
         ]), $config))->triggerRun();
 
-        JWT::getPayloadWithUser($signIn->getResponse()->getContent()['jwt']);
+        $changeEmail->getAuthenticator()->check();
     }
 
     private function getContent(): array

@@ -6,6 +6,7 @@ use Abdyek\Whoo\Core\Core;
 use Abdyek\Whoo\Tool\JWT;
 use Abdyek\Whoo\Tool\Interfaces\JWTInterface;
 use Abdyek\Whoo\Repository\User;
+use Abdyek\Whoo\Exception\InvalidTokenException;
 
 class Authenticator extends Core
 {
@@ -27,6 +28,9 @@ class Authenticator extends Core
             $this->jwt = $content['jwt'];
             $payload = $this->JWTObject->payload($content['jwt']);
             $this->user = User::getById($payload['whoo']->userId);
+            if($this->user->getSignOutCount() > $payload['whoo']->signOutCount) {
+                throw new InvalidTokenException;
+            }
         }
     }
 

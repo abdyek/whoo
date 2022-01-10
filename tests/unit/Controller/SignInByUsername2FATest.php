@@ -54,7 +54,8 @@ class SignInByUsername2FATest extends TestCase
             $jwt = $responseContent['jwt'];
             $user = $responseContent['user'];
         }
-        $payload = (array) JWT::getPayloadWithUser($jwt)['payload'];
+        $jwtObject = new JWT;
+        $payload = $jwtObject->payload($jwt);
 
         $this->assertEquals($user->getId(), $payload['whoo']->userId);
     }

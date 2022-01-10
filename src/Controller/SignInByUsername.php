@@ -47,7 +47,7 @@ class SignInByUsername extends AbstractController
             throw $e;
         }
 
-        $jwt = JWT::generateToken($user->getId(), $user->getSignOutCount());
+        $jwt = $this->getAuthenticator()->getJWTObject()->generateToken($user->getId(), $user->getSignOutCount());
         $this->response->setContent([
             'jwt' => $jwt,
             'user' => $user

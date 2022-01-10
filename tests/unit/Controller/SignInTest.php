@@ -53,7 +53,8 @@ class SignInTest extends TestCase
         $jwt = $responseContent['jwt'];
         $user = $responseContent['user'];
 
-        $payload = (array) JWT::getPayloadWithUser($jwt)['payload'];
+        $jwtObject = new JWT;
+        $payload = $jwtObject->payload($jwt);
 
         $this->assertNotNull($jwt);
 
@@ -221,8 +222,9 @@ class SignInTest extends TestCase
         $user = $responseContent['user'];
         $jwt = $responseContent['jwt'];
 
-        $payload = JWT::getPayloadWithUser($jwt)['payload'];
-        $this->assertEquals($user->getId(), $payload->whoo->userId);
+        $jwtObject = new JWT();
+        $payload = $jwtObject->payload($jwt);
+        $this->assertEquals($user->getId(), $payload['whoo']->userId);
     }
 
     private function getContent(): array
