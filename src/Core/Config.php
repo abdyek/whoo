@@ -363,6 +363,7 @@ class Config extends Core
 
     // other
     private string $secretKey = 's3cr3t';
+    private string $JWTAlgorithm = 'HS256';
 
     public function getRequiredMap(): array
     {
@@ -562,6 +563,16 @@ class Config extends Core
     public function setSecretKey(string $secretKey): void
     {
         $this->secretKey = $secretKey;
+    }
+
+    public function getJWTAlgorithm(): string
+    {
+        return $this->JWTAlgorithm;
+    }
+
+    public function setJWTAlgorithm(string $algorithm): void
+    {
+        $this->JWTAlgorithm = $algorithm;
     }
 
 }

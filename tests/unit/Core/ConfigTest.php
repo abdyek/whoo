@@ -86,7 +86,8 @@ class ConfigTest extends TestCase
     public function providerForOther(): array
     {
         return [
-            ['secretKey']
+            ['secretKey'],
+            ['JWTAlgorithm'],
         ];
     }
 

@@ -14,6 +14,9 @@ use Pseudo\ExampleController;
 
 class AuthenticatorTest extends TestCase
 {
+    private const SECRET_KEY = 'example_secret_key';
+    private const JWT_ALGORITHM = 'HS512';
+
     public function testCheck()
     {
         require 'generated-conf/config.php';
@@ -22,11 +25,24 @@ class AuthenticatorTest extends TestCase
             'password' => '123456789',
         ]);
         $controller = new ExampleController(new Data);
-        $jwt = $controller->getAuthenticator()->getJWTObject()->generateToken($user->getId(), $user->getSignOutCount());
-        $controller->getData()->setContent(['jwt' => $jwt]);
+        $controller->getConfig()->setSecretKey(self::SECRET_KEY);
+        $controller->getConfig()->setJWTAlgorithm(self::JWT_ALGORITHM);
+
+        $jwtObject = new JWT;
+        $jwtObject->setSecretKey(self::SECRET_KEY);
+        $jwtObject->setAlgorithm(self::JWT_ALGORITHM);
+        $jwt = $jwtObject->generateToken($user->getId(), $user->getSignOutCount());
+        
+        $controller->getData()->setContent([
+            'jwt' => $jwt
+        ]);
+
         $authenticator = $controller->getAuthenticator();
         $authenticator->check();
+
         $this->assertSame($user, $authenticator->getUser());
+        $this->assertSame(self::SECRET_KEY, $authenticator->getJWTObject()->getSecretKey());
+        $this->assertSame(self::JWT_ALGORITHM, $authenticator->getJWTObject()->getAlgorithm());
     }
 
     public function testInvalidaTokenException()

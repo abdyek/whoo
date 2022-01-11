@@ -21,8 +21,13 @@ class Authenticator extends Core
 
     public function check(): void
     {
+        $config = $this->controller->getConfig();
         $data = $this->controller->getData();
         $content = $data->getContent();
+
+        $this->JWTObject->setSecretKey($config->getSecretKey());
+        $this->JWTObject->setAlgorithm($config->getJWTAlgorithm());
+
         // TODO: make it dynamic
         if(isset($content['jwt'])) {
             $this->jwt = $content['jwt'];
