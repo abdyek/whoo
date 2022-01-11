@@ -11,15 +11,23 @@ class Whoo
 {
     public bool $success = true;
     private AbstractController $controller;
-    private static ?Config $config = null;
+    private static ?Config $globalConfig = null;
     private array $callbacks = [];
     public array $content = [];
+    private object $successCallback;
 
     public function __construct(string $controller, ?array $args = [])
     {
+        $this->successCallback = function() {};
         $class = 'Abdyek\\Whoo\\Controller\\' . $controller;
-        $config = (self::$config !== null ? clone(self::$config) : null);
+        $config = (self::$globalConfig !== null ? clone(self::$globalConfig) : null);
         $this->controller = new $class(new Data($args), $config);
+    }
+
+    public function success(object $callback)
+    {
+        $this->successCallback = $callback;
+        return $this;
     }
 
     public function catchException(string $exception, object $callback)
@@ -33,6 +41,7 @@ class Whoo
         try {
             $this->controller->triggerRun();
             $this->content = $this->controller->getResponse()->getContent();
+            ($this->successCallback)();
         } catch(\Exception $e) {
             $this->success = false;
             $this->exception = $e;
@@ -50,26 +59,29 @@ class Whoo
         require Propel::$CONFIG_FILE;
     }
 
-    public static function getConfig(): ?Config
+    public static function getGlobalConfig(): ?Config
     {
-        return self::$config;
+        return self::$globalConfig;
     }
 
-    public static function setConfig(Config $config): void
+    public static function setGlobalConfig(Config $globalConfig): void
     {
-        self::$config = $config;
+        self::$globalConfig = $globalConfig;
+    }
+
+    public function getConfig(): Config
+    {
+        return $this->controller->getConfig();
+    }
+
+    public function setConfig(Config $config): void
+    {
+        $this->controller->setConfig($config);
     }
 
     public function getController(): ? AbstractController
     {
         return $this->controller;
     }
-
-    /*
-    public function setJWTAdditionalClaims(array $claims): void
-    {
-        $this->controller->getConfig()->setJWTPayload($claims);
-    }
-     */
 
 }

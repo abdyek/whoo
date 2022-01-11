@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 use Abdyek\Whoo\Whoo;
 use Abdyek\Whoo\Core\Config;
+use Pseudo\ExampleController;
 
 /**
  * @covers Whoo::
@@ -25,23 +26,38 @@ class WhooTest extends TestCase
         $this->assertSame('Abdyek\\Whoo\\Controller\\SignUp', $className);
     }
 
-    public function testCatchException()
+    public function testSuccess()
     {
-        $whoo = new Whoo('SignUp');
-        $val = true;
-        $whoo->catchException('InvalidData', function() {
+        $config = new Config();
+        $whoo = new Whoo('SignUp', [
+            'email' => 'example@example.com',
+            'password' => 'this_is_pw',
+        ]);
+        $whoo->success(function() {
             $this->assertTrue(true);
         });
         $whoo->run();
     }
 
-    public function testSetConfig()
+    public function testCatchException()
+    {
+        $whoo = new Whoo('SignUp');
+        $whoo->success(function() {
+            $this->assertTrue(false);
+        })->catchException('InvalidData', function() {
+            $this->assertTrue(true);
+        });
+        $whoo->run();
+    }
+
+    public function testGetSetGlobalConfig()
     {
         $config = new Config();
         $config->setValidityTimeToVerifyEmail(123);
-        Whoo::setConfig($config);
+        Whoo::setGlobalConfig($config);
         $whoo = new Whoo('SignUp');
         $this->assertEquals(123, $whoo->getController()->getConfig()->getValidityTimeToVerifyEmail());
+        $this->assertSame($config, $whoo->getGlobalConfig());
     }
 
     public function testContent()
