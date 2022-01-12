@@ -1,11 +1,16 @@
 <?php
 
-require 'vendor/autoload.php';
-use Abdyek\Whoo\Tool\CLI;
+require __DIR__ . '/../vendor/autoload.php';
 
-if(in_array('init', $_SERVER['argv'])) {
-    $config = (file_exists('whoo.json')?'whoo.json': null);
-    CLI::init($config);
-} elseif(in_array('update-config', $_SERVER['argv'])) {
-    CLI::updateConfig();
-}
+use Abdyek\Whoo\Command\Init;
+use Abdyek\Whoo\Command\PropelCreate;
+use Abdyek\Whoo\Command\PropelUpdate;
+use Symfony\Component\Console\Application;
+
+$cli = new Application();
+
+$cli->add(new Init);
+$cli->add(new PropelCreate);
+$cli->add(new PropelUpdate);
+
+$cli->run();
