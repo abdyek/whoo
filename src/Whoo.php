@@ -13,7 +13,6 @@ class Whoo
     private AbstractController $controller;
     private static ?Config $globalConfig = null;
     private array $callbacks = [];
-    public array $content = [];
     private object $successCallback;
 
     public function __construct(string $controller, ?array $args = [])
@@ -30,7 +29,7 @@ class Whoo
         return $this;
     }
 
-    public function catchException(string $exception, object $callback)
+    public function exception(string $exception, object $callback)
     {
         $this->callbacks[$exception] = $callback;
         return $this;
@@ -40,8 +39,7 @@ class Whoo
     {
         try {
             $this->controller->triggerRun();
-            $this->content = $this->controller->getResponse()->getContent();
-            ($this->successCallback)();
+            ($this->successCallback)($this->controller->getResponse()->getContent());
         } catch(\Exception $e) {
             $this->success = false;
             $this->exception = $e;
@@ -50,7 +48,7 @@ class Whoo
             if(!isset($this->callbacks[$pieces[0]])) {
                 throw $e;
             }
-            ($this->callbacks[$pieces[0]])();
+            ($this->callbacks[$pieces[0]])($e);
         }
     }
 
@@ -82,6 +80,11 @@ class Whoo
     public function getController(): ? AbstractController
     {
         return $this->controller;
+    }
+
+    public function claims(array $claims): void
+    {
+        $this->controller->getAuthenticator()->getJWTObject()->setClaims($claims);
     }
 
 }

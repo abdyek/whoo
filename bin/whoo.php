@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
+require 'vendor/autoload.php';
 
 use Abdyek\Whoo\Command\Init;
 use Abdyek\Whoo\Command\PropelCreate;

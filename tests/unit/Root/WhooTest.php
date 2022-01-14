@@ -33,8 +33,9 @@ class WhooTest extends TestCase
             'email' => 'example@example.com',
             'password' => 'this_is_pw',
         ]);
-        $whoo->success(function() {
-            $this->assertTrue(true);
+        $whoo->success(function($content) {
+            $this->assertNotNull($content['user']);
+            $this->assertNotNull($content['tempToken']);
         });
         $whoo->run();
     }
@@ -44,7 +45,7 @@ class WhooTest extends TestCase
         $whoo = new Whoo('SignUp');
         $whoo->success(function() {
             $this->assertTrue(false);
-        })->catchException('InvalidData', function() {
+        })->exception('InvalidData', function() {
             $this->assertTrue(true);
         });
         $whoo->run();
@@ -60,16 +61,14 @@ class WhooTest extends TestCase
         $this->assertSame($config, $whoo->getGlobalConfig());
     }
 
-    public function testContent()
+    public function testClaims()
     {
-        $whoo = new Whoo('SignUp', [
-            'email' => 'example@example.com',
-            'password' => '123123123123'
-        ]);
-        $whoo->run();
-
-        $this->assertNotNull($whoo->content['user']);
-        $this->assertNotNull($whoo->content['tempToken']);
+        $claims = [
+            'exp' => time() + 360
+        ];
+        $whoo = new Whoo('SignUp');
+        $whoo->claims($claims);
+        $this->assertSame($claims, $whoo->getController()->getAuthenticator()->getJWTObject()->getClaims());
     }
 
 }
