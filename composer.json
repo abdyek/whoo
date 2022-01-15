@@ -1,5 +1,6 @@
 {
     "name":"abdyek/whoo",
+    "type": "library",
     "description": "database agnostic authentication library",
     "keywords": [
         "authentication",
@@ -37,6 +38,5 @@
     },
     "bin": [
         "bin/whoo"
-    ],
-    "minimum-stability": "dev"
+    ]
 }
