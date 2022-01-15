@@ -4,6 +4,8 @@ namespace Abdyek\Whoo\Config;
 
 class Authentication {
 
+    // TODO: remove this file and move the map to another appropriate place
+
     // mapping authentication type
     const TYPE_EMAIL_VERIFICATION = 0;
     const TYPE_MANAGE_2FA = 1;

@@ -3,7 +3,6 @@
 namespace Abdyek\Whoo;
 
 use Abdyek\Whoo\Core\AbstractController;
-use Abdyek\Whoo\Config\Propel;
 use Abdyek\Whoo\Core\Config;
 use Abdyek\Whoo\Core\Data;
 
@@ -54,7 +53,7 @@ class Whoo
 
     public static function loadPropelConfig(): void
     {
-        require Propel::$CONFIG_FILE;
+        require 'whoo/propel/config.php';
     }
 
     public static function getGlobalConfig(): ?Config
