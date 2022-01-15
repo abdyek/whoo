@@ -4,7 +4,6 @@ use PHPUnit\Framework\TestCase;
 use Abdyek\Whoo\Repository\AuthenticationCode;
 use Abdyek\Whoo\Tool\Random;
 use Abdyek\Whoo\Config\Authentication as AuthConfig;
-use Abdyek\Whoo\Config\Propel as PropelConfig;
 
 /**
  * @covers AuthenticationCode::
@@ -13,9 +12,6 @@ use Abdyek\Whoo\Config\Propel as PropelConfig;
 class AuthenticationCodeTest extends TestCase {
     use Reset;
     use UserTool;
-    public static function setUpBeforeClass(): void {
-        PropelConfig::$CONFIG_FILE = 'propel/config.php';
-    }
     public function setUp(): void {
         self::reset();
     }
