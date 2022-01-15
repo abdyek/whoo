@@ -32,8 +32,8 @@ class Authenticator extends Core
         if(isset($content['jwt'])) {
             $this->jwt = $content['jwt'];
             $payload = $this->JWTObject->payload($content['jwt']);
-            $this->user = User::getById($payload['whoo']->userId);
-            if($this->user->getSignOutCount() > $payload['whoo']->signOutCount) {
+            $this->user = User::getById($payload['whoo']['userId']);
+            if($this->user->getSignOutCount() > $payload['whoo']['signOutCount']) {
                 throw new InvalidTokenException;
             }
         }

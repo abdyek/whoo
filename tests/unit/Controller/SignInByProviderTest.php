@@ -47,7 +47,7 @@ class SignInByProviderTest extends TestCase
 
         $jwtObject = new JWT;
         $payload = $jwtObject->payload($responseContent['jwt']);
-        $this->assertEquals($user->getId(), $payload['whoo']->userId);
+        $this->assertEquals($user->getId(), $payload['whoo']['userId']);
     
         $this->assertSame($first, $responseContent['firstSignIn']);
     }
@@ -97,7 +97,7 @@ class SignInByProviderTest extends TestCase
             $user = User::getByEmail($content['email']);
             $jwtObject = new JWT;
             $payload = $jwtObject->payload($signIn->getResponse()->getContent()['jwt']);
-            $this->assertEquals($user->getId(), $payload['whoo']->userId);
+            $this->assertEquals($user->getId(), $payload['whoo']['userId']);
         }
     }
 

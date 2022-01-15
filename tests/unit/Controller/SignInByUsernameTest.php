@@ -49,7 +49,7 @@ class SignInByUsernameTest extends TestCase
         $jwtObject = new JWT;
         $payload = $jwtObject->payload($jwt);
 
-        $this->assertSame($user->getId(), $payload['whoo']->userId);
+        $this->assertSame($user->getId(), $payload['whoo']['userId']);
     }
 
     public function testRunIncorrectPasswordException()
@@ -169,7 +169,7 @@ class SignInByUsernameTest extends TestCase
         $jwtObject = new JWT;
         $payload = $jwtObject->payload($jwt);
 
-        $this->assertSame($user->getId(), $payload['whoo']->userId);
+        $this->assertSame($user->getId(), $payload['whoo']['userId']);
     }
 
     public function testRunUnmatchedPasswordsException()

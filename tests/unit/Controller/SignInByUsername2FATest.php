@@ -57,7 +57,7 @@ class SignInByUsername2FATest extends TestCase
         $jwtObject = new JWT;
         $payload = $jwtObject->payload($jwt);
 
-        $this->assertEquals($user->getId(), $payload['whoo']->userId);
+        $this->assertEquals($user->getId(), $payload['whoo']['userId']);
     }
 
     public function testRunInvalidCodeException()

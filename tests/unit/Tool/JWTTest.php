@@ -22,7 +22,7 @@ class JWTTest extends TestCase
         $jwtObject->setClaims($claims);
         $jwt = $jwtObject->generateToken(12, 0);
         $payload = $jwtObject->payload($jwt);
-        $this->assertEquals(12, $payload['whoo']->userId);
+        $this->assertEquals(12, $payload['whoo']['userId']);
     }
 
     public function testInvalidTokenException()

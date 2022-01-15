@@ -31,7 +31,7 @@ class JWT implements JWTInterface
         } catch (\UnexpectedValueException $e) {
             throw new InvalidTokenException;
         }
-        return (array) $payload;
+        return self::objectToArray($payload);
     }
 
     public function getSecretKey(): string
@@ -62,6 +62,18 @@ class JWT implements JWTInterface
     public function setClaims(array $claims): void
     {
         $this->claims = $claims;
+    }
+
+    private static function objectToArray($object)
+    {
+        if(is_object($object) or is_array($object)) {
+            $array = (array) $object;
+            foreach($array as &$item) {
+                $item = self::objectToArray($item);
+            }
+            return $array;
+        }
+        return $object;
     }
 
 }

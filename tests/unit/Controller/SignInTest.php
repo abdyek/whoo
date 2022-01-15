@@ -58,7 +58,7 @@ class SignInTest extends TestCase
 
         $this->assertNotNull($jwt);
 
-        $this->assertEquals($user->getId(), $payload['whoo']->userId);
+        $this->assertEquals($user->getId(), $payload['whoo']['userId']);
     }
 
     public function testNotFoundException()
@@ -224,7 +224,7 @@ class SignInTest extends TestCase
 
         $jwtObject = new JWT();
         $payload = $jwtObject->payload($jwt);
-        $this->assertEquals($user->getId(), $payload['whoo']->userId);
+        $this->assertEquals($user->getId(), $payload['whoo']['userId']);
     }
 
     private function getContent(): array
