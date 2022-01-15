@@ -37,5 +37,6 @@
     },
     "bin": [
         "bin/whoo"
-    ]
+    ],
+    "minimum-stability": "beta"
 }
