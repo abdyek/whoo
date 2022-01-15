@@ -38,5 +38,5 @@
     "bin": [
         "bin/whoo"
     ],
-    "minimum-stability": "beta"
+    "minimum-stability": "dev"
 }
